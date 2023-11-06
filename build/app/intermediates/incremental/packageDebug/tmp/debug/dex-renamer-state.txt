@@ -1,0 +1,4 @@
+#Tue Oct 31 14:09:04 WIB 2023
+base.0=/Users/enygma/Documents/Rudi_Usman_workspace/flutter/e_shop/build/app/intermediates/dex/debug/mergeDexDebug/classes.dex
+path.0=classes.dex
+renamed.0=classes.dex
