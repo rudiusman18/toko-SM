@@ -1,4 +1,4 @@
-#Mon Nov 06 09:42:08 WIB 2023
+#Tue Nov 07 16:45:44 WIB 2023
 base.0=/Users/enygma/Documents/Rudi_Usman_workspace/flutter/e_shop/build/app/intermediates/dex/release/minifyReleaseWithR8/classes.dex
 path.0=classes.dex
 renamed.0=classes.dex

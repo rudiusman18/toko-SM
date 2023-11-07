@@ -35,6 +35,7 @@ class ProductDetailPage extends StatefulWidget {
 class _ProductDetailPageState extends State<ProductDetailPage> {
   FToast fToast = FToast();
   int carouselIndex = 0;
+  double headerAlpha = 0.0;
 
   @override
   void initState() {
@@ -88,6 +89,119 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       );
     }
 
+    Widget headerNavigation(){
+      return  AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        padding: const EdgeInsets.symmetric(vertical:5, horizontal: 10),
+        color: backgroundColor3.withAlpha((headerAlpha * 255).round()),
+        child: Row(
+          children: [
+            InkWell(
+              onTap: (){
+                Navigator.pop(context);
+              },
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                child: const Icon(
+                  Icons.arrow_back,
+                  color: Colors.white,
+                  size: 30,
+                ),
+              ),
+            ),
+
+            const Spacer(),
+
+            InkWell(
+              onTap: (){
+                fToast.removeCustomToast();
+                pageProvider.currentIndex = 4;
+                Navigator.push(
+                    context,
+                    PageTransition(
+                      child: const MainPage(),
+                      type: PageTransitionType.bottomToTop,
+                    ),
+                ).then((value) => setState(() {
+                  pageProvider.currentIndex = 0;
+                }));
+              },
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                child: const Icon(
+                  Icons.shopping_cart,
+                  color: Colors.white,
+                  size: 30,
+                ),
+              ),
+            ),
+
+            InkWell(
+              onTap: (){
+                setState(() {
+                  fToast.removeCustomToast();
+                  favoriteProvider.isFavorite = wishlist.isFavorite == null ? true : false;
+
+                  if(favoriteProvider.isFavorite){
+                    productProvider.wishlistData.removeWhere((element) => element.urlImg == widget.imageURL);
+                    productProvider.wishlistData.add(
+                        ProductModel(
+                          productName: widget.productName,
+                          productPrice: widget.productPrice,
+                          isDiscount: widget.isDiscount,
+                          beforeDiscountPrice: widget.beforeDiscountPrice,
+                          discountPercentage: widget.discountPercentage,
+                          urlImg: widget.imageURL,
+                          isFavorite: favoriteProvider.isFavorite,
+                          isAddtoCart: false,
+                        )
+                    );
+
+                    for(var data in productProvider.wishlistData){
+                      print("wishlist data yang dimasukkan adalah ${data.urlImg} dengan jumlah ${productProvider.wishlistData.length}");
+                    }
+
+
+                    fToast.showToast(
+                      child: toast(
+                        message: "1 barang berhasil ditambahkan",
+                        onTap: (){
+                          fToast.removeCustomToast();
+                          pageProvider.currentIndex = 2;
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              PageTransition(
+                                child: const MainPage(),
+                                type: PageTransitionType.bottomToTop,
+                              ),
+                                  (route) => false
+                          );
+                        },
+                      ),
+                      toastDuration: const Duration(seconds: 2),
+                      gravity: ToastGravity.CENTER,
+                    );
+                  }
+                  else{
+                    productProvider.wishlistData.removeWhere((element) => element.urlImg == widget.imageURL);
+                  }
+                },
+                );
+              },
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                child: Icon(
+                  wishlist.isFavorite == false || wishlist.isFavorite == null ? Icons.favorite_border : Icons.favorite,
+                  color: Colors.white,
+                  size: 30,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     Widget header(){
       return Stack(
         children: [
@@ -135,97 +249,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 dotWidth: 10,
               ),
 
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.all(20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                InkWell(
-                  onTap: (){
-                    Navigator.pop(context);
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.arrow_back,
-                      color: backgroundColor3,
-                      size: 30,
-                    ),
-                  ),
-                ),
-
-                InkWell(
-                  onTap: (){
-                    setState(() {
-                      fToast.removeCustomToast();
-                      favoriteProvider.isFavorite = wishlist.isFavorite == null ? true : false;
-
-                      if(favoriteProvider.isFavorite){
-                        productProvider.wishlistData.removeWhere((element) => element.urlImg == widget.imageURL);
-                        productProvider.wishlistData.add(
-                            ProductModel(
-                              productName: widget.productName,
-                              productPrice: widget.productPrice,
-                              isDiscount: widget.isDiscount,
-                              beforeDiscountPrice: widget.beforeDiscountPrice,
-                              discountPercentage: widget.discountPercentage,
-                              urlImg: widget.imageURL,
-                              isFavorite: favoriteProvider.isFavorite,
-                              isAddtoCart: false,
-                            )
-                        );
-
-                        for(var data in productProvider.wishlistData){
-                          print("wishlist data yang dimasukkan adalah ${data.urlImg} dengan jumlah ${productProvider.wishlistData.length}");
-                        }
-
-
-                        fToast.showToast(
-                          child: toast(
-                            message: "1 barang berhasil ditambahkan",
-                            onTap: (){
-                              fToast.removeCustomToast();
-                              pageProvider.currentIndex = 2;
-                              Navigator.pushAndRemoveUntil(
-                                  context,
-                                  PageTransition(
-                                    child: const MainPage(),
-                                    type: PageTransitionType.bottomToTop,
-                                  ),
-                                      (route) => false
-                              );
-                            },
-                          ),
-                          toastDuration: const Duration(seconds: 2),
-                          gravity: ToastGravity.CENTER,
-                        );
-                      }
-                      else{
-                        productProvider.wishlistData.removeWhere((element) => element.urlImg == widget.imageURL);
-                      }
-                    },
-                    );
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      wishlist.isFavorite == false || wishlist.isFavorite == null ? Icons.favorite_border : Icons.favorite,
-                      color: backgroundColor3,
-                      size: 30,
-                    ),
-                  ),
-                ),
-              ],
             ),
           ),
         ],
@@ -644,16 +667,34 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       body: SafeArea(
         child: Stack(
          children: [
-           ListView(
-             children: [
-               Stack(
-                 children: [
-                   header(),
-                   content(),
-                 ],
-               ),
-             ],
+           NotificationListener<ScrollNotification>(
+             onNotification: (ScrollNotification scrollInfo) {
+               if (scrollInfo is ScrollUpdateNotification) {
+                 setState(() {
+                   // Calculate the new alpha value based on scroll position
+                   double newAlpha = 0.0 + (scrollInfo.metrics.pixels / scrollInfo.metrics.maxScrollExtent);
+
+                   if (newAlpha > 0.0){
+                     newAlpha = 1;
+                   }
+                   // Limit alpha to be in the range [0, 1]
+                   headerAlpha = newAlpha.clamp(0.0, 1.0);
+                 });
+               }
+               return false;
+             },
+             child: ListView(
+               children: [
+                 Stack(
+                   children: [
+                     header(),
+                     content(),
+                   ],
+                 ),
+               ],
+             ),
            ),
+           headerNavigation(),
            Align(
              alignment: Alignment.bottomCenter,
              child: addToCartButton(),

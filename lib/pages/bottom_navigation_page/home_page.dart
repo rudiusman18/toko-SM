@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:e_shop/pages/bottom_navigation_page/home_page/product_list_search_result.dart';
 import 'package:e_shop/pages/bottom_navigation_page/product_detail/product_detail_page.dart';
 import 'package:e_shop/pages/main_page.dart';
 import 'package:e_shop/pages/profile_page.dart';
@@ -162,6 +163,17 @@ class _HomePageState extends State<HomePage> {
           controller: searchTextFieldController,
           cursorColor: backgroundColor1,
           focusNode: searchTextFieldFocusNode,
+          onFieldSubmitted: (_){
+            print("object yang dicari adalah ${searchTextFieldController.text}");
+            if (searchTextFieldController.text.isNotEmpty){
+              Navigator.push(context, PageTransition(child: ProductListSearchResult(searchKeyword: searchTextFieldController.text), type: PageTransitionType.fade));
+              setState(() {
+                searchTextFieldController.text = "";
+                searchTextFieldFocusNode.canRequestFocus = false;
+              });
+            }
+
+          },
           decoration: InputDecoration(
             hintText: "Cari Barang",
             prefixIcon: const Icon(Icons.search),
@@ -190,6 +202,13 @@ class _HomePageState extends State<HomePage> {
               InkWell(
                 onTap: (){
                   print("clicked on ${text[index]}");
+                  if (searchTextFieldController.text.isNotEmpty){
+                    Navigator.push(context, PageTransition(child: ProductListSearchResult(searchKeyword: text[index]), type: PageTransitionType.fade));
+                    setState(() {
+                      searchTextFieldController.text = "";
+                      searchTextFieldFocusNode.canRequestFocus = false;
+                    });
+                  }
                 },
                 child: Container(
                   margin: const EdgeInsets.only(bottom: 20),
