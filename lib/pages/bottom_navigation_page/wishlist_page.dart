@@ -85,7 +85,7 @@ class _WishlistPageState extends State<WishlistPage> {
                         maxLines: 2,
                         style: poppins.copyWith(
                           color: backgroundColor1,
-                          fontWeight: semiBold,
+                          fontWeight: medium,
                         ),
                       ),
                     ),
@@ -98,7 +98,7 @@ class _WishlistPageState extends State<WishlistPage> {
                         maxLines: 1,
                         style: poppins.copyWith(
                           color: backgroundColor1,
-                          fontWeight: medium,
+                          fontWeight: semiBold,
                         ),
                       ),
                     ),

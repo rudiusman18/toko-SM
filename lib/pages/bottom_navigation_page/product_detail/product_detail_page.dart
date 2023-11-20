@@ -72,6 +72,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               message,
               style: poppins.copyWith(
                 color: Colors.white,
+                fontSize: 10,
               ),
             ),
             InkWell(
@@ -80,7 +81,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 "Lihat detail",
                 style: poppins.copyWith(
                     color: Colors.white,
-                    decoration: TextDecoration.underline
+                    decoration: TextDecoration.underline,
+                  fontSize: 10,
                 ),
               ),
             )

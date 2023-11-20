@@ -147,13 +147,14 @@ class _CartPageState extends State<CartPage> {
                       maxLines: 2,
                       style: poppins.copyWith(
                         color: backgroundColor1,
-                        fontWeight: semiBold,
+                        fontWeight: medium,
                       ),
                     ),
                     Text(
                       product.product!.productPrice.toString(),
                       style: poppins.copyWith(
                         color: backgroundColor1,
+                        fontWeight: semiBold,
                       ),
                     ),
 
