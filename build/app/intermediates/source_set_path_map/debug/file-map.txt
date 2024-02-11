@@ -1,14 +1,14 @@
-com.example.e_shop.app-jetified-window-1.0.0-beta04-0 /Users/enygma/.gradle/caches/transforms-3/25cee5f028ac2a6b79fd6278ff5b59e2/transformed/jetified-window-1.0.0-beta04/res
-com.example.e_shop.app-jetified-annotation-experimental-1.1.0-1 /Users/enygma/.gradle/caches/transforms-3/6c0c163cc77ae6c91f9f7dfcd179c29c/transformed/jetified-annotation-experimental-1.1.0/res
-com.example.e_shop.app-core-1.6.0-2 /Users/enygma/.gradle/caches/transforms-3/7e9df2ac2213a6bd3cef0f2f27870d79/transformed/core-1.6.0/res
-com.example.e_shop.app-jetified-window-java-1.0.0-beta04-3 /Users/enygma/.gradle/caches/transforms-3/ae81e06d24c799147c26814497a2a305/transformed/jetified-window-java-1.0.0-beta04/res
-com.example.e_shop.app-debug-4 /Users/enygma/Documents/Rudi_Usman_workspace/flutter/e_shop/android/app/src/debug/res
-com.example.e_shop.app-main-5 /Users/enygma/Documents/Rudi_Usman_workspace/flutter/e_shop/android/app/src/main/res
-com.example.e_shop.app-pngs-6 /Users/enygma/Documents/Rudi_Usman_workspace/flutter/e_shop/build/app/generated/res/pngs/debug
-com.example.e_shop.app-resValues-7 /Users/enygma/Documents/Rudi_Usman_workspace/flutter/e_shop/build/app/generated/res/resValues/debug
-com.example.e_shop.app-rs-8 /Users/enygma/Documents/Rudi_Usman_workspace/flutter/e_shop/build/app/generated/res/rs/debug
-com.example.e_shop.app-mergeDebugResources-9 /Users/enygma/Documents/Rudi_Usman_workspace/flutter/e_shop/build/app/intermediates/incremental/debug/mergeDebugResources/merged.dir
-com.example.e_shop.app-mergeDebugResources-10 /Users/enygma/Documents/Rudi_Usman_workspace/flutter/e_shop/build/app/intermediates/incremental/debug/mergeDebugResources/stripped.dir
-com.example.e_shop.app-merged_res-11 /Users/enygma/Documents/Rudi_Usman_workspace/flutter/e_shop/build/app/intermediates/merged_res/debug
-com.example.e_shop.app-packaged_res-12 /Users/enygma/Documents/Rudi_Usman_workspace/flutter/e_shop/build/fluttertoast/intermediates/packaged_res/debug
-com.example.e_shop.app-packaged_res-13 /Users/enygma/Documents/Rudi_Usman_workspace/flutter/e_shop/build/path_provider_android/intermediates/packaged_res/debug
+com.example.e_shop.app-jetified-window-1.0.0-beta04-0 C:\Users\Rudi\.gradle\caches\transforms-3\25cee5f028ac2a6b79fd6278ff5b59e2\transformed\jetified-window-1.0.0-beta04\res
+com.example.e_shop.app-jetified-annotation-experimental-1.1.0-1 C:\Users\Rudi\.gradle\caches\transforms-3\6c0c163cc77ae6c91f9f7dfcd179c29c\transformed\jetified-annotation-experimental-1.1.0\res
+com.example.e_shop.app-core-1.6.0-2 C:\Users\Rudi\.gradle\caches\transforms-3\7e9df2ac2213a6bd3cef0f2f27870d79\transformed\core-1.6.0\res
+com.example.e_shop.app-jetified-window-java-1.0.0-beta04-3 C:\Users\Rudi\.gradle\caches\transforms-3\ae81e06d24c799147c26814497a2a305\transformed\jetified-window-java-1.0.0-beta04\res
+com.example.e_shop.app-debug-4 D:\My_Project\Project with mas galang\online-shop\android\app\src\debug\res
+com.example.e_shop.app-main-5 D:\My_Project\Project with mas galang\online-shop\android\app\src\main\res
+com.example.e_shop.app-pngs-6 D:\My_Project\Project with mas galang\online-shop\build\app\generated\res\pngs\debug
+com.example.e_shop.app-resValues-7 D:\My_Project\Project with mas galang\online-shop\build\app\generated\res\resValues\debug
+com.example.e_shop.app-rs-8 D:\My_Project\Project with mas galang\online-shop\build\app\generated\res\rs\debug
+com.example.e_shop.app-mergeDebugResources-9 D:\My_Project\Project with mas galang\online-shop\build\app\intermediates\incremental\debug\mergeDebugResources\merged.dir
+com.example.e_shop.app-mergeDebugResources-10 D:\My_Project\Project with mas galang\online-shop\build\app\intermediates\incremental\debug\mergeDebugResources\stripped.dir
+com.example.e_shop.app-merged_res-11 D:\My_Project\Project with mas galang\online-shop\build\app\intermediates\merged_res\debug
+com.example.e_shop.app-packaged_res-12 D:\My_Project\Project with mas galang\online-shop\build\fluttertoast\intermediates\packaged_res\debug
+com.example.e_shop.app-packaged_res-13 D:\My_Project\Project with mas galang\online-shop\build\path_provider_android\intermediates\packaged_res\debug

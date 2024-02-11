@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:e_shop/pages/login_page.dart';
 import 'package:e_shop/pages/main_page.dart';
 import 'package:e_shop/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -9,19 +10,21 @@ class SplashPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    Timer(Duration(seconds: 3), () {
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const MainPage()), (route)=>false);
+    // Masih Dummy (nanti ada pengecekan disini untuk login atau langsung masuk ke halaman home)
+    Timer(const Duration(seconds: 3), () {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const LoginPage()),
+          (route) => false);
     });
 
     return Container(
       width: MediaQuery.sizeOf(context).width,
       height: MediaQuery.sizeOf(context).height,
       color: backgroundColor3,
-      child:  Stack(
+      child: Stack(
         alignment: Alignment.bottomCenter,
-          children: [
-            Column(
+        children: [
+          Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
@@ -38,15 +41,14 @@ class SplashPage extends StatelessWidget {
                 ),
                 textAlign: TextAlign.center,
               ),
-
             ],
           ),
-            Container(
-              margin: const EdgeInsets.only(bottom: 60),
-              child: const CircularProgressIndicator(
-                color: Colors.white,
-              ),
+          Container(
+            margin: const EdgeInsets.only(bottom: 60),
+            child: const CircularProgressIndicator(
+              color: Colors.white,
             ),
+          ),
         ],
       ),
     );

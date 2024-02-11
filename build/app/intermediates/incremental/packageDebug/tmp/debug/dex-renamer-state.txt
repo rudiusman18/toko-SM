@@ -1,4 +1,4 @@
-#Mon Nov 20 09:28:33 WIB 2023
-base.0=/Users/enygma/Documents/Rudi_Usman_workspace/flutter/e_shop/build/app/intermediates/dex/debug/mergeDexDebug/classes.dex
+#Sat Feb 10 16:45:05 ICT 2024
+base.0=D\:\\My_Project\\Project with mas galang\\online-shop\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
 path.0=classes.dex
 renamed.0=classes.dex

@@ -22,7 +22,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final List <String> adsBannerList = [
+  final List<String> adsBannerList = [
     "https://lelogama.go-jek.com/post_featured_image/promo-kesebelasan-Anniv_GoFood_Blog-Banner_1456x818_200rb.jpg",
     "https://lelogama.go-jek.com/post_thumbnail/promo-go-food-des-2022.jpg",
     "https://bankmega.com/media/filer_public/73/01/73017ae3-22cb-487e-8f55-6a7817730adb/0-banner-bm-new-eos-tfi.jpg",
@@ -39,9 +39,17 @@ class _HomePageState extends State<HomePage> {
   ];
 
   List<String> textSuggestion = [];
-  List<String> dummyTextDatabase = ["sambal","Kecap","saos","coca-cola", "meses", "shampo", "sabun"];
+  List<String> dummyTextDatabase = [
+    "sambal",
+    "Kecap",
+    "saos",
+    "coca-cola",
+    "meses",
+    "shampo",
+    "sabun"
+  ];
 
-  TextEditingController searchTextFieldController  = TextEditingController();
+  TextEditingController searchTextFieldController = TextEditingController();
   FocusNode searchTextFieldFocusNode = FocusNode();
 
   // Keyboard
@@ -67,26 +75,23 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       debugPrint("Focus: ${searchTextFieldFocusNode.hasFocus.toString()}");
     });
-
   }
-
 
   @override
   Widget build(BuildContext context) {
     PageProvider pageProvider = Provider.of<PageProvider>(context);
 
-    Widget header(){
-      return Padding(padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
+    Widget header() {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-
             InkWell(
-              onTap: (){
+              onTap: () {
                 setState(() {
                   pageProvider.currentIndex = 1;
                 });
-
               },
               child: Icon(
                 Icons.view_list,
@@ -94,30 +99,33 @@ class _HomePageState extends State<HomePage> {
                 color: backgroundColor3,
               ),
             ),
-
-
-            Expanded(child: Column(
-              children: [
-                Text("John Doe",
-                  style: poppins.copyWith(
-                    fontWeight: semiBold,
-                    color: backgroundColor1,
+            Expanded(
+              child: Column(
+                children: [
+                  Text(
+                    "John Doe",
+                    style: poppins.copyWith(
+                      fontWeight: semiBold,
+                      color: backgroundColor1,
+                    ),
                   ),
-                ),
-                Text("Jakarta, Indonesia",
-                  style: poppins.copyWith(
-                    fontWeight: medium,
-                    color: backgroundColor2,
-                  ),
-                )
-              ],
+                  Text(
+                    "Jakarta, Indonesia",
+                    style: poppins.copyWith(
+                      fontWeight: medium,
+                      color: backgroundColor2,
+                    ),
+                  )
+                ],
+              ),
             ),
-
-            ),
-
             InkWell(
-              onTap: (){
-                Navigator.push(context, PageTransition(child: const ProfilePage(), type: PageTransitionType.rightToLeft));
+              onTap: () {
+                Navigator.push(
+                    context,
+                    PageTransition(
+                        child: const ProfilePage(),
+                        type: PageTransitionType.rightToLeft));
               },
               child: Icon(
                 Icons.person,
@@ -125,132 +133,146 @@ class _HomePageState extends State<HomePage> {
                 color: backgroundColor3,
               ),
             ),
-
           ],
         ),
       );
     }
 
 //  Fungsi untuk membuat title text
-    Widget titleText(String title){
+    Widget titleText(String title) {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Text(
           title,
           style: poppins.copyWith(
-              color: backgroundColor1,
-              fontWeight: semiBold,
-              fontSize: 24,
+            color: backgroundColor1,
+            fontWeight: semiBold,
+            fontSize: 24,
           ),
         ),
       );
     }
 
-    Widget searchBar(){
+    Widget searchBar() {
       return Container(
         margin: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
         child: TextFormField(
-          onChanged: (value){
+          onChanged: (value) {
             setState(() {
               print("search object: ${searchTextFieldController.text}");
               textSuggestion.clear();
-              textSuggestion = dummyTextDatabase.where((element) => element.toLowerCase().contains(value.toLowerCase())).toList();
+              textSuggestion = dummyTextDatabase
+                  .where((element) =>
+                      element.toLowerCase().contains(value.toLowerCase()))
+                  .toList();
               print("isi listnya adalah $textSuggestion");
-
             });
           },
           textInputAction: TextInputAction.search,
           controller: searchTextFieldController,
           cursorColor: backgroundColor1,
           focusNode: searchTextFieldFocusNode,
-          onFieldSubmitted: (_){
-            print("object yang dicari adalah ${searchTextFieldController.text}");
-            if (searchTextFieldController.text.isNotEmpty){
-              Navigator.push(context, PageTransition(child: ProductListSearchResult(searchKeyword: searchTextFieldController.text), type: PageTransitionType.fade));
+          onFieldSubmitted: (_) {
+            print(
+                "object yang dicari adalah ${searchTextFieldController.text}");
+            if (searchTextFieldController.text.isNotEmpty) {
+              Navigator.push(
+                  context,
+                  PageTransition(
+                      child: ProductListSearchResult(
+                          searchKeyword: searchTextFieldController.text),
+                      type: PageTransitionType.fade));
               setState(() {
                 searchTextFieldController.text = "";
                 searchTextFieldFocusNode.canRequestFocus = false;
               });
             }
-
           },
           decoration: InputDecoration(
             hintText: "Cari Barang",
+            hintStyle: poppins,
             prefixIcon: const Icon(Icons.search),
-            prefixIconColor: searchTextFieldFocusNode.hasFocus ? backgroundColor1 : Colors.grey,
-            focusedBorder:OutlineInputBorder(
+            prefixIconColor: searchTextFieldFocusNode.hasFocus
+                ? backgroundColor1
+                : Colors.grey,
+            focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(color: backgroundColor1, width: 2.0),
               borderRadius: const BorderRadius.all(Radius.circular(7.0)),
             ),
             border: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(7.0)),
+              borderRadius: BorderRadius.all(Radius.circular(7.0)),
             ),
           ),
         ),
       );
     }
 
-    Widget searchSuggestion({required List<String> text}){
-
-        print("panjang text nya adalah: ${text.length}");
-          return Container(
-          alignment: Alignment.topCenter,
-          margin: const EdgeInsets.only(left: 30, right: 30),
-          child: searchTextFieldController.text == "" ? const SizedBox() : ListView(
-            children: [
-              for(var index=0; index<text.length; index++)
-              InkWell(
-                onTap: (){
-                  print("clicked on ${text[index]}");
-                  if (searchTextFieldController.text.isNotEmpty){
-                    Navigator.push(context, PageTransition(child: ProductListSearchResult(searchKeyword: text[index]), type: PageTransitionType.fade));
-                    setState(() {
-                      searchTextFieldController.text = "";
-                      searchTextFieldFocusNode.canRequestFocus = false;
-                    });
-                  }
-                },
-                child: Container(
-                  margin: const EdgeInsets.only(bottom: 20),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Icon(
-                              Icons.search,
-                              color: backgroundColor1,
-                          ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          Text(
-                            text[index],
-                            style: poppins.copyWith(
+    Widget searchSuggestion({required List<String> text}) {
+      print("panjang text nya adalah: ${text.length}");
+      return Container(
+        alignment: Alignment.topCenter,
+        margin: const EdgeInsets.only(left: 30, right: 30),
+        child: searchTextFieldController.text == ""
+            ? const SizedBox()
+            : ListView(
+                children: [
+                  for (var index = 0; index < text.length; index++)
+                    InkWell(
+                      onTap: () {
+                        print("clicked on ${text[index]}");
+                        if (searchTextFieldController.text.isNotEmpty) {
+                          Navigator.push(
+                              context,
+                              PageTransition(
+                                  child: ProductListSearchResult(
+                                      searchKeyword: text[index]),
+                                  type: PageTransitionType.fade));
+                          setState(() {
+                            searchTextFieldController.text = "";
+                            searchTextFieldFocusNode.canRequestFocus = false;
+                          });
+                        }
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.only(bottom: 20),
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.search,
+                                  color: backgroundColor1,
+                                ),
+                                const SizedBox(
+                                  width: 20,
+                                ),
+                                Text(
+                                  text[index],
+                                  style: poppins.copyWith(
+                                    color: backgroundColor1,
+                                  ),
+                                ),
+                                const Spacer(),
+                                Icon(
+                                  Icons.call_made,
+                                  color: backgroundColor1,
+                                ),
+                              ],
+                            ),
+                            Divider(
+                              thickness: 1,
                               color: backgroundColor1,
                             ),
-                          ),
-                          const Spacer(),
-                          Icon(
-                              Icons.call_made,
-                              color: backgroundColor1,
-                          ),
-
-                        ],
+                          ],
+                        ),
                       ),
-                      Divider(
-                        thickness: 1,
-                        color: backgroundColor1,
-                      ),
-                    ],
-                  ),
-                ),
+                    ),
+                ],
               ),
-            ],
-          ),
-        );
+      );
     }
 
-    Widget carouselSlider(){
+    Widget carouselSlider() {
       return Container(
         margin: const EdgeInsets.symmetric(horizontal: 20),
         decoration: BoxDecoration(
@@ -258,7 +280,7 @@ class _HomePageState extends State<HomePage> {
             BoxShadow(
               color: Colors.grey.withOpacity(0.2),
               blurRadius: 4,
-              offset:  const Offset(2, 8), // Shadow position
+              offset: const Offset(2, 8), // Shadow position
             ),
           ],
         ),
@@ -273,46 +295,42 @@ class _HomePageState extends State<HomePage> {
                       Container(
                         decoration: BoxDecoration(
                           color: backgroundColor2,
-                        // borderRadius: BorderRadius.circular(8),
-                        image: DecorationImage(
+                          // borderRadius: BorderRadius.circular(8),
+                          image: DecorationImage(
                             image: NetworkImage(img),
                             fit: BoxFit.contain,
                           ),
                         ),
                       ),
-
                   ],
                   options: CarouselOptions(
-                    initialPage: 0,
-                    enableInfiniteScroll: true,
-                    padEnds: false,
-                    viewportFraction: 1,
-                    reverse: false,
-                    autoPlay: true,
-                    autoPlayInterval: const Duration(seconds: 3),
-                    autoPlayAnimationDuration: const Duration(milliseconds: 800),
-                    autoPlayCurve: Curves.linear,
-                    scrollDirection: Axis.horizontal,
-                    onPageChanged: (index, reason){
-                      setState(() {
-                        carouselIndex = index;
-                      });
-                    }
-
-                  )
-              ),
+                      initialPage: 0,
+                      enableInfiniteScroll: true,
+                      padEnds: false,
+                      viewportFraction: 1,
+                      reverse: false,
+                      autoPlay: true,
+                      autoPlayInterval: const Duration(seconds: 3),
+                      autoPlayAnimationDuration:
+                          const Duration(milliseconds: 800),
+                      autoPlayCurve: Curves.linear,
+                      scrollDirection: Axis.horizontal,
+                      onPageChanged: (index, reason) {
+                        setState(() {
+                          carouselIndex = index;
+                        });
+                      })),
               Container(
                 margin: const EdgeInsets.only(bottom: 10),
                 child: AnimatedSmoothIndicator(
-                    activeIndex: carouselIndex,
-                    count: adsBannerList.length,
-                    effect: WormEffect(
-                      activeDotColor: backgroundColor2,
-                      dotColor: Colors.white,
-                      dotWidth: 10,
-                      dotHeight: 10,
-                    ),
-
+                  activeIndex: carouselIndex,
+                  count: adsBannerList.length,
+                  effect: WormEffect(
+                    activeDotColor: backgroundColor2,
+                    dotColor: Colors.white,
+                    dotWidth: 10,
+                    dotHeight: 10,
+                  ),
                 ),
               )
             ],
@@ -321,16 +339,16 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
-    Widget horizontalListItem({bool isOnDiscountContent = false}){
+    Widget horizontalListItem({bool isOnDiscountContent = false}) {
       List<String> listImageData = [];
-      for (var i = 0; i<20; i++){
+      for (var i = 0; i < 20; i++) {
         // var imageData = (imgList..shuffle()).first;
         // listImageData.add(imageData);
         productIndex = (productIndex + 1);
-        if (productIndex == imgList.length - 1){
+        if (productIndex == imgList.length - 1) {
           productIndex = 0;
           listImageData.add(imgList[productIndex]);
-        }else{
+        } else {
           listImageData.add(imgList[productIndex]);
         }
       }
@@ -339,27 +357,29 @@ class _HomePageState extends State<HomePage> {
         scrollDirection: Axis.horizontal,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-          child:  Row(
+          child: Row(
             children: [
-              for (var i = 0; i<20; i++)
+              for (var i = 0; i < 20; i++)
                 InkWell(
-                  onTap: (){
+                  onTap: () {
                     print("ditekan untuk object foto: $i");
                     Navigator.push(
-                        context,
-                        PageTransition(
-                            child: ProductDetailPage(
-                                imageURL: listImageData[i],
-                                productLoct: "Cabang Malang Kota",
-                                productName: "Lorem Ipsum dolor sit amet",
-                                productPrice: "Rp 18.000,00",
-                                productStar: "4.5",
-                                beforeDiscountPrice: isOnDiscountContent ? "Rp 180.000,00" : null,
-                                discountPercentage: isOnDiscountContent ? "50%" : null,
-                                isDiscount: isOnDiscountContent,
-                              ),
-                            type: PageTransitionType.bottomToTop,
+                      context,
+                      PageTransition(
+                        child: ProductDetailPage(
+                          imageURL: listImageData[i],
+                          productLoct: "Cabang Malang Kota",
+                          productName: "Lorem Ipsum dolor sit amet",
+                          productPrice: "Rp 18.000,00",
+                          productStar: "4.5",
+                          beforeDiscountPrice:
+                              isOnDiscountContent ? "Rp 180.000,00" : null,
+                          discountPercentage:
+                              isOnDiscountContent ? "50%" : null,
+                          isDiscount: isOnDiscountContent,
                         ),
+                        type: PageTransitionType.bottomToTop,
+                      ),
                     );
                   },
                   child: Container(
@@ -372,16 +392,16 @@ class _HomePageState extends State<HomePage> {
                         BoxShadow(
                           color: Colors.grey.withOpacity(0.5),
                           blurRadius: 4,
-                          offset:  const Offset(0, 8), // Shadow position
+                          offset: const Offset(0, 8), // Shadow position
                         ),
                       ],
                     ),
-
                     margin: EdgeInsets.only(right: i < 19 ? 10 : 0),
                     child: Column(
                       children: [
                         ClipRRect(
-                          borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
+                          borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(8)),
                           child: Image.network(
                             (listImageData[i]),
                             width: 150,
@@ -395,7 +415,8 @@ class _HomePageState extends State<HomePage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 5),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 5),
                                 child: Text(
                                   "Lorem Ipsum dolor sit amet",
                                   overflow: TextOverflow.ellipsis,
@@ -406,9 +427,9 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ),
                               ),
-
                               Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 5),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 5),
                                 child: Text(
                                   "Rp 18.000,00",
                                   overflow: TextOverflow.ellipsis,
@@ -419,10 +440,10 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ),
                               ),
-
-                              if(isOnDiscountContent == true)
+                              if (isOnDiscountContent == true)
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 5),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
@@ -432,13 +453,12 @@ class _HomePageState extends State<HomePage> {
                                           overflow: TextOverflow.ellipsis,
                                           maxLines: 1,
                                           style: poppins.copyWith(
-                                              decoration: TextDecoration.lineThrough,
+                                              decoration:
+                                                  TextDecoration.lineThrough,
                                               color: Colors.grey,
-                                              fontSize: 10
-                                          ),
+                                              fontSize: 10),
                                         ),
                                       ),
-
                                       Container(
                                         margin: const EdgeInsets.only(left: 5),
                                         child: Text(
@@ -455,7 +475,6 @@ class _HomePageState extends State<HomePage> {
                                     ],
                                   ),
                                 ),
-
                               Row(
                                 mainAxisSize: MainAxisSize.min,
                                 mainAxisAlignment: MainAxisAlignment.start,
@@ -467,12 +486,11 @@ class _HomePageState extends State<HomePage> {
                                   Text(
                                     "4.5",
                                     style: poppins.copyWith(
-                                        fontWeight: semiBold,
+                                      fontWeight: semiBold,
                                     ),
                                   ),
                                 ],
                               ),
-
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -508,9 +526,10 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
-    Widget verticalListItem(String imageUrl, {bool isOnDiscountContent = false}){
+    Widget verticalListItem(String imageUrl,
+        {bool isOnDiscountContent = false}) {
       return InkWell(
-        onTap: (){
+        onTap: () {
           Navigator.push(
             context,
             PageTransition(
@@ -534,7 +553,7 @@ class _HomePageState extends State<HomePage> {
               BoxShadow(
                 color: Colors.grey.withOpacity(0.2),
                 blurRadius: 4,
-                offset:  const Offset(0, 8), // Shadow position
+                offset: const Offset(0, 8), // Shadow position
               ),
             ],
             borderRadius: BorderRadius.circular(10),
@@ -550,7 +569,6 @@ class _HomePageState extends State<HomePage> {
                   fit: BoxFit.cover,
                 ),
               ),
-
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -568,7 +586,6 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
-
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Text(
@@ -581,7 +598,6 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
-
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 5),
                       child: Row(
@@ -601,8 +617,7 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                     ),
-
-                    if(isOnDiscountContent == true)
+                    if (isOnDiscountContent == true)
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: Row(
@@ -616,11 +631,9 @@ class _HomePageState extends State<HomePage> {
                                 style: poppins.copyWith(
                                     decoration: TextDecoration.lineThrough,
                                     color: Colors.grey,
-                                    fontSize: 10
-                                ),
+                                    fontSize: 10),
                               ),
                             ),
-
                             Container(
                               margin: const EdgeInsets.only(left: 5),
                               child: Text(
@@ -637,7 +650,6 @@ class _HomePageState extends State<HomePage> {
                           ],
                         ),
                       ),
-
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 5),
                       child: Row(
@@ -672,7 +684,7 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
-    Widget homePageContent(){
+    Widget homePageContent() {
       return ListView(
         children: [
           carouselSlider(),
@@ -693,8 +705,7 @@ class _HomePageState extends State<HomePage> {
           const SizedBox(
             height: 5,
           ),
-          for(var data in imgList)
-            verticalListItem(data),
+          for (var data in imgList) verticalListItem(data),
           const SizedBox(
             height: 20,
           ),
@@ -703,7 +714,7 @@ class _HomePageState extends State<HomePage> {
     }
 
     return SafeArea(
-        child: Container(
+      child: Container(
         color: Colors.white,
         width: MediaQuery.sizeOf(context).width,
         child: Column(
@@ -711,7 +722,9 @@ class _HomePageState extends State<HomePage> {
             header(),
             searchBar(),
             Expanded(
-              child: searchTextFieldFocusNode.hasFocus ? searchSuggestion(text: textSuggestion) : homePageContent(),
+              child: searchTextFieldFocusNode.hasFocus
+                  ? searchSuggestion(text: textSuggestion)
+                  : homePageContent(),
             ),
           ],
         ),
