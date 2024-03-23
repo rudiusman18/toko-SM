@@ -1,4 +1,4 @@
-com.example.e_shop
+id.project.tokoSM
 attr activityAction
 attr activityName
 attr alpha

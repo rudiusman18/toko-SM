@@ -1,12 +1,13 @@
-import 'package:e_shop/pages/splash_page.dart';
-import 'package:e_shop/providers/favorite_provider.dart';
-import 'package:e_shop/providers/page_provider.dart';
-import 'package:e_shop/providers/product_provider.dart';
+import 'package:tokoSM/pages/splash_page.dart';
+import 'package:tokoSM/providers/favorite_provider.dart';
+import 'package:tokoSM/providers/login_provider.dart';
+import 'package:tokoSM/providers/page_provider.dart';
+import 'package:tokoSM/providers/product_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -16,6 +17,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => LoginProvider()),
         ChangeNotifierProvider(create: (context) => PageProvider()),
         ChangeNotifierProvider(create: (context) => FavoriteProvider()),
         ChangeNotifierProvider(create: (context) => ProductProvider()),
@@ -27,7 +29,7 @@ class MyApp extends StatelessWidget {
             child: child!,
           );
         },
-        title: "Lorem Ipsum Customer App",
+        title: "Toko SM",
         debugShowCheckedModeBanner: false,
         home: const Scaffold(
           body: SplashPage(),

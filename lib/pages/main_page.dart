@@ -1,15 +1,15 @@
-import 'package:e_shop/pages/bottom_navigation_page/cart_page.dart';
-import 'package:e_shop/pages/bottom_navigation_page/category_page.dart';
-import 'package:e_shop/pages/bottom_navigation_page/transaction_page.dart';
-import 'package:e_shop/pages/bottom_navigation_page/wishlist_page.dart';
-import 'package:e_shop/providers/page_provider.dart';
-import 'package:e_shop/theme/theme.dart';
+import 'package:tokoSM/pages/bottom_navigation_page/cart_page.dart';
+import 'package:tokoSM/pages/bottom_navigation_page/category_page.dart';
+import 'package:tokoSM/pages/bottom_navigation_page/transaction_page.dart';
+import 'package:tokoSM/pages/bottom_navigation_page/wishlist_page.dart';
+import 'package:tokoSM/providers/page_provider.dart';
+import 'package:tokoSM/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-    
 
+import 'bottom_navigation_page/home_page.dart';
 
-import 'bottom_navigation_page/home_page.dart';class MainPage extends StatefulWidget {
+class MainPage extends StatefulWidget {
   const MainPage({super.key});
 
   @override
@@ -17,13 +17,12 @@ import 'bottom_navigation_page/home_page.dart';class MainPage extends StatefulWi
 }
 
 class _MainPageState extends State<MainPage> {
-
   @override
   Widget build(BuildContext context) {
     PageProvider pageProvider = Provider.of(context);
 
-    Widget body(){
-      switch(pageProvider.currentIndex){
+    Widget body() {
+      switch (pageProvider.currentIndex) {
         case 0:
           return HomePage();
         case 1:
@@ -37,7 +36,6 @@ class _MainPageState extends State<MainPage> {
         default:
           return HomePage();
       }
-
     }
 
     Widget customBottomNav() {
@@ -65,7 +63,7 @@ class _MainPageState extends State<MainPage> {
                 icon: Container(
                   margin: const EdgeInsets.symmetric(vertical: 15),
                   child: Icon(
-                  Icons.home_filled,
+                    Icons.home_filled,
                     size: 30,
                     color: pageProvider.currentIndex == 0
                         ? Colors.white
@@ -132,12 +130,12 @@ class _MainPageState extends State<MainPage> {
       );
     }
 
-    return SafeArea(child:  Scaffold(
-        backgroundColor: Colors.white,//backgroundColor3,
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.white, //backgroundColor3,
         bottomNavigationBar: customBottomNav(),
         body: body(),
       ),
     );
   }
 }
-    

@@ -2,11 +2,13 @@ import 'dart:ffi';
 
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:e_shop/pages/bottom_navigation_page/home_page/product_list_search_result.dart';
-import 'package:e_shop/pages/bottom_navigation_page/product_detail/product_detail_page.dart';
-import 'package:e_shop/pages/main_page.dart';
-import 'package:e_shop/pages/profile_page.dart';
-import 'package:e_shop/theme/theme.dart';
+import 'package:tokoSM/models/login_model.dart';
+import 'package:tokoSM/pages/bottom_navigation_page/home_page/product_list_search_result.dart';
+import 'package:tokoSM/pages/bottom_navigation_page/product_detail/product_detail_page.dart';
+import 'package:tokoSM/pages/main_page.dart';
+import 'package:tokoSM/pages/profile_page.dart';
+import 'package:tokoSM/providers/login_provider.dart';
+import 'package:tokoSM/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +17,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../providers/page_provider.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({super.key});
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -80,6 +82,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     PageProvider pageProvider = Provider.of<PageProvider>(context);
+    LoginProvider loginProvider = Provider.of<LoginProvider>(context);
+    LoginModel userLogin = loginProvider.loginModel;
 
     Widget header() {
       return Padding(
@@ -103,14 +107,14 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 children: [
                   Text(
-                    "John Doe",
+                    "${userLogin.data?.namaPelanggan}",
                     style: poppins.copyWith(
                       fontWeight: semiBold,
                       color: backgroundColor1,
                     ),
                   ),
                   Text(
-                    "Jakarta, Indonesia",
+                    "${userLogin.data?.alamatPelanggan}",
                     style: poppins.copyWith(
                       fontWeight: medium,
                       color: backgroundColor2,
@@ -713,20 +717,22 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
-    return SafeArea(
-      child: Container(
-        color: Colors.white,
-        width: MediaQuery.sizeOf(context).width,
-        child: Column(
-          children: [
-            header(),
-            searchBar(),
-            Expanded(
-              child: searchTextFieldFocusNode.hasFocus
-                  ? searchSuggestion(text: textSuggestion)
-                  : homePageContent(),
-            ),
-          ],
+    return Scaffold(
+      body: SafeArea(
+        child: Container(
+          color: Colors.white,
+          width: MediaQuery.sizeOf(context).width,
+          child: Column(
+            children: [
+              header(),
+              searchBar(),
+              Expanded(
+                child: searchTextFieldFocusNode.hasFocus
+                    ? searchSuggestion(text: textSuggestion)
+                    : homePageContent(),
+              ),
+            ],
+          ),
         ),
       ),
     );

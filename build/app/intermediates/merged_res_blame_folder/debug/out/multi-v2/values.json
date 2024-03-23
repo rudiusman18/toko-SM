@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.e_shop.app-mergeDebugResources-9:/values/values.xml",
+            "outputFile": "id.project.tokoSM.app-mergeDebugResources-9:/values/values.xml",
             "map": [
                 {
                     "source": "D:\\My_Project\\Project with mas galang\\online-shop\\android\\app\\src\\main\\res\\values\\styles.xml",

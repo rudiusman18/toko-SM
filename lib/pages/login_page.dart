@@ -1,7 +1,11 @@
-import 'package:e_shop/pages/main_page.dart';
-import 'package:e_shop/theme/theme.dart';
+import 'package:tokoSM/models/login_model.dart';
+import 'package:tokoSM/pages/main_page.dart';
+import 'package:tokoSM/pages/register_page.dart';
+import 'package:tokoSM/providers/login_provider.dart';
+import 'package:tokoSM/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -16,9 +20,27 @@ class _LoginPageState extends State<LoginPage> {
       TextEditingController();
 
   bool isPasswordVisible = false;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
+    LoginProvider loginProvider = Provider.of<LoginProvider>(context);
+
+    loginHandler() async {
+      setState(() {
+        isLoading = true;
+      });
+      if (await loginProvider.postLogin(
+          email: emailTextEditingController.text,
+          password: passswordTextEditingController.text)) {
+        // ignore: use_build_context_synchronously
+        Navigator.push(
+            context,
+            PageTransition(
+                child: const MainPage(), type: PageTransitionType.fade));
+      }
+    }
+
     return Scaffold(
       backgroundColor: backgroundColor3,
       body: SafeArea(
@@ -36,16 +58,16 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 Container(
                   padding: const EdgeInsets.all(
-                    50,
+                    20,
                   ),
-                  width: 200,
-                  height: 200,
+                  width: 150,
+                  height: 150,
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     shape: BoxShape.circle,
                   ),
                   child: Image.asset(
-                    "assets/bag.png",
+                    "assets/logo.png",
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -157,16 +179,42 @@ class _LoginPageState extends State<LoginPage> {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         backgroundColor: backgroundColor1),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          PageTransition(
-                              child: const MainPage(),
-                              type: PageTransitionType.fade));
-                    },
+                    onPressed: loginHandler,
                     child: const Text(
                       "LOGIN",
                     ),
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(
+                    top: 10,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Doesn't have an account? ",
+                        style: poppins.copyWith(
+                          color: Colors.white,
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            PageTransition(
+                                child: const RegisterPage(),
+                                type: PageTransitionType.rightToLeft),
+                          );
+                        },
+                        child: Text(
+                          "Register",
+                          style: poppins.copyWith(
+                            color: backgroundColor1,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],

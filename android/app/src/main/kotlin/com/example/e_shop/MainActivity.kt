@@ -1,4 +1,4 @@
-package com.example.e_shop
+package id.project.tokoSM
 
 import io.flutter.embedding.android.FlutterActivity
 
