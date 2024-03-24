@@ -17,14 +17,6 @@ class LoginProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // Setter getter untuk mendapatkan dan melakukan set email dan password yang ada di local
-  late UserLocalModel _userLocal;
-  UserLocalModel get userLocal => _userLocal;
-  set userLocal(UserLocalModel newUserLocal) {
-    _userLocal = newUserLocal;
-    notifyListeners();
-  }
-
   // Fungsi provider untuk digunakan di view
   Future<bool> postLogin(
       {required String email, required String password}) async {
@@ -32,7 +24,7 @@ class LoginProvider with ChangeNotifier {
       LoginModel login =
           await LoginService().login(email: email, password: password);
       _loginModel = login;
-      await saveModelToPrefs(UserLocalModel(email: email, password: password));
+      await saveModelToPrefs(_loginModel);
       return true;
     } catch (e) {
       return false;
@@ -40,20 +32,18 @@ class LoginProvider with ChangeNotifier {
   }
 
   // Save model to SharedPreferences
-  Future<void> saveModelToPrefs(UserLocalModel model) async {
-    print(
-        "isi konten yang akan disimpan adalah: ${model.email} dan ${model.password}");
+  Future<void> saveModelToPrefs(LoginModel model) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('loginData', jsonEncode(model.toJson()));
   }
 
-  Future<UserLocalModel?> getModelFromPrefs() async {
+  Future<LoginModel?> getModelFromPrefs() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? jsonString = prefs.getString('loginData');
     if (jsonString != null) {
       Map<String, dynamic> jsonMap = jsonDecode(jsonString);
-      _userLocal = UserLocalModel.fromJson(jsonMap);
-      return UserLocalModel.fromJson(jsonMap);
+      _loginModel = LoginModel.fromJson(jsonMap);
+      return LoginModel.fromJson(jsonMap);
     } else {
       return null;
     }

@@ -33,11 +33,25 @@ class _LoginPageState extends State<LoginPage> {
       if (await loginProvider.postLogin(
           email: emailTextEditingController.text,
           password: passswordTextEditingController.text)) {
+        setState(() {
+          isLoading = false;
+        });
         // ignore: use_build_context_synchronously
         Navigator.push(
             context,
             PageTransition(
                 child: const MainPage(), type: PageTransitionType.fade));
+      } else {
+        setState(() {
+          isLoading = false;
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                "Login Gagal",
+              ),
+            ),
+          );
+        });
       }
     }
 
@@ -180,9 +194,17 @@ class _LoginPageState extends State<LoginPage> {
                     style: ElevatedButton.styleFrom(
                         backgroundColor: backgroundColor1),
                     onPressed: loginHandler,
-                    child: const Text(
-                      "LOGIN",
-                    ),
+                    child: isLoading
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
+                          )
+                        : const Text(
+                            "LOGIN",
+                          ),
                   ),
                 ),
                 Container(

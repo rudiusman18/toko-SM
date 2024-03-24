@@ -3,11 +3,13 @@ import 'dart:ffi';
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:tokoSM/models/login_model.dart';
+import 'package:tokoSM/models/product_model.dart';
 import 'package:tokoSM/pages/bottom_navigation_page/home_page/product_list_search_result.dart';
 import 'package:tokoSM/pages/bottom_navigation_page/product_detail/product_detail_page.dart';
 import 'package:tokoSM/pages/main_page.dart';
 import 'package:tokoSM/pages/profile_page.dart';
 import 'package:tokoSM/providers/login_provider.dart';
+import 'package:tokoSM/providers/product_provider.dart';
 import 'package:tokoSM/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
@@ -60,10 +62,37 @@ class _HomePageState extends State<HomePage> {
   int carouselIndex = 0;
   int productIndex = 0;
 
+  // Promo Product
+  bool isLoading = false;
+  ProductModel promoProduct = ProductModel();
+
   @override
   void initState() {
     super.initState();
     searchTextFieldFocusNode.addListener(_onFocusChange);
+    _initProduct();
+  }
+
+  _initProduct() async {
+    // Mendapatkan data produk
+    ProductProvider productProvider =
+        Provider.of<ProductProvider>(context, listen: false);
+    LoginProvider loginProvider =
+        Provider.of<LoginProvider>(context, listen: false);
+    setState(() {
+      isLoading = true;
+    });
+    if (await productProvider.getPromoProduct(
+        cabangId: "1", token: loginProvider.loginModel.token ?? "")) {
+      setState(() {
+        isLoading = true;
+      });
+      promoProduct = productProvider.promoProduct;
+    } else {
+      setState(() {
+        isLoading = true;
+      });
+    }
   }
 
   @override
@@ -345,15 +374,10 @@ class _HomePageState extends State<HomePage> {
 
     Widget horizontalListItem({bool isOnDiscountContent = false}) {
       List<String> listImageData = [];
-      for (var i = 0; i < 20; i++) {
-        // var imageData = (imgList..shuffle()).first;
-        // listImageData.add(imageData);
-        productIndex = (productIndex + 1);
-        if (productIndex == imgList.length - 1) {
-          productIndex = 0;
-          listImageData.add(imgList[productIndex]);
-        } else {
-          listImageData.add(imgList[productIndex]);
+      var numberofItem = promoProduct.data?.length ?? 0;
+      for (var i = 0; i < numberofItem; i++) {
+        if (promoProduct.data != null) {
+          listImageData.add(promoProduct.data![i].gambar1 ?? "");
         }
       }
 
@@ -363,7 +387,7 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
           child: Row(
             children: [
-              for (var i = 0; i < 20; i++)
+              for (var i = 0; i < numberofItem; i++)
                 InkWell(
                   onTap: () {
                     print("ditekan untuk object foto: $i");

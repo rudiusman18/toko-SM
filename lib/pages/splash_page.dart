@@ -17,33 +17,20 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
-  late UserLocalModel userLocal;
-  LoginModel user = LoginModel();
-
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     LoginProvider loginProvider = Provider.of(context, listen: false);
     Future.delayed(Duration.zero, () async {
-      userLocal = await loginProvider.getModelFromPrefs() ?? UserLocalModel();
-      if (await loginProvider.postLogin(
-          email: userLocal.email ?? "", password: userLocal.password ?? "")) {
-        user = loginProvider.loginModel;
-        // ignore: use_build_context_synchronously
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-                builder: (context) =>
-                    user.data != null ? const MainPage() : const LoginPage()),
-            (route) => false);
-      } else {
-        // ignore: use_build_context_synchronously
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-                builder: (context) =>
-                    user.data != null ? const MainPage() : const LoginPage()),
-            (route) => false);
-      }
+      loginProvider.loginModel =
+          await loginProvider.getModelFromPrefs() ?? LoginModel();
+      // ignore: use_build_context_synchronously
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+              builder: (context) => loginProvider.loginModel.data != null
+                  ? const MainPage()
+                  : const LoginPage()),
+          (route) => false);
     });
   }
 

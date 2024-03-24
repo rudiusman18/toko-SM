@@ -1,9 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
-
 import 'package:tokoSM/models/login_model.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginService {
   var client = HttpClient();
