@@ -375,17 +375,19 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
-    Widget horizontalListItem({bool isOnDiscountContent = false, required String forTitle}) {
+    Widget horizontalListItem(
+        {bool isOnDiscountContent = false, required String forTitle}) {
       // Data dibawah ini hanya bersifat sementara
       List<String> listImageData = [];
-      var numberofItem = forTitle.toLowerCase() == 'barang populer' ? 20 : promoProduct.data?.length ?? 0;
+      var numberofItem = forTitle.toLowerCase() == 'barang populer'
+          ? 20
+          : promoProduct.data?.length ?? 0;
       var counter = 0;
       for (var i = 0; i < 20; i++) {
-        if (counter <= imgList.length - 1){
-        listImageData.add(imgList[counter]);
-        counter += 1;
-        }
-        else{
+        if (counter <= imgList.length - 1) {
+          listImageData.add(imgList[counter]);
+          counter += 1;
+        } else {
           counter = 0;
           listImageData.add(imgList[counter]);
         }
@@ -397,7 +399,6 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
           child: Row(
             children: [
-
               for (var i = 0; i < numberofItem; i++)
                 InkWell(
                   onTap: () {
@@ -406,16 +407,32 @@ class _HomePageState extends State<HomePage> {
                       context,
                       PageTransition(
                         child: ProductDetailPage(
-                          imageURL: forTitle.toLowerCase() == 'barang populer' ? listImageData[i] : "${promoProduct.data?[i].gambar1}",
-                          productId: forTitle.toLowerCase() == 'barang populer' ? "-1" : "${promoProduct.data?[i].id}",
-                          productLoct:  "Cabang Malang Kota",
-                          productName: forTitle.toLowerCase() == 'barang populer' ? 'Lorem Ipsum' : "${promoProduct.data?[i].namaProduk}",
-                          productPrice: forTitle.toLowerCase() == 'barang populer' ? '18000' : "${promoProduct.data?[i].hargaDiskon}",
+                          imageURL: forTitle.toLowerCase() == 'barang populer'
+                              ? listImageData[i]
+                              : "${promoProduct.data?[i].gambar1}",
+                          productId: forTitle.toLowerCase() == 'barang populer'
+                              ? "-1"
+                              : "${promoProduct.data?[i].id}",
+                          productLoct: "Cabang Malang Kota",
+                          productName:
+                              forTitle.toLowerCase() == 'barang populer'
+                                  ? 'Lorem Ipsum'
+                                  : "${promoProduct.data?[i].namaProduk}",
+                          productPrice:
+                              forTitle.toLowerCase() == 'barang populer'
+                                  ? '18000'
+                                  : "${promoProduct.data?[i].hargaDiskon}",
                           productStar: "4.5",
-                          beforeDiscountPrice:
-                              isOnDiscountContent ? forTitle.toLowerCase() == 'barang populer' ? '18000' : "${promoProduct.data?[i].harga}" : null,
-                          discountPercentage:
-                              isOnDiscountContent ? forTitle.toLowerCase() == 'barang populer' ? '18000' : "${promoProduct.data?[i].diskon}%" : null,
+                          beforeDiscountPrice: isOnDiscountContent
+                              ? forTitle.toLowerCase() == 'barang populer'
+                                  ? '18000'
+                                  : "${promoProduct.data?[i].harga}"
+                              : null,
+                          discountPercentage: isOnDiscountContent
+                              ? forTitle.toLowerCase() == 'barang populer'
+                                  ? '18000'
+                                  : "${promoProduct.data?[i].diskon}%"
+                              : null,
                           isDiscount: isOnDiscountContent,
                         ),
                         type: PageTransitionType.bottomToTop,
@@ -443,7 +460,9 @@ class _HomePageState extends State<HomePage> {
                           borderRadius: const BorderRadius.vertical(
                               top: Radius.circular(8)),
                           child: Image.network(
-                            ( forTitle.toLowerCase() == 'barang populer' ? listImageData[i] : '${promoProduct.data?[i].gambar1}'),
+                            (forTitle.toLowerCase() == 'barang populer'
+                                ? listImageData[i]
+                                : '${promoProduct.data?[i].gambar1}'),
                             width: 150,
                             height: 150,
                             fit: BoxFit.cover,
@@ -458,7 +477,9 @@ class _HomePageState extends State<HomePage> {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 5),
                                 child: Text(
-                                  forTitle.toLowerCase() == 'barang populer' ? "Lorem Ipsum dolor sit amet" : "${promoProduct.data?[i].namaProduk}",
+                                  forTitle.toLowerCase() == 'barang populer'
+                                      ? "Lorem Ipsum dolor sit amet"
+                                      : "${promoProduct.data?[i].namaProduk}",
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 2,
                                   style: poppins.copyWith(
@@ -471,7 +492,9 @@ class _HomePageState extends State<HomePage> {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 5),
                                 child: Text(
-                                  forTitle.toLowerCase() == 'barang populer' ? 'Rp 18.000,00' : "Rp ${currencyFormatter.format(promoProduct.data?[i].hargaDiskon)}",
+                                  forTitle.toLowerCase() == 'barang populer'
+                                      ? 'Rp 18.000,00'
+                                      : "Rp ${currencyFormatter.format(promoProduct.data?[i].hargaDiskon)}",
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
                                   style: poppins.copyWith(
@@ -489,7 +512,10 @@ class _HomePageState extends State<HomePage> {
                                     children: [
                                       Flexible(
                                         child: Text(
-                                          forTitle.toLowerCase() == 'barang populer' ? 'Rp 18.000,00' : "Rp ${currencyFormatter.format(promoProduct.data?[i].harga)}",
+                                          forTitle.toLowerCase() ==
+                                                  'barang populer'
+                                              ? 'Rp 18.000,00'
+                                              : "Rp ${currencyFormatter.format(promoProduct.data?[i].harga)}",
                                           overflow: TextOverflow.ellipsis,
                                           maxLines: 1,
                                           style: poppins.copyWith(
@@ -502,7 +528,10 @@ class _HomePageState extends State<HomePage> {
                                       Container(
                                         margin: const EdgeInsets.only(left: 5),
                                         child: Text(
-                                          forTitle.toLowerCase() == 'barang populer' ? "50%" : "${promoProduct.data?[i].diskon}%",
+                                          forTitle.toLowerCase() ==
+                                                  'barang populer'
+                                              ? "50%"
+                                              : "${promoProduct.data?[i].diskon}%",
                                           overflow: TextOverflow.ellipsis,
                                           maxLines: 1,
                                           style: poppins.copyWith(
@@ -577,7 +606,7 @@ class _HomePageState extends State<HomePage> {
                 imageURL: imageUrl,
                 productLoct: "Cabang Malang Kota",
                 productName: "Lorem Ipsum dolor sit amet",
-                productPrice: "Rp 18.000,00",
+                productPrice: "18000",
                 productStar: "4.5",
                 isDiscount: isOnDiscountContent,
               ),
@@ -737,7 +766,8 @@ class _HomePageState extends State<HomePage> {
             height: 20,
           ),
           titleText("Sedang Promo"),
-          horizontalListItem(isOnDiscountContent: true, forTitle: 'Sedang Promo'),
+          horizontalListItem(
+              isOnDiscountContent: true, forTitle: 'Sedang Promo'),
           const SizedBox(
             height: 20,
           ),

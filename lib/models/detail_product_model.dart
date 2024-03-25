@@ -23,51 +23,51 @@ class Data {
   int? id;
   int? produkKategoriId;
   String? kodeProduk;
-  Null? barcodeProduk;
+  String? barcodeProduk;
   String? namaProduk;
   String? satuanProduk;
-  Null? golonganProduk;
+  String? golonganProduk;
   String? merkProduk;
-  Null? deskripsiProduk;
-  Null? beratProduk;
-  Null? hargaPokok;
-  Null? multisatuanJumlah;
-  Null? multisatuanUnit;
+  String? deskripsiProduk;
+  String? beratProduk;
+  String? hargaPokok;
+  String? multisatuanJumlah;
+  String? multisatuanUnit;
   String? gambar1;
-  Null? gambar2;
-  Null? gambar3;
-  Null? gambar4;
-  Null? gambar5;
+  String? gambar2;
+  String? gambar3;
+  String? gambar4;
+  String? gambar5;
   String? createdAt;
   String? updatedAt;
-  Null? deletedAt;
+  String? deletedAt;
   List<Stok>? stok;
   List<Harga>? harga;
 
   Data(
       {this.id,
-        this.produkKategoriId,
-        this.kodeProduk,
-        this.barcodeProduk,
-        this.namaProduk,
-        this.satuanProduk,
-        this.golonganProduk,
-        this.merkProduk,
-        this.deskripsiProduk,
-        this.beratProduk,
-        this.hargaPokok,
-        this.multisatuanJumlah,
-        this.multisatuanUnit,
-        this.gambar1,
-        this.gambar2,
-        this.gambar3,
-        this.gambar4,
-        this.gambar5,
-        this.createdAt,
-        this.updatedAt,
-        this.deletedAt,
-        this.stok,
-        this.harga});
+      this.produkKategoriId,
+      this.kodeProduk,
+      this.barcodeProduk,
+      this.namaProduk,
+      this.satuanProduk,
+      this.golonganProduk,
+      this.merkProduk,
+      this.deskripsiProduk,
+      this.beratProduk,
+      this.hargaPokok,
+      this.multisatuanJumlah,
+      this.multisatuanUnit,
+      this.gambar1,
+      this.gambar2,
+      this.gambar3,
+      this.gambar4,
+      this.gambar5,
+      this.createdAt,
+      this.updatedAt,
+      this.deletedAt,
+      this.stok,
+      this.harga});
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -94,45 +94,45 @@ class Data {
     if (json['stok'] != null) {
       stok = <Stok>[];
       json['stok'].forEach((v) {
-        stok!.add(new Stok.fromJson(v));
+        stok!.add(Stok.fromJson(v));
       });
     }
     if (json['harga'] != null) {
       harga = <Harga>[];
       json['harga'].forEach((v) {
-        harga!.add(new Harga.fromJson(v));
+        harga!.add(Harga.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['produk_kategori_id'] = this.produkKategoriId;
-    data['kode_produk'] = this.kodeProduk;
-    data['barcode_produk'] = this.barcodeProduk;
-    data['nama_produk'] = this.namaProduk;
-    data['satuan_produk'] = this.satuanProduk;
-    data['golongan_produk'] = this.golonganProduk;
-    data['merk_produk'] = this.merkProduk;
-    data['deskripsi_produk'] = this.deskripsiProduk;
-    data['berat_produk'] = this.beratProduk;
-    data['harga_pokok'] = this.hargaPokok;
-    data['multisatuan_jumlah'] = this.multisatuanJumlah;
-    data['multisatuan_unit'] = this.multisatuanUnit;
-    data['gambar1'] = this.gambar1;
-    data['gambar2'] = this.gambar2;
-    data['gambar3'] = this.gambar3;
-    data['gambar4'] = this.gambar4;
-    data['gambar5'] = this.gambar5;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
-    data['deleted_at'] = this.deletedAt;
-    if (this.stok != null) {
-      data['stok'] = this.stok!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['produk_kategori_id'] = produkKategoriId;
+    data['kode_produk'] = kodeProduk;
+    data['barcode_produk'] = barcodeProduk;
+    data['nama_produk'] = namaProduk;
+    data['satuan_produk'] = satuanProduk;
+    data['golongan_produk'] = golonganProduk;
+    data['merk_produk'] = merkProduk;
+    data['deskripsi_produk'] = deskripsiProduk;
+    data['berat_produk'] = beratProduk;
+    data['harga_pokok'] = hargaPokok;
+    data['multisatuan_jumlah'] = multisatuanJumlah;
+    data['multisatuan_unit'] = multisatuanUnit;
+    data['gambar1'] = gambar1;
+    data['gambar2'] = gambar2;
+    data['gambar3'] = gambar3;
+    data['gambar4'] = gambar4;
+    data['gambar5'] = gambar5;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
+    data['deleted_at'] = deletedAt;
+    if (stok != null) {
+      data['stok'] = stok!.map((v) => v.toJson()).toList();
     }
-    if (this.harga != null) {
-      data['harga'] = this.harga!.map((v) => v.toJson()).toList();
+    if (harga != null) {
+      data['harga'] = harga!.map((v) => v.toJson()).toList();
     }
     return data;
   }

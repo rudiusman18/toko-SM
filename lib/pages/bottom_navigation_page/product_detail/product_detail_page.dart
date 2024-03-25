@@ -18,6 +18,7 @@ import 'package:readmore/readmore.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class ProductDetailPage extends StatefulWidget {
+  final currencyFormatter = NumberFormat('#,##0.00', 'ID');
   final String? imageURL;
   final String? productId;
   final String? productName;
@@ -27,7 +28,8 @@ class ProductDetailPage extends StatefulWidget {
   final String? beforeDiscountPrice;
   final String? discountPercentage;
   final bool? isDiscount;
-  const ProductDetailPage(
+
+  ProductDetailPage(
       {super.key,
       this.imageURL,
       this.productId,
@@ -47,34 +49,47 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   FToast fToast = FToast();
   int carouselIndex = 0;
   double headerAlpha = 0.0;
-  final currencyFormatter = NumberFormat('#,##0.00', 'ID');
 
   // detail data product
+  bool isLoading = false;
   DetailProductModel detailProduct = DetailProductModel();
 
   @override
   void initState() {
     super.initState();
     _getDetailproduct();
-    print("isi imageURL adalah: ${widget.imageURL} dengan product id ${widget.productId}");
+    print(
+        "isi imageURL adalah: ${widget.imageURL} dengan product id ${widget.productId}");
     fToast.init(context);
   }
 
-    _getDetailproduct()async{
-      ProductProvider productProvider = Provider.of<ProductProvider>(context, listen: false);
-      LoginProvider loginProvider = Provider.of<LoginProvider>(context, listen: false);
-      if(await productProvider.getDetailProduct(productId: widget.productId ?? "", token: loginProvider.loginModel.token ?? "")){
-          print("isi data didalamnya adalah: ${productProvider.detailProductModel.data?.namaProduk}");
-          setState(() {
-              detailProduct = productProvider.detailProductModel ?? DetailProductModel();
-          });
-      }else{
-        setState(() {
-          print("Gagal mendapatkan detail product");
-        });
-      }
+  _getDetailproduct() async {
+    setState(() {
+      isLoading = true;
+    });
+    ProductProvider productProvider =
+        Provider.of<ProductProvider>(context, listen: false);
+    LoginProvider loginProvider =
+        Provider.of<LoginProvider>(context, listen: false);
+    if (await productProvider.getDetailProduct(
+        productId: widget.productId ?? "",
+        token: loginProvider.loginModel.token ?? "")) {
+      print(
+          "isi data didalamnya adalah: ${productProvider.detailProductModel.data?.namaProduk}");
+      setState(() {
+        isLoading = false;
+        detailProduct =
+            productProvider.detailProductModel ?? DetailProductModel();
+      });
+    } else {
+      setState(() {
+        isLoading = false;
+        print("Gagal mendapatkan detail product");
+      });
     }
+  }
 
+  @override
   void dispose() {
     super.dispose();
     fToast.removeCustomToast();
@@ -82,9 +97,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    // FavoriteProvider favoriteProvider = Provider.of<FavoriteProvider>(context);
-    // PageProvider pageProvider = Provider.of<PageProvider>(context);
-    // ProductProvider productProvider = Provider.of<ProductProvider>(context);
+    FavoriteProvider favoriteProvider = Provider.of<FavoriteProvider>(context);
+    PageProvider pageProvider = Provider.of<PageProvider>(context);
 
     // list.firstWhere((a) => a == b, orElse: () => print('No matching element.'));
     // ProductModel wishlist = productProvider.wishlistData.firstWhere((element) => element.urlImg == widget.imageURL, orElse: ()=> ProductModel());
@@ -124,117 +138,117 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       );
     }
 
-    // Widget headerNavigation() {
-    //   return AnimatedContainer(
-    //     duration: const Duration(milliseconds: 300),
-    //     padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-    //     color: backgroundColor3.withAlpha((headerAlpha * 255).round()),
-    //     child: Row(
-    //       children: [
-    //         InkWell(
-    //           onTap: () {
-    //             Navigator.pop(context);
-    //           },
-    //           child: Container(
-    //             padding: const EdgeInsets.all(10),
-    //             child: const Icon(
-    //               Icons.arrow_back,
-    //               color: Colors.white,
-    //               size: 30,
-    //             ),
-    //           ),
-    //         ),
-    //         const Spacer(),
-    //         InkWell(
-    //           onTap: () {
-    //             fToast.removeCustomToast();
-    //             pageProvider.currentIndex = 4;
-    //             Navigator.push(
-    //               context,
-    //               PageTransition(
-    //                 child: const MainPage(),
-    //                 type: PageTransitionType.bottomToTop,
-    //               ),
-    //             ).then((value) => setState(() {
-    //                   pageProvider.currentIndex = 0;
-    //                 }));
-    //           },
-    //           child: Container(
-    //             padding: const EdgeInsets.all(10),
-    //             child: const Icon(
-    //               Icons.shopping_cart,
-    //               color: Colors.white,
-    //               size: 30,
-    //             ),
-    //           ),
-    //         ),
-    //         InkWell(
-    //           onTap: () {
-    //             setState(
-    //               () {
-    //                 fToast.removeCustomToast();
-    //                 favoriteProvider.isFavorite =
-    //                     wishlist.isFavorite == null ? true : false;
+    Widget headerNavigation() {
+      return AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+        color: backgroundColor3.withAlpha((headerAlpha * 255).round()),
+        child: Row(
+          children: [
+            InkWell(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                child: const Icon(
+                  Icons.arrow_back,
+                  color: Colors.white,
+                  size: 30,
+                ),
+              ),
+            ),
+            const Spacer(),
+            InkWell(
+              onTap: () {
+                fToast.removeCustomToast();
+                pageProvider.currentIndex = 4;
+                Navigator.push(
+                  context,
+                  PageTransition(
+                    child: const MainPage(),
+                    type: PageTransitionType.bottomToTop,
+                  ),
+                ).then((value) => setState(() {
+                      pageProvider.currentIndex = 0;
+                    }));
+              },
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                child: const Icon(
+                  Icons.shopping_cart,
+                  color: Colors.white,
+                  size: 30,
+                ),
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                // setState(
+                //   () {
+                //     fToast.removeCustomToast();
+                //     favoriteProvider.isFavorite =
+                //         wishlist.isFavorite == null ? true : false;
 
-    //                 if (favoriteProvider.isFavorite) {
-    //                   productProvider.wishlistData.removeWhere(
-    //                       (element) => element.urlImg == widget.imageURL);
-    //                   productProvider.wishlistData.add(ProductModel(
-    //                     productName: widget.productName,
-    //                     productPrice: widget.productPrice,
-    //                     isDiscount: widget.isDiscount,
-    //                     beforeDiscountPrice: widget.beforeDiscountPrice,
-    //                     discountPercentage: widget.discountPercentage,
-    //                     urlImg: widget.imageURL,
-    //                     isFavorite: favoriteProvider.isFavorite,
-    //                     isAddtoCart: false,
-    //                   ));
+                //     if (favoriteProvider.isFavorite) {
+                //       productProvider.wishlistData.removeWhere(
+                //           (element) => element.urlImg == widget.imageURL);
+                //       productProvider.wishlistData.add(ProductModel(
+                //         productName: widget.productName,
+                //         productPrice: widget.productPrice,
+                //         isDiscount: widget.isDiscount,
+                //         beforeDiscountPrice: widget.beforeDiscountPrice,
+                //         discountPercentage: widget.discountPercentage,
+                //         urlImg: widget.imageURL,
+                //         isFavorite: favoriteProvider.isFavorite,
+                //         isAddtoCart: false,
+                //       ));
 
-    //                   for (var data in productProvider.wishlistData) {
-    //                     print(
-    //                         "wishlist data yang dimasukkan adalah ${data.urlImg} dengan jumlah ${productProvider.wishlistData.length}");
-    //                   }
+                //       for (var data in productProvider.wishlistData) {
+                //         print(
+                //             "wishlist data yang dimasukkan adalah ${data.urlImg} dengan jumlah ${productProvider.wishlistData.length}");
+                //       }
 
-    //                   fToast.showToast(
-    //                     child: toast(
-    //                       message: "1 barang berhasil ditambahkan",
-    //                       onTap: () {
-    //                         fToast.removeCustomToast();
-    //                         pageProvider.currentIndex = 2;
-    //                         Navigator.pushAndRemoveUntil(
-    //                             context,
-    //                             PageTransition(
-    //                               child: const MainPage(),
-    //                               type: PageTransitionType.bottomToTop,
-    //                             ),
-    //                             (route) => false);
-    //                       },
-    //                     ),
-    //                     toastDuration: const Duration(seconds: 2),
-    //                     gravity: ToastGravity.CENTER,
-    //                   );
-    //                 } else {
-    //                   productProvider.wishlistData.removeWhere(
-    //                       (element) => element.urlImg == widget.imageURL);
-    //                 }
-    //               },
-    //             );
-    //           },
-    //           child: Container(
-    //             padding: const EdgeInsets.all(10),
-    //             child: Icon(
-    //               wishlist.isFavorite == false || wishlist.isFavorite == null
-    //                   ? Icons.favorite_border
-    //                   : Icons.favorite,
-    //               color: Colors.white,
-    //               size: 30,
-    //             ),
-    //           ),
-    //         ),
-    //       ],
-    //     ),
-    //   );
-    // }
+                //       fToast.showToast(
+                //         child: toast(
+                //           message: "1 barang berhasil ditambahkan",
+                //           onTap: () {
+                //             fToast.removeCustomToast();
+                //             pageProvider.currentIndex = 2;
+                //             Navigator.pushAndRemoveUntil(
+                //                 context,
+                //                 PageTransition(
+                //                   child: const MainPage(),
+                //                   type: PageTransitionType.bottomToTop,
+                //                 ),
+                //                 (route) => false);
+                //           },
+                //         ),
+                //         toastDuration: const Duration(seconds: 2),
+                //         gravity: ToastGravity.CENTER,
+                //       );
+                //     } else {
+                //       productProvider.wishlistData.removeWhere(
+                //           (element) => element.urlImg == widget.imageURL);
+                //     }
+                //   },
+                // );
+              },
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                child: Icon(
+                  // wishlist.isFavorite == false || wishlist.isFavorite == null
+                  // ? Icons.favorite_border
+                  Icons.favorite,
+                  color: Colors.white,
+                  size: 30,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
 
     Widget header() {
       return Stack(
@@ -243,7 +257,25 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             items: [
               for (var i = 0; i < 5; i++)
                 Image.network(
-                  detailProduct.data != null ? i == 1 ? detailProduct.data?.gambar1 ?? "" : i == 2 ? detailProduct.data?.gambar2 ?? detailProduct.data?.gambar1 ?? "" : i == 3 ? detailProduct.data?.gambar3 ?? detailProduct.data?.gambar1 ?? "" : i == 4 ? detailProduct.data?.gambar4 ?? detailProduct.data?.gambar1 ?? "" : detailProduct.data?.gambar5 ?? detailProduct.data?.gambar1 ?? "" : widget.imageURL ?? "",
+                  detailProduct.data != null
+                      ? i == 1
+                          ? detailProduct.data?.gambar1 ?? ""
+                          : i == 2
+                              ? detailProduct.data?.gambar2 ??
+                                  detailProduct.data?.gambar1 ??
+                                  ""
+                              : i == 3
+                                  ? detailProduct.data?.gambar3 ??
+                                      detailProduct.data?.gambar1 ??
+                                      ""
+                                  : i == 4
+                                      ? detailProduct.data?.gambar4 ??
+                                          detailProduct.data?.gambar1 ??
+                                          ""
+                                      : detailProduct.data?.gambar5 ??
+                                          detailProduct.data?.gambar1 ??
+                                          ""
+                      : widget.imageURL ?? "",
                   height: MediaQuery.sizeOf(context).width,
                   width: MediaQuery.sizeOf(context).width,
                   fit: BoxFit.contain,
@@ -428,7 +460,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              widget.productPrice.toString(),
+              "Rp ${widget.currencyFormatter.format(int.parse(widget.productPrice.toString()))}",
               style: poppins.copyWith(
                 fontSize: 24,
                 fontWeight: bold,
@@ -443,7 +475,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   children: [
                     Flexible(
                       child: Text(
-                        widget.beforeDiscountPrice.toString(),
+                        "Rp ${widget.currencyFormatter.format(int.parse(widget.beforeDiscountPrice.toString()))}",
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                         style: poppins.copyWith(
@@ -455,7 +487,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     Container(
                       margin: const EdgeInsets.only(left: 5),
                       child: Text(
-                        widget.discountPercentage.toString(),
+                        "${widget.discountPercentage}",
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                         style: poppins.copyWith(
@@ -596,83 +628,83 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       );
     }
 
-    // Widget addToCartButton() {
-    //   return Container(
-    //     color: Colors.white,
-    //     width: double.infinity,
-    //     padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
-    //     child: TextButton(
-    //         onPressed: () {
-    //           CartModel cart = productProvider.cartData.firstWhere(
-    //               (element) => element.product?.urlImg == widget.imageURL,
-    //               orElse: () => CartModel(numberOfItem: 0));
-    //           if (cart.numberOfItem == 0) {
-    //             print("object ${widget.beforeDiscountPrice}");
-    //             productProvider.cartData.add(
-    //               CartModel(
-    //                   product: ProductModel(
-    //                     productName: widget.productName,
-    //                     productPrice: widget.productPrice,
-    //                     isDiscount: widget.isDiscount,
-    //                     beforeDiscountPrice: widget.beforeDiscountPrice,
-    //                     discountPercentage: widget.discountPercentage,
-    //                     urlImg: widget.imageURL,
-    //                     isFavorite: favoriteProvider.isFavorite,
-    //                     isAddtoCart: false,
-    //                   ),
-    //                   numberOfItem: 1),
-    //             );
-    //           } else {
-    //             cart.product?.productPrice = widget.productPrice;
-    //             cart.product?.isDiscount = widget.isDiscount;
-    //             cart.product?.beforeDiscountPrice = widget.beforeDiscountPrice;
-    //             cart.product?.discountPercentage = widget.discountPercentage;
-    //             cart.numberOfItem += 1;
-    //           }
+    Widget addToCartButton() {
+      return Container(
+        color: Colors.white,
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+        child: TextButton(
+            onPressed: () {
+              // CartModel cart = productProvider.cartData.firstWhere(
+              //     (element) => element.product?.urlImg == widget.imageURL,
+              //     orElse: () => CartModel(numberOfItem: 0));
+              // if (cart.numberOfItem == 0) {
+              //   print("object ${widget.beforeDiscountPrice}");
+              //   productProvider.cartData.add(
+              //     CartModel(
+              //         product: ProductModel(
+              //           productName: widget.productName,
+              //           productPrice: widget.productPrice,
+              //           isDiscount: widget.isDiscount,
+              //           beforeDiscountPrice: widget.beforeDiscountPrice,
+              //           discountPercentage: widget.discountPercentage,
+              //           urlImg: widget.imageURL,
+              //           isFavorite: favoriteProvider.isFavorite,
+              //           isAddtoCart: false,
+              //         ),
+              //         numberOfItem: 1),
+              //   );
+              // } else {
+              //   cart.product?.productPrice = widget.productPrice;
+              //   cart.product?.isDiscount = widget.isDiscount;
+              //   cart.product?.beforeDiscountPrice = widget.beforeDiscountPrice;
+              //   cart.product?.discountPercentage = widget.discountPercentage;
+              //   cart.numberOfItem += 1;
+              // }
 
-    //           fToast.showToast(
-    //             child: toast(
-    //               message: "1 barang berhasil ditambahkan",
-    //               onTap: () {
-    //                 fToast.removeCustomToast();
-    //                 pageProvider.currentIndex = 4;
-    //                 Navigator.pushAndRemoveUntil(
-    //                     context,
-    //                     PageTransition(
-    //                       child: const MainPage(),
-    //                       type: PageTransitionType.bottomToTop,
-    //                     ),
-    //                     (route) => false);
-    //               },
-    //             ),
-    //             toastDuration: const Duration(seconds: 2),
-    //             gravity: ToastGravity.CENTER,
-    //           );
-    //         },
-    //         style: TextButton.styleFrom(
-    //           backgroundColor: backgroundColor3,
-    //           shape: RoundedRectangleBorder(
-    //               borderRadius: BorderRadius.circular(30)),
-    //         ),
-    //         child: Padding(
-    //           padding: const EdgeInsets.all(8.0),
-    //           child: Row(
-    //             mainAxisAlignment: MainAxisAlignment.center,
-    //             children: [
-    //               const Icon(
-    //                 Icons.shopping_cart,
-    //                 color: Colors.white,
-    //               ),
-    //               Text(
-    //                 "Masukkan Keranjang",
-    //                 style: poppins.copyWith(
-    //                     fontWeight: medium, color: Colors.white),
-    //               ),
-    //             ],
-    //           ),
-    //         )),
-    //   );
-    // }
+              // fToast.showToast(
+              //   child: toast(
+              //     message: "1 barang berhasil ditambahkan",
+              //     onTap: () {
+              //       fToast.removeCustomToast();
+              //       pageProvider.currentIndex = 4;
+              //       Navigator.pushAndRemoveUntil(
+              //           context,
+              //           PageTransition(
+              //             child: const MainPage(),
+              //             type: PageTransitionType.bottomToTop,
+              //           ),
+              //           (route) => false);
+              //     },
+              //   ),
+              //   toastDuration: const Duration(seconds: 2),
+              //   gravity: ToastGravity.CENTER,
+              // );
+            },
+            style: TextButton.styleFrom(
+              backgroundColor: backgroundColor3,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30)),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.shopping_cart,
+                    color: Colors.white,
+                  ),
+                  Text(
+                    "Masukkan Keranjang",
+                    style: poppins.copyWith(
+                        fontWeight: medium, color: Colors.white),
+                  ),
+                ],
+              ),
+            )),
+      );
+    }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -708,11 +740,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 ],
               ),
             ),
-            // headerNavigation(),
-            // Align(
-            //   alignment: Alignment.bottomCenter,
-            //   child: addToCartButton(),
-            // ),
+            headerNavigation(),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: addToCartButton(),
+            ),
           ],
         ),
       ),
