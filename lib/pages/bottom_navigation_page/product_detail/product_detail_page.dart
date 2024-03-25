@@ -1,8 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:intl/intl.dart';
 import 'package:tokoSM/models/cart_model.dart';
+import 'package:tokoSM/models/detail_product_model.dart';
 import 'package:tokoSM/models/product_model.dart';
 import 'package:tokoSM/pages/main_page.dart';
 import 'package:tokoSM/providers/favorite_provider.dart';
+import 'package:tokoSM/providers/login_provider.dart';
 import 'package:tokoSM/providers/page_provider.dart';
 import 'package:tokoSM/providers/product_provider.dart';
 import 'package:tokoSM/theme/theme.dart';
@@ -15,22 +18,24 @@ import 'package:readmore/readmore.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class ProductDetailPage extends StatefulWidget {
-  final String imageURL;
-  final String productName;
-  final String productPrice;
-  final String productStar;
-  final String productLoct;
+  final String? imageURL;
+  final String? productId;
+  final String? productName;
+  final String? productPrice;
+  final String? productStar;
+  final String? productLoct;
   final String? beforeDiscountPrice;
   final String? discountPercentage;
-  final bool isDiscount;
+  final bool? isDiscount;
   const ProductDetailPage(
       {super.key,
-      required this.imageURL,
-      required this.productName,
-      required this.productPrice,
-      required this.productStar,
-      required this.productLoct,
-      required this.isDiscount,
+      this.imageURL,
+      this.productId,
+      this.productName,
+      this.productPrice,
+      this.productStar,
+      this.productLoct,
+      this.isDiscount,
       this.beforeDiscountPrice,
       this.discountPercentage});
 
@@ -42,13 +47,33 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   FToast fToast = FToast();
   int carouselIndex = 0;
   double headerAlpha = 0.0;
+  final currencyFormatter = NumberFormat('#,##0.00', 'ID');
+
+  // detail data product
+  DetailProductModel detailProduct = DetailProductModel();
 
   @override
   void initState() {
     super.initState();
-    // if you want to use context from globally instead of content we need to pass navigatorKey.currentContext!
+    _getDetailproduct();
+    print("isi imageURL adalah: ${widget.imageURL} dengan product id ${widget.productId}");
     fToast.init(context);
   }
+
+    _getDetailproduct()async{
+      ProductProvider productProvider = Provider.of<ProductProvider>(context, listen: false);
+      LoginProvider loginProvider = Provider.of<LoginProvider>(context, listen: false);
+      if(await productProvider.getDetailProduct(productId: widget.productId ?? "", token: loginProvider.loginModel.token ?? "")){
+          print("isi data didalamnya adalah: ${productProvider.detailProductModel.data?.namaProduk}");
+          setState(() {
+              detailProduct = productProvider.detailProductModel ?? DetailProductModel();
+          });
+      }else{
+        setState(() {
+          print("Gagal mendapatkan detail product");
+        });
+      }
+    }
 
   void dispose() {
     super.dispose();
@@ -57,9 +82,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    FavoriteProvider favoriteProvider = Provider.of<FavoriteProvider>(context);
-    PageProvider pageProvider = Provider.of<PageProvider>(context);
-    ProductProvider productProvider = Provider.of<ProductProvider>(context);
+    // FavoriteProvider favoriteProvider = Provider.of<FavoriteProvider>(context);
+    // PageProvider pageProvider = Provider.of<PageProvider>(context);
+    // ProductProvider productProvider = Provider.of<ProductProvider>(context);
 
     // list.firstWhere((a) => a == b, orElse: () => print('No matching element.'));
     // ProductModel wishlist = productProvider.wishlistData.firstWhere((element) => element.urlImg == widget.imageURL, orElse: ()=> ProductModel());
@@ -218,10 +243,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             items: [
               for (var i = 0; i < 5; i++)
                 Image.network(
-                  widget.imageURL,
+                  detailProduct.data != null ? i == 1 ? detailProduct.data?.gambar1 ?? "" : i == 2 ? detailProduct.data?.gambar2 ?? detailProduct.data?.gambar1 ?? "" : i == 3 ? detailProduct.data?.gambar3 ?? detailProduct.data?.gambar1 ?? "" : i == 4 ? detailProduct.data?.gambar4 ?? detailProduct.data?.gambar1 ?? "" : detailProduct.data?.gambar5 ?? detailProduct.data?.gambar1 ?? "" : widget.imageURL ?? "",
                   height: MediaQuery.sizeOf(context).width,
                   width: MediaQuery.sizeOf(context).width,
-                  fit: BoxFit.cover,
+                  fit: BoxFit.contain,
                 ),
             ],
             options: CarouselOptions(
@@ -403,14 +428,14 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              widget.productPrice,
+              widget.productPrice.toString(),
               style: poppins.copyWith(
                 fontSize: 24,
                 fontWeight: bold,
                 color: backgroundColor1,
               ),
             ),
-            if (widget.isDiscount)
+            if (widget.isDiscount ?? false)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 5),
                 child: Row(
@@ -446,7 +471,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             Padding(
               padding: const EdgeInsets.only(top: 10),
               child: Text(
-                widget.productName,
+                widget.productName ?? "",
                 style: poppins.copyWith(
                   fontSize: 18,
                   fontWeight: bold,
@@ -466,7 +491,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   ),
                   Expanded(
                     child: Text(
-                      widget.productLoct,
+                      widget.productLoct ?? "",
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                       style: poppins.copyWith(
@@ -482,7 +507,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             Padding(
               padding: const EdgeInsets.only(top: 10),
               child: RatingStars(
-                value: double.parse(widget.productStar),
+                value: double.parse(widget.productStar ?? "0"),
                 onValueChanged: (v) {
                   //
                   setState(() {

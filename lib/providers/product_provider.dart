@@ -1,6 +1,7 @@
 import 'dart:ffi';
 
 import 'package:tokoSM/models/cart_model.dart';
+import 'package:tokoSM/models/detail_product_model.dart';
 import 'package:tokoSM/models/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:tokoSM/services/product_service.dart';
@@ -41,6 +42,23 @@ class ProductProvider extends ChangeNotifier {
       _promoProduct = product;
       return true;
     } catch (e) {
+      return false;
+    }
+  }
+
+  late DetailProductModel _detailProductModel;
+  DetailProductModel get detailProductModel => _detailProductModel;
+  set detailProductModel(DetailProductModel newDetailProductModel){
+    _detailProductModel = newDetailProductModel;
+  }
+
+  Future<bool> getDetailProduct({required String productId, required String token})async{
+    try{
+      DetailProductModel detailProduct = await ProductService().detailProduct(productId: productId, token: token,);
+      _detailProductModel = detailProduct;
+      return true;
+    }
+    catch(e){
       return false;
     }
   }

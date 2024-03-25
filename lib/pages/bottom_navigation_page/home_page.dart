@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:intl/intl.dart';
 import 'package:tokoSM/models/login_model.dart';
 import 'package:tokoSM/models/product_model.dart';
 import 'package:tokoSM/pages/bottom_navigation_page/home_page/product_list_search_result.dart';
@@ -61,6 +62,8 @@ class _HomePageState extends State<HomePage> {
 
   int carouselIndex = 0;
   int productIndex = 0;
+
+  final currencyFormatter = NumberFormat('#,##0.00', 'ID');
 
   // Promo Product
   bool isLoading = false;
@@ -372,12 +375,19 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
-    Widget horizontalListItem({bool isOnDiscountContent = false}) {
+    Widget horizontalListItem({bool isOnDiscountContent = false, required String forTitle}) {
+      // Data dibawah ini hanya bersifat sementara
       List<String> listImageData = [];
-      var numberofItem = promoProduct.data?.length ?? 0;
-      for (var i = 0; i < numberofItem; i++) {
-        if (promoProduct.data != null) {
-          listImageData.add(promoProduct.data![i].gambar1 ?? "");
+      var numberofItem = forTitle.toLowerCase() == 'barang populer' ? 20 : promoProduct.data?.length ?? 0;
+      var counter = 0;
+      for (var i = 0; i < 20; i++) {
+        if (counter <= imgList.length - 1){
+        listImageData.add(imgList[counter]);
+        counter += 1;
+        }
+        else{
+          counter = 0;
+          listImageData.add(imgList[counter]);
         }
       }
 
@@ -387,6 +397,7 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
           child: Row(
             children: [
+
               for (var i = 0; i < numberofItem; i++)
                 InkWell(
                   onTap: () {
@@ -395,15 +406,16 @@ class _HomePageState extends State<HomePage> {
                       context,
                       PageTransition(
                         child: ProductDetailPage(
-                          imageURL: listImageData[i],
-                          productLoct: "Cabang Malang Kota",
-                          productName: "Lorem Ipsum dolor sit amet",
-                          productPrice: "Rp 18.000,00",
+                          imageURL: forTitle.toLowerCase() == 'barang populer' ? listImageData[i] : "${promoProduct.data?[i].gambar1}",
+                          productId: forTitle.toLowerCase() == 'barang populer' ? "-1" : "${promoProduct.data?[i].id}",
+                          productLoct:  "Cabang Malang Kota",
+                          productName: forTitle.toLowerCase() == 'barang populer' ? 'Lorem Ipsum' : "${promoProduct.data?[i].namaProduk}",
+                          productPrice: forTitle.toLowerCase() == 'barang populer' ? '18000' : "${promoProduct.data?[i].hargaDiskon}",
                           productStar: "4.5",
                           beforeDiscountPrice:
-                              isOnDiscountContent ? "Rp 180.000,00" : null,
+                              isOnDiscountContent ? forTitle.toLowerCase() == 'barang populer' ? '18000' : "${promoProduct.data?[i].harga}" : null,
                           discountPercentage:
-                              isOnDiscountContent ? "50%" : null,
+                              isOnDiscountContent ? forTitle.toLowerCase() == 'barang populer' ? '18000' : "${promoProduct.data?[i].diskon}%" : null,
                           isDiscount: isOnDiscountContent,
                         ),
                         type: PageTransitionType.bottomToTop,
@@ -431,7 +443,7 @@ class _HomePageState extends State<HomePage> {
                           borderRadius: const BorderRadius.vertical(
                               top: Radius.circular(8)),
                           child: Image.network(
-                            (listImageData[i]),
+                            ( forTitle.toLowerCase() == 'barang populer' ? listImageData[i] : '${promoProduct.data?[i].gambar1}'),
                             width: 150,
                             height: 150,
                             fit: BoxFit.cover,
@@ -446,7 +458,7 @@ class _HomePageState extends State<HomePage> {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 5),
                                 child: Text(
-                                  "Lorem Ipsum dolor sit amet",
+                                  forTitle.toLowerCase() == 'barang populer' ? "Lorem Ipsum dolor sit amet" : "${promoProduct.data?[i].namaProduk}",
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 2,
                                   style: poppins.copyWith(
@@ -459,7 +471,7 @@ class _HomePageState extends State<HomePage> {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 5),
                                 child: Text(
-                                  "Rp 18.000,00",
+                                  forTitle.toLowerCase() == 'barang populer' ? 'Rp 18.000,00' : "Rp ${currencyFormatter.format(promoProduct.data?[i].hargaDiskon)}",
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
                                   style: poppins.copyWith(
@@ -477,7 +489,7 @@ class _HomePageState extends State<HomePage> {
                                     children: [
                                       Flexible(
                                         child: Text(
-                                          "Rp 180.000,00",
+                                          forTitle.toLowerCase() == 'barang populer' ? 'Rp 18.000,00' : "Rp ${currencyFormatter.format(promoProduct.data?[i].harga)}",
                                           overflow: TextOverflow.ellipsis,
                                           maxLines: 1,
                                           style: poppins.copyWith(
@@ -490,7 +502,7 @@ class _HomePageState extends State<HomePage> {
                                       Container(
                                         margin: const EdgeInsets.only(left: 5),
                                         child: Text(
-                                          "50%",
+                                          forTitle.toLowerCase() == 'barang populer' ? "50%" : "${promoProduct.data?[i].diskon}%",
                                           overflow: TextOverflow.ellipsis,
                                           maxLines: 1,
                                           style: poppins.copyWith(
@@ -720,12 +732,12 @@ class _HomePageState extends State<HomePage> {
             height: 20,
           ),
           titleText("Barang Populer"),
-          horizontalListItem(),
+          horizontalListItem(forTitle: 'Barang Populer'),
           const SizedBox(
             height: 20,
           ),
           titleText("Sedang Promo"),
-          horizontalListItem(isOnDiscountContent: true),
+          horizontalListItem(isOnDiscountContent: true, forTitle: 'Sedang Promo'),
           const SizedBox(
             height: 20,
           ),
