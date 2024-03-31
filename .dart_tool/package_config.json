@@ -2,6 +2,12 @@
   "configVersion": 2,
   "packages": [
     {
+      "name": "animated_custom_dropdown",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/animated_custom_dropdown-3.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
       "name": "async",
       "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/async-2.11.0",
       "packageUri": "lib/",
@@ -446,7 +452,7 @@
       "languageVersion": "3.1"
     }
   ],
-  "generated": "2024-03-25T12:42:10.177269Z",
+  "generated": "2024-03-31T09:39:42.049906Z",
   "generator": "pub",
   "generatorVersion": "3.1.2"
 }

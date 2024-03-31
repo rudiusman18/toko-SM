@@ -76,7 +76,7 @@ class _MainPageState extends State<MainPage> {
                 icon: Container(
                   margin: const EdgeInsets.symmetric(vertical: 15),
                   child: Icon(
-                    Icons.view_list,
+                    Icons.view_cozy_rounded,
                     size: 30,
                     color: pageProvider.currentIndex == 1
                         ? Colors.white

@@ -1,5 +1,6 @@
 import 'package:tokoSM/models/login_model.dart';
 import 'package:tokoSM/pages/login_page.dart';
+import 'package:tokoSM/pages/profile_page/edit_profile_page.dart';
 import 'package:tokoSM/providers/login_provider.dart';
 import 'package:tokoSM/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,8 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  get type => null;
+
   @override
   Widget build(BuildContext context) {
     LoginProvider loginProvider = Provider.of<LoginProvider>(context);
@@ -108,27 +111,51 @@ class _ProfilePageState extends State<ProfilePage> {
       );
     }
 
-    Widget profileData({required String title, required String value}) {
-      return Row(
-        children: [
-          Expanded(
-            child: Text(
-              title,
-              style: poppins,
-            ),
+    Widget profileData({required String title}) {
+      return Text(
+        title,
+        style: poppins.copyWith(
+          fontWeight: medium,
+          fontSize: 14,
+        ),
+      );
+    }
+
+    Widget actionWidget({
+      required IconData icon,
+      required String title,
+      required onTap,
+    }) {
+      return Container(
+        margin: const EdgeInsets.only(
+          left: 20,
+          right: 20,
+          top: 10,
+        ),
+        child: InkWell(
+          onTap: onTap,
+          child: Row(
+            children: [
+              Icon(icon),
+              const SizedBox(
+                width: 10,
+              ),
+              Text(
+                title,
+                style: poppins.copyWith(
+                  fontSize: 18,
+                ),
+              ),
+            ],
           ),
-          Text(
-            value,
-            style: poppins,
-          ),
-        ],
+        ),
       );
     }
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Profil Pengguna",
+          "Pengaturan",
           style: poppins,
         ),
         centerTitle: true,
@@ -139,69 +166,116 @@ class _ProfilePageState extends State<ProfilePage> {
         child: SingleChildScrollView(
           child: SizedBox(
             width: double.infinity,
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 20),
+            child: Padding(
+              padding: const EdgeInsets.only(
+                top: 30,
+              ),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Container(
-                    margin: const EdgeInsets.only(
-                      top: 30,
-                    ),
-                    width: 200,
-                    height: 200,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: backgroundColor3,
-                    ),
-                    child: Center(
-                      child: Text(
-                        getInitials(
-                          userLogin.data?.namaPelanggan ?? "-".toUpperCase(),
+                  Row(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(left: 20, right: 20),
+                        width: 100,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: backgroundColor3,
                         ),
-                        style: poppins.copyWith(
-                          fontWeight: bold,
-                          fontSize: 80,
+                        child: Center(
+                          child: Text(
+                            getInitials(
+                              userLogin.data?.namaPelanggan ??
+                                  "-".toUpperCase(),
+                            ),
+                            style: poppins.copyWith(
+                              fontWeight: bold,
+                              fontSize: 30,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                  profileData(
-                    title: "Nama",
-                    value: userLogin.data?.namaPelanggan ?? "-",
-                  ),
-                  profileData(
-                    title: "Nama Pengguna",
-                    value: userLogin.data?.username ?? "-",
-                  ),
-                  profileData(
-                      title: "Email",
-                      value: userLogin.data?.emailPelanggan ?? "-"),
-                  profileData(
-                      title: "Telp",
-                      value: userLogin.data?.telpPelanggan ?? "-"),
-                  profileData(
-                      title: "Jenis Kelamin",
-                      value: userLogin.data?.jenisKelaminPelanggan ?? "-"),
-                  profileData(
-                      title: "Alamat",
-                      value: userLogin.data?.alamatPelanggan ?? "-"),
-                  ElevatedButton(
-                    onPressed: () {
-                      showAlertDialog(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(Icons.logout),
-                        Text(
-                          "LOGOUT",
-                          style: poppins,
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            profileData(
+                              title: userLogin.data?.namaPelanggan ?? "-",
+                            ),
+                            profileData(
+                                title: userLogin.data?.emailPelanggan ?? "-"),
+                            profileData(
+                                title: userLogin.data?.telpPelanggan ?? "-"),
+                          ],
                         ),
-                      ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  actionWidget(
+                    icon: Icons.edit,
+                    title: "Edit Profil",
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        PageTransition(
+                          child: const EditProfilePage(),
+                          type: PageTransitionType.rightToLeft,
+                        ),
+                      );
+                    },
+                  ),
+                  actionWidget(
+                    icon: Icons.lock,
+                    title: "Ubah Kata Sandi",
+                    onTap: () {},
+                  ),
+                  actionWidget(
+                    icon: Icons.house,
+                    title: "Daftar Alamat",
+                    onTap: () {},
+                  ),
+                  actionWidget(
+                    icon: Icons.receipt,
+                    title: "daftar transaksi",
+                    onTap: () {},
+                  ),
+                  actionWidget(
+                    icon: Icons.star,
+                    title: "Ulasan",
+                    onTap: () {},
+                  ),
+                  actionWidget(
+                    icon: Icons.favorite,
+                    title: "Favorit",
+                    onTap: () {},
+                  ),
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  Container(
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                    ),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        showAlertDialog(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.logout),
+                          Text(
+                            "LOGOUT",
+                            style: poppins,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],

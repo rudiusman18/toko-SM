@@ -43,10 +43,13 @@ class Data {
   String? gambar3;
   String? gambar4;
   String? gambar5;
+  int? isAktiva;
   int? hargaMember;
   int? diskon;
+  List<String>? gambar;
   int? harga;
   int? hargaDiskon;
+  double? rating;
 
   Data(
       {this.id,
@@ -67,10 +70,13 @@ class Data {
       this.gambar3,
       this.gambar4,
       this.gambar5,
+      this.isAktiva,
       this.hargaMember,
       this.diskon,
+      this.gambar,
       this.harga,
-      this.hargaDiskon});
+      this.hargaDiskon,
+      this.rating});
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -91,10 +97,13 @@ class Data {
     gambar3 = json['gambar3'];
     gambar4 = json['gambar4'];
     gambar5 = json['gambar5'];
+    isAktiva = json['is_aktiva'];
     hargaMember = json['harga_member'];
     diskon = json['diskon'];
+    gambar = json['gambar'].cast<String>();
     harga = json['harga'];
     hargaDiskon = json['harga_diskon'];
+    rating = json['rating'];
   }
 
   Map<String, dynamic> toJson() {
@@ -117,10 +126,13 @@ class Data {
     data['gambar3'] = gambar3;
     data['gambar4'] = gambar4;
     data['gambar5'] = gambar5;
+    data['is_aktiva'] = isAktiva;
     data['harga_member'] = hargaMember;
     data['diskon'] = diskon;
+    data['gambar'] = gambar;
     data['harga'] = harga;
     data['harga_diskon'] = hargaDiskon;
+    data['rating'] = rating;
     return data;
   }
 }

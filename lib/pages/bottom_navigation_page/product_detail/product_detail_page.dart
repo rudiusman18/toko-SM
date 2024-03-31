@@ -1,10 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:intl/intl.dart';
-import 'package:tokoSM/models/cart_model.dart';
 import 'package:tokoSM/models/detail_product_model.dart';
-import 'package:tokoSM/models/product_model.dart';
+import 'package:tokoSM/models/favorite_model.dart';
 import 'package:tokoSM/pages/main_page.dart';
-import 'package:tokoSM/providers/favorite_provider.dart';
 import 'package:tokoSM/providers/login_provider.dart';
 import 'package:tokoSM/providers/page_provider.dart';
 import 'package:tokoSM/providers/product_provider.dart';
@@ -15,8 +13,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+// ignore: must_be_immutable
 class ProductDetailPage extends StatefulWidget {
   final currencyFormatter = NumberFormat('#,##0.00', 'ID');
   final String? imageURL;
@@ -24,7 +22,7 @@ class ProductDetailPage extends StatefulWidget {
   final String? productName;
   final String? productPrice;
   final String? productStar;
-  final String? productLoct;
+  String? productLoct;
   final String? beforeDiscountPrice;
   final String? discountPercentage;
   final bool? isDiscount;
@@ -53,13 +51,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   // detail data product
   bool isLoading = false;
   DetailProductModel detailProduct = DetailProductModel();
+  FavoriteModel favoriteProduct = FavoriteModel();
 
   @override
   void initState() {
     super.initState();
     _getDetailproduct();
-    print(
-        "isi imageURL adalah: ${widget.imageURL} dengan product id ${widget.productId}");
+    _getFavoriteProduct();
     fToast.init(context);
   }
 
@@ -74,18 +72,35 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     if (await productProvider.getDetailProduct(
         productId: widget.productId ?? "",
         token: loginProvider.loginModel.token ?? "")) {
-      print(
-          "isi data didalamnya adalah: ${productProvider.detailProductModel.data?.namaProduk}");
       setState(() {
         isLoading = false;
-        detailProduct =
-            productProvider.detailProductModel ?? DetailProductModel();
+        detailProduct = productProvider.detailProductModel;
       });
     } else {
       setState(() {
         isLoading = false;
-        print("Gagal mendapatkan detail product");
       });
+    }
+  }
+
+  _getFavoriteProduct() async {
+    ProductProvider productProvider =
+        Provider.of<ProductProvider>(context, listen: false);
+    LoginProvider loginProvider =
+        Provider.of<LoginProvider>(context, listen: false);
+    if (await productProvider.getFavoriteProduct(
+        token: loginProvider.loginModel.token ?? "")) {
+      favoriteProduct = productProvider.favoriteModel;
+      favoriteProduct.data = favoriteProduct.data
+          ?.where((element) =>
+              element.namaProduk?.toLowerCase() ==
+              widget.productName?.toLowerCase())
+          .toList();
+
+      print(
+          "isi favorite page untuk product ${widget.productName} adalah ${favoriteProduct.data}");
+    } else {
+      print("ada yang salah dengan logikamu");
     }
   }
 
@@ -97,8 +112,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    FavoriteProvider favoriteProvider = Provider.of<FavoriteProvider>(context);
     PageProvider pageProvider = Provider.of<PageProvider>(context);
+    ProductProvider productProvider = Provider.of<ProductProvider>(context);
+    LoginProvider loginProvider = Provider.of<LoginProvider>(context);
 
     // list.firstWhere((a) => a == b, orElse: () => print('No matching element.'));
     // ProductModel wishlist = productProvider.wishlistData.firstWhere((element) => element.urlImg == widget.imageURL, orElse: ()=> ProductModel());
@@ -183,63 +199,47 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               ),
             ),
             InkWell(
-              onTap: () {
-                // setState(
-                //   () {
-                //     fToast.removeCustomToast();
-                //     favoriteProvider.isFavorite =
-                //         wishlist.isFavorite == null ? true : false;
-
-                //     if (favoriteProvider.isFavorite) {
-                //       productProvider.wishlistData.removeWhere(
-                //           (element) => element.urlImg == widget.imageURL);
-                //       productProvider.wishlistData.add(ProductModel(
-                //         productName: widget.productName,
-                //         productPrice: widget.productPrice,
-                //         isDiscount: widget.isDiscount,
-                //         beforeDiscountPrice: widget.beforeDiscountPrice,
-                //         discountPercentage: widget.discountPercentage,
-                //         urlImg: widget.imageURL,
-                //         isFavorite: favoriteProvider.isFavorite,
-                //         isAddtoCart: false,
-                //       ));
-
-                //       for (var data in productProvider.wishlistData) {
-                //         print(
-                //             "wishlist data yang dimasukkan adalah ${data.urlImg} dengan jumlah ${productProvider.wishlistData.length}");
-                //       }
-
-                //       fToast.showToast(
-                //         child: toast(
-                //           message: "1 barang berhasil ditambahkan",
-                //           onTap: () {
-                //             fToast.removeCustomToast();
-                //             pageProvider.currentIndex = 2;
-                //             Navigator.pushAndRemoveUntil(
-                //                 context,
-                //                 PageTransition(
-                //                   child: const MainPage(),
-                //                   type: PageTransitionType.bottomToTop,
-                //                 ),
-                //                 (route) => false);
-                //           },
-                //         ),
-                //         toastDuration: const Duration(seconds: 2),
-                //         gravity: ToastGravity.CENTER,
-                //       );
-                //     } else {
-                //       productProvider.wishlistData.removeWhere(
-                //           (element) => element.urlImg == widget.imageURL);
-                //     }
-                //   },
-                // );
+              onTap: () async {
+                setState(() {});
+                fToast.removeCustomToast();
+                if (favoriteProduct.data?.isEmpty ?? true) {
+                  await productProvider.postFavoriteProduct(
+                    token: loginProvider.loginModel.token ?? "",
+                    productId: widget.productId.toString(),
+                  );
+                  _getFavoriteProduct();
+                  fToast.showToast(
+                    child: toast(
+                      message: "1 barang berhasil ditambahkan",
+                      onTap: () {
+                        fToast.removeCustomToast();
+                        pageProvider.currentIndex = 2;
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            PageTransition(
+                              child: const MainPage(),
+                              type: PageTransitionType.bottomToTop,
+                            ),
+                            (route) => false);
+                      },
+                    ),
+                    toastDuration: const Duration(seconds: 2),
+                    gravity: ToastGravity.CENTER,
+                  );
+                } else {
+                  await productProvider.deleteFavoriteProduct(
+                    token: loginProvider.loginModel.token ?? "",
+                    productId: widget.productId.toString(),
+                  );
+                  _getFavoriteProduct();
+                }
               },
               child: Container(
                 padding: const EdgeInsets.all(10),
                 child: Icon(
-                  // wishlist.isFavorite == false || wishlist.isFavorite == null
-                  // ? Icons.favorite_border
-                  Icons.favorite,
+                  favoriteProduct.data?.isEmpty ?? true
+                      ? Icons.favorite_border
+                      : Icons.favorite,
                   color: Colors.white,
                   size: 30,
                 ),
@@ -251,34 +251,19 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     }
 
     Widget header() {
+      int numberofItems = detailProduct.data?.gambar?.length ?? 0;
       return Stack(
         children: [
           CarouselSlider(
             items: [
-              for (var i = 0; i < 5; i++)
+              for (int i = 0; i < numberofItems; i++)
                 Image.network(
                   detailProduct.data != null
-                      ? i == 1
-                          ? detailProduct.data?.gambar1 ?? ""
-                          : i == 2
-                              ? detailProduct.data?.gambar2 ??
-                                  detailProduct.data?.gambar1 ??
-                                  ""
-                              : i == 3
-                                  ? detailProduct.data?.gambar3 ??
-                                      detailProduct.data?.gambar1 ??
-                                      ""
-                                  : i == 4
-                                      ? detailProduct.data?.gambar4 ??
-                                          detailProduct.data?.gambar1 ??
-                                          ""
-                                      : detailProduct.data?.gambar5 ??
-                                          detailProduct.data?.gambar1 ??
-                                          ""
+                      ? "${detailProduct.data?.gambar?[i]}"
                       : widget.imageURL ?? "",
                   height: MediaQuery.sizeOf(context).width,
                   width: MediaQuery.sizeOf(context).width,
-                  fit: BoxFit.contain,
+                  fit: BoxFit.cover,
                 ),
             ],
             options: CarouselOptions(
@@ -300,17 +285,24 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 }),
           ),
           Container(
+            padding: const EdgeInsets.only(
+              left: 20,
+            ),
             height: MediaQuery.sizeOf(context).width * 0.68,
-            alignment: Alignment.bottomCenter,
+            alignment: Alignment.bottomLeft,
             margin: const EdgeInsets.only(bottom: 10),
-            child: AnimatedSmoothIndicator(
-              activeIndex: carouselIndex,
-              count: 5,
-              effect: WormEffect(
-                activeDotColor: backgroundColor2,
-                dotColor: Colors.white,
-                dotHeight: 10,
-                dotWidth: 10,
+            child: Container(
+              padding: const EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                color: backgroundColor3,
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: Text(
+                "${carouselIndex + 1}/$numberofItems",
+                style: poppins.copyWith(
+                  fontWeight: light,
+                  color: Colors.white,
+                ),
               ),
             ),
           ),
@@ -444,6 +436,16 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     }
 
     Widget content() {
+      List<String> dataCabang = <String>[];
+      var numberofStocks = detailProduct.data?.stok?.length ?? 0;
+      if ((detailProduct.data?.stok?.length ?? 0) <= 0) {
+        dataCabang.add("Pusat");
+      } else {
+        dataCabang.clear();
+        for (int i = 0; i < numberofStocks; i++) {
+          dataCabang.add("${detailProduct.data?.stok?[i].cabang}");
+        }
+      }
       return Container(
         margin: EdgeInsets.only(top: MediaQuery.sizeOf(context).width * 0.7),
         padding: const EdgeInsets.only(
@@ -460,14 +462,20 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Rp ${widget.currencyFormatter.format(int.parse(widget.productPrice.toString()))}",
+              "Rp ${widget.currencyFormatter.format(int.parse((detailProduct.data?.harga?.where((element) => element.cabang?.toLowerCase() == widget.productLoct?.toLowerCase()).first.diskon ?? 0).toString() == "0" ? (detailProduct.data?.harga?.where((element) => element.cabang?.toLowerCase() == widget.productLoct?.toLowerCase()).first.harga ?? 0).toString() : (detailProduct.data?.harga?.where((element) => element.cabang?.toLowerCase() == widget.productLoct?.toLowerCase()).first.hargaDiskon ?? 0).toString()))}",
               style: poppins.copyWith(
                 fontSize: 24,
                 fontWeight: bold,
                 color: backgroundColor1,
               ),
             ),
-            if (widget.isDiscount ?? false)
+            if ((detailProduct.data?.harga
+                    ?.where((element) =>
+                        element.cabang?.toLowerCase() ==
+                        widget.productLoct?.toLowerCase())
+                    .first
+                    .diskon) !=
+                null)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 5),
                 child: Row(
@@ -475,7 +483,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   children: [
                     Flexible(
                       child: Text(
-                        "Rp ${widget.currencyFormatter.format(int.parse(widget.beforeDiscountPrice.toString()))}",
+                        "Rp ${widget.currencyFormatter.format(int.parse((detailProduct.data?.harga?.where((element) => element.cabang?.toLowerCase() == widget.productLoct?.toLowerCase()).first.harga ?? 0).toString()))}",
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                         style: poppins.copyWith(
@@ -487,7 +495,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     Container(
                       margin: const EdgeInsets.only(left: 5),
                       child: Text(
-                        "${widget.discountPercentage}",
+                        "${(detailProduct.data?.harga?.where((element) => element.cabang?.toLowerCase() == widget.productLoct?.toLowerCase()).first.diskon ?? 0)}%"
+                            .toString(),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                         style: poppins.copyWith(
@@ -515,22 +524,37 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               padding: const EdgeInsets.only(top: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Icon(
                     Icons.location_city,
                     color: backgroundColor2,
+                    size: 40,
+                  ),
+                  Text(
+                    "Cabang ",
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: poppins.copyWith(
+                      color: backgroundColor2,
+                      fontWeight: medium,
+                    ),
                   ),
                   Expanded(
-                    child: Text(
-                      widget.productLoct ?? "",
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                      style: poppins.copyWith(
-                        color: backgroundColor2,
-                        fontWeight: medium,
-                        fontSize: 12,
-                      ),
+                    child: DropdownMenu<String>(
+                      initialSelection: widget.productLoct,
+                      onSelected: (String? value) {
+                        // This is called when the user selects an item.
+                        setState(() {
+                          widget.productLoct = value!;
+                          print(' value $value');
+                        });
+                      },
+                      dropdownMenuEntries: dataCabang
+                          .map<DropdownMenuEntry<String>>((String value) {
+                        return DropdownMenuEntry<String>(
+                            value: value, label: value);
+                      }).toList(),
                     ),
                   ),
                 ],
@@ -574,7 +598,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             Padding(
               padding: const EdgeInsets.only(top: 10),
               child: ReadMoreText(
-                "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of \"de Finibus Bonorum et Malorum\" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, \"Lorem ipsum dolor sit amet..\", comes from a line in section 1.10.32. The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from \"de Finibus Bonorum et Malorum\" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.\n",
+                "${detailProduct.data?.deskripsiProduk}",
                 style: poppins.copyWith(
                   fontWeight: light,
                 ),
@@ -597,9 +621,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 ),
               ),
             ),
-            productDetailsContent("Kondisi", "Baru"),
-            productDetailsContent("Min. Pembelian", "1 Buah"),
-            productDetailsContent("Kategori", "Makanan & Minuman"),
+            productDetailsContent("Merk", "${detailProduct.data?.merkProduk}"),
+            productDetailsContent(
+                "Satuan", "${detailProduct.data?.satuanProduk}"),
+            productDetailsContent(
+                "Golongan", "${detailProduct.data?.golonganProduk}"),
+            productDetailsContent("Stok",
+                "${detailProduct.data?.stok?.where((element) => element.cabang?.toLowerCase() == "${widget.productLoct?.toLowerCase()}").first.stok}"),
             Padding(
               padding: const EdgeInsets.only(top: 10),
               child: Row(
@@ -635,51 +663,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
         child: TextButton(
             onPressed: () {
-              // CartModel cart = productProvider.cartData.firstWhere(
-              //     (element) => element.product?.urlImg == widget.imageURL,
-              //     orElse: () => CartModel(numberOfItem: 0));
-              // if (cart.numberOfItem == 0) {
-              //   print("object ${widget.beforeDiscountPrice}");
-              //   productProvider.cartData.add(
-              //     CartModel(
-              //         product: ProductModel(
-              //           productName: widget.productName,
-              //           productPrice: widget.productPrice,
-              //           isDiscount: widget.isDiscount,
-              //           beforeDiscountPrice: widget.beforeDiscountPrice,
-              //           discountPercentage: widget.discountPercentage,
-              //           urlImg: widget.imageURL,
-              //           isFavorite: favoriteProvider.isFavorite,
-              //           isAddtoCart: false,
-              //         ),
-              //         numberOfItem: 1),
-              //   );
-              // } else {
-              //   cart.product?.productPrice = widget.productPrice;
-              //   cart.product?.isDiscount = widget.isDiscount;
-              //   cart.product?.beforeDiscountPrice = widget.beforeDiscountPrice;
-              //   cart.product?.discountPercentage = widget.discountPercentage;
-              //   cart.numberOfItem += 1;
-              // }
-
-              // fToast.showToast(
-              //   child: toast(
-              //     message: "1 barang berhasil ditambahkan",
-              //     onTap: () {
-              //       fToast.removeCustomToast();
-              //       pageProvider.currentIndex = 4;
-              //       Navigator.pushAndRemoveUntil(
-              //           context,
-              //           PageTransition(
-              //             child: const MainPage(),
-              //             type: PageTransitionType.bottomToTop,
-              //           ),
-              //           (route) => false);
-              //     },
-              //   ),
-              //   toastDuration: const Duration(seconds: 2),
-              //   gravity: ToastGravity.CENTER,
-              // );
+              // CartModel
             },
             style: TextButton.styleFrom(
               backgroundColor: backgroundColor3,
@@ -713,7 +697,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           children: [
             NotificationListener<ScrollNotification>(
               onNotification: (ScrollNotification scrollInfo) {
-                if (scrollInfo is ScrollUpdateNotification) {
+                if (scrollInfo is ScrollUpdateNotification &&
+                    scrollInfo.metrics.axis == Axis.vertical) {
                   setState(() {
                     // Calculate the new alpha value based on scroll position
                     double newAlpha = 0.0 +

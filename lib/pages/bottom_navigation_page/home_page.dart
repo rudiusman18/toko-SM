@@ -1,13 +1,9 @@
-import 'dart:ffi';
-
-import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:intl/intl.dart';
 import 'package:tokoSM/models/login_model.dart';
 import 'package:tokoSM/models/product_model.dart';
 import 'package:tokoSM/pages/bottom_navigation_page/home_page/product_list_search_result.dart';
 import 'package:tokoSM/pages/bottom_navigation_page/product_detail/product_detail_page.dart';
-import 'package:tokoSM/pages/main_page.dart';
 import 'package:tokoSM/pages/profile_page.dart';
 import 'package:tokoSM/providers/login_provider.dart';
 import 'package:tokoSM/providers/product_provider.dart';
@@ -27,13 +23,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final List<String> adsBannerList = [
-    "https://lelogama.go-jek.com/post_featured_image/promo-kesebelasan-Anniv_GoFood_Blog-Banner_1456x818_200rb.jpg",
-    "https://lelogama.go-jek.com/post_thumbnail/promo-go-food-des-2022.jpg",
-    "https://bankmega.com/media/filer_public/73/01/73017ae3-22cb-487e-8f55-6a7817730adb/0-banner-bm-new-eos-tfi.jpg",
-    "https://shopee.co.id/inspirasi-shopee/wp-content/uploads/2020/05/Banner-15-Mei_Horizontal.jpg",
-    "https://bankmega.com/media/filer_public/a0/c1/a0c12e79-f551-478d-a5cf-e0815d0e4028/0-bm-banner-ecommerce-payday.jpg"
-  ];
+  List<Map<String, dynamic>> adsBannerList = [];
   final List<String> imgList = [
     'https://images.unsplash.com/photo-1519420573924-65fcd45245f8?auto=format&fit=crop&q=80&w=1935&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     'https://images.unsplash.com/photo-1591184510259-b6f1be3d7aff?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
@@ -65,35 +55,136 @@ class _HomePageState extends State<HomePage> {
 
   final currencyFormatter = NumberFormat('#,##0.00', 'ID');
 
+  // Banner Product
+  bool bannerisLoading = false;
+
   // Promo Product
-  bool isLoading = false;
+  bool promoIsLoading = false;
   ProductModel promoProduct = ProductModel();
+
+  // Paling Laris Product
+  bool palingLarisLoading = false;
+  ProductModel palingLarisProduct = ProductModel();
+
+  // scroll controller
+  final scrollController = ScrollController();
+  bool scrollIsAtEnd = false;
+  int page = 1;
+  bool palingLarisProductisReachEnd = false;
 
   @override
   void initState() {
     super.initState();
     searchTextFieldFocusNode.addListener(_onFocusChange);
-    _initProduct();
+    scrollController.addListener(_scrollController);
+    _initBannerProduct();
+    _initPromoProduct();
+    _initPalingLarisProduct();
   }
 
-  _initProduct() async {
+  _scrollController() {
+    if (scrollController.offset >= scrollController.position.maxScrollExtent &&
+        !scrollController.position.outOfRange) {
+      setState(() {
+        scrollIsAtEnd = true;
+        if (palingLarisProductisReachEnd == false) {
+          page += 1;
+          _initPalingLarisProduct(page: page.toString());
+        }
+      });
+    } else {
+      setState(() {
+        scrollIsAtEnd = false;
+      });
+    }
+  }
+
+  _initBannerProduct() async {
+    //  Mendapatkan data banner produk
+    LoginProvider loginProvider =
+        Provider.of<LoginProvider>(context, listen: false);
+    ProductProvider productProvider =
+        Provider.of<ProductProvider>(context, listen: false);
+    setState(() {
+      bannerisLoading = true;
+    });
+
+    if (await productProvider.getBannerProduct(
+        token: loginProvider.loginModel.token ?? "")) {
+      setState(() {
+        bannerisLoading = false;
+        adsBannerList = (productProvider.bannerProduct['data'] as List)
+            .map((e) => e as Map<String, dynamic>)
+            .toList();
+      });
+    } else {
+      setState(() {
+        bannerisLoading = false;
+      });
+    }
+  }
+
+  _initPromoProduct() async {
     // Mendapatkan data produk
     ProductProvider productProvider =
         Provider.of<ProductProvider>(context, listen: false);
     LoginProvider loginProvider =
         Provider.of<LoginProvider>(context, listen: false);
     setState(() {
-      isLoading = true;
+      promoIsLoading = true;
     });
-    if (await productProvider.getPromoProduct(
-        cabangId: "1", token: loginProvider.loginModel.token ?? "")) {
+    if (await productProvider.getProduct(
+      cabangId: "1",
+      token: loginProvider.loginModel.token ?? "",
+      page: "1",
+      limit: "5",
+      sort: "promo",
+    )) {
       setState(() {
-        isLoading = true;
+        promoIsLoading = false;
+        promoProduct = productProvider.promoProduct;
       });
-      promoProduct = productProvider.promoProduct;
     } else {
       setState(() {
-        isLoading = true;
+        promoIsLoading = false;
+      });
+    }
+  }
+
+  _initPalingLarisProduct({String page = '1'}) async {
+    // Mendapatkan data produk
+    ProductProvider productProvider =
+        Provider.of<ProductProvider>(context, listen: false);
+    LoginProvider loginProvider =
+        Provider.of<LoginProvider>(context, listen: false);
+    setState(() {
+      palingLarisLoading = true;
+    });
+    if (await productProvider.getProduct(
+      cabangId: "1",
+      token: loginProvider.loginModel.token ?? "",
+      page: page,
+      limit: "5",
+      sort: "terlaris",
+    )) {
+      setState(() {
+        palingLarisLoading = false;
+        if (page == "1" && productProvider.palingLarisProduct.data != null) {
+          palingLarisProductisReachEnd = false;
+          palingLarisProduct = productProvider.palingLarisProduct;
+        } else if (productProvider.palingLarisProduct.data?.isEmpty == false) {
+          palingLarisProductisReachEnd = false;
+          palingLarisProduct.data
+              ?.addAll(productProvider.palingLarisProduct.data?.toList() ?? []);
+        } else {
+          setState(() {
+            palingLarisProductisReachEnd = true;
+          });
+        }
+      });
+    } else {
+      setState(() {
+        palingLarisLoading = false;
       });
     }
   }
@@ -113,67 +204,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    PageProvider pageProvider = Provider.of<PageProvider>(context);
-    LoginProvider loginProvider = Provider.of<LoginProvider>(context);
-    LoginModel userLogin = loginProvider.loginModel;
-
-    Widget header() {
-      return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            InkWell(
-              onTap: () {
-                setState(() {
-                  pageProvider.currentIndex = 1;
-                });
-              },
-              child: Icon(
-                Icons.view_list,
-                size: 30,
-                color: backgroundColor3,
-              ),
-            ),
-            Expanded(
-              child: Column(
-                children: [
-                  Text(
-                    "${userLogin.data?.namaPelanggan}",
-                    style: poppins.copyWith(
-                      fontWeight: semiBold,
-                      color: backgroundColor1,
-                    ),
-                  ),
-                  Text(
-                    "${userLogin.data?.alamatPelanggan}",
-                    style: poppins.copyWith(
-                      fontWeight: medium,
-                      color: backgroundColor2,
-                    ),
-                  )
-                ],
-              ),
-            ),
-            InkWell(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    PageTransition(
-                        child: const ProfilePage(),
-                        type: PageTransitionType.rightToLeft));
-              },
-              child: Icon(
-                Icons.person,
-                size: 30,
-                color: backgroundColor3,
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
 //  Fungsi untuk membuat title text
     Widget titleText(String title) {
       return Padding(
@@ -191,54 +221,79 @@ class _HomePageState extends State<HomePage> {
 
     Widget searchBar() {
       return Container(
-        margin: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
-        child: TextFormField(
-          onChanged: (value) {
-            setState(() {
-              print("search object: ${searchTextFieldController.text}");
-              textSuggestion.clear();
-              textSuggestion = dummyTextDatabase
-                  .where((element) =>
-                      element.toLowerCase().contains(value.toLowerCase()))
-                  .toList();
-              print("isi listnya adalah $textSuggestion");
-            });
-          },
-          textInputAction: TextInputAction.search,
-          controller: searchTextFieldController,
-          cursorColor: backgroundColor1,
-          focusNode: searchTextFieldFocusNode,
-          onFieldSubmitted: (_) {
-            print(
-                "object yang dicari adalah ${searchTextFieldController.text}");
-            if (searchTextFieldController.text.isNotEmpty) {
-              Navigator.push(
-                  context,
-                  PageTransition(
-                      child: ProductListSearchResult(
-                          searchKeyword: searchTextFieldController.text),
-                      type: PageTransitionType.fade));
-              setState(() {
-                searchTextFieldController.text = "";
-                searchTextFieldFocusNode.canRequestFocus = false;
-              });
-            }
-          },
-          decoration: InputDecoration(
-            hintText: "Cari Barang",
-            hintStyle: poppins,
-            prefixIcon: const Icon(Icons.search),
-            prefixIconColor: searchTextFieldFocusNode.hasFocus
-                ? backgroundColor1
-                : Colors.grey,
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: backgroundColor1, width: 2.0),
-              borderRadius: const BorderRadius.all(Radius.circular(7.0)),
+        margin: const EdgeInsets.only(top: 30, bottom: 20, left: 20, right: 20),
+        child: Row(
+          children: [
+            Expanded(
+              child: TextFormField(
+                onChanged: (value) {
+                  setState(() {
+                    print("search object: ${searchTextFieldController.text}");
+                    textSuggestion.clear();
+                    textSuggestion = dummyTextDatabase
+                        .where((element) =>
+                            element.toLowerCase().contains(value.toLowerCase()))
+                        .toList();
+                    print("isi listnya adalah $textSuggestion");
+                  });
+                },
+                textInputAction: TextInputAction.search,
+                controller: searchTextFieldController,
+                cursorColor: backgroundColor1,
+                focusNode: searchTextFieldFocusNode,
+                onFieldSubmitted: (_) {
+                  print(
+                      "object yang dicari adalah ${searchTextFieldController.text}");
+                  if (searchTextFieldController.text.isNotEmpty) {
+                    Navigator.push(
+                        context,
+                        PageTransition(
+                            child: ProductListSearchResult(
+                                searchKeyword: searchTextFieldController.text),
+                            type: PageTransitionType.fade));
+                    setState(() {
+                      searchTextFieldController.text = "";
+                      searchTextFieldFocusNode.canRequestFocus = false;
+                    });
+                  }
+                },
+                decoration: InputDecoration(
+                  hintText: "Cari Barang",
+                  hintStyle: poppins,
+                  prefixIcon: const Icon(Icons.search),
+                  prefixIconColor: searchTextFieldFocusNode.hasFocus
+                      ? backgroundColor1
+                      : Colors.grey,
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: backgroundColor1, width: 2.0),
+                    borderRadius: const BorderRadius.all(Radius.circular(7.0)),
+                  ),
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(7.0)),
+                  ),
+                ),
+              ),
             ),
-            border: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(7.0)),
+            Container(
+              margin: const EdgeInsets.only(
+                left: 20,
+              ),
+              child: InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      PageTransition(
+                          child: const ProfilePage(),
+                          type: PageTransitionType.rightToLeft));
+                },
+                child: Icon(
+                  Icons.view_list,
+                  size: 30,
+                  color: backgroundColor3,
+                ),
+              ),
             ),
-          ),
+          ],
         ),
       );
     }
@@ -333,7 +388,7 @@ class _HomePageState extends State<HomePage> {
                           color: backgroundColor2,
                           // borderRadius: BorderRadius.circular(8),
                           image: DecorationImage(
-                            image: NetworkImage(img),
+                            image: NetworkImage(img['gambar_promo']),
                             fit: BoxFit.contain,
                           ),
                         ),
@@ -362,7 +417,7 @@ class _HomePageState extends State<HomePage> {
                   activeIndex: carouselIndex,
                   count: adsBannerList.length,
                   effect: WormEffect(
-                    activeDotColor: backgroundColor2,
+                    activeDotColor: backgroundColor1,
                     dotColor: Colors.white,
                     dotWidth: 10,
                     dotHeight: 10,
@@ -375,15 +430,12 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
-    Widget horizontalListItem(
-        {bool isOnDiscountContent = false, required String forTitle}) {
+    Widget horizontalListItem({bool isOnDiscountContent = false}) {
       // Data dibawah ini hanya bersifat sementara
       List<String> listImageData = [];
-      var numberofItem = forTitle.toLowerCase() == 'barang populer'
-          ? 20
-          : promoProduct.data?.length ?? 0;
+      var numberofItem = promoProduct.data?.length ?? 0;
       var counter = 0;
-      for (var i = 0; i < 20; i++) {
+      for (var i = 0; i < numberofItem; i++) {
         if (counter <= imgList.length - 1) {
           listImageData.add(imgList[counter]);
           counter += 1;
@@ -398,40 +450,26 @@ class _HomePageState extends State<HomePage> {
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               for (var i = 0; i < numberofItem; i++)
                 InkWell(
                   onTap: () {
-                    print("ditekan untuk object foto: $i");
                     Navigator.push(
                       context,
                       PageTransition(
                         child: ProductDetailPage(
-                          imageURL: forTitle.toLowerCase() == 'barang populer'
-                              ? listImageData[i]
-                              : "${promoProduct.data?[i].gambar1}",
-                          productId: forTitle.toLowerCase() == 'barang populer'
-                              ? "-1"
-                              : "${promoProduct.data?[i].id}",
-                          productLoct: "Cabang Malang Kota",
-                          productName:
-                              forTitle.toLowerCase() == 'barang populer'
-                                  ? 'Lorem Ipsum'
-                                  : "${promoProduct.data?[i].namaProduk}",
-                          productPrice:
-                              forTitle.toLowerCase() == 'barang populer'
-                                  ? '18000'
-                                  : "${promoProduct.data?[i].hargaDiskon}",
-                          productStar: "4.5",
+                          imageURL: "${promoProduct.data?[i].gambar?.first}",
+                          productId: "${promoProduct.data?[i].id}",
+                          productLoct: "Pusat",
+                          productName: "${promoProduct.data?[i].namaProduk}",
+                          productPrice: "${promoProduct.data?[i].hargaDiskon}",
+                          productStar: "${promoProduct.data?[i].rating}",
                           beforeDiscountPrice: isOnDiscountContent
-                              ? forTitle.toLowerCase() == 'barang populer'
-                                  ? '18000'
-                                  : "${promoProduct.data?[i].harga}"
+                              ? "${promoProduct.data?[i].harga}"
                               : null,
                           discountPercentage: isOnDiscountContent
-                              ? forTitle.toLowerCase() == 'barang populer'
-                                  ? '18000'
-                                  : "${promoProduct.data?[i].diskon}%"
+                              ? "${promoProduct.data?[i].diskon}%"
                               : null,
                           isDiscount: isOnDiscountContent,
                         ),
@@ -455,14 +493,13 @@ class _HomePageState extends State<HomePage> {
                     ),
                     margin: EdgeInsets.only(right: i < 19 ? 10 : 0),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         ClipRRect(
                           borderRadius: const BorderRadius.vertical(
                               top: Radius.circular(8)),
                           child: Image.network(
-                            (forTitle.toLowerCase() == 'barang populer'
-                                ? listImageData[i]
-                                : '${promoProduct.data?[i].gambar1}'),
+                            ('${promoProduct.data?[i].gambar?.first}'),
                             width: 150,
                             height: 150,
                             fit: BoxFit.cover,
@@ -477,9 +514,7 @@ class _HomePageState extends State<HomePage> {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 5),
                                 child: Text(
-                                  forTitle.toLowerCase() == 'barang populer'
-                                      ? "Lorem Ipsum dolor sit amet"
-                                      : "${promoProduct.data?[i].namaProduk}",
+                                  "${promoProduct.data?[i].namaProduk}",
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 2,
                                   style: poppins.copyWith(
@@ -492,9 +527,7 @@ class _HomePageState extends State<HomePage> {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 5),
                                 child: Text(
-                                  forTitle.toLowerCase() == 'barang populer'
-                                      ? 'Rp 18.000,00'
-                                      : "Rp ${currencyFormatter.format(promoProduct.data?[i].hargaDiskon)}",
+                                  "Rp ${currencyFormatter.format(promoProduct.data?[i].hargaDiskon)}",
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
                                   style: poppins.copyWith(
@@ -512,10 +545,7 @@ class _HomePageState extends State<HomePage> {
                                     children: [
                                       Flexible(
                                         child: Text(
-                                          forTitle.toLowerCase() ==
-                                                  'barang populer'
-                                              ? 'Rp 18.000,00'
-                                              : "Rp ${currencyFormatter.format(promoProduct.data?[i].harga)}",
+                                          "Rp ${currencyFormatter.format(promoProduct.data?[i].harga)}",
                                           overflow: TextOverflow.ellipsis,
                                           maxLines: 1,
                                           style: poppins.copyWith(
@@ -528,10 +558,7 @@ class _HomePageState extends State<HomePage> {
                                       Container(
                                         margin: const EdgeInsets.only(left: 5),
                                         child: Text(
-                                          forTitle.toLowerCase() ==
-                                                  'barang populer'
-                                              ? "50%"
-                                              : "${promoProduct.data?[i].diskon}%",
+                                          "${promoProduct.data?[i].diskon}%",
                                           overflow: TextOverflow.ellipsis,
                                           maxLines: 1,
                                           style: poppins.copyWith(
@@ -553,7 +580,7 @@ class _HomePageState extends State<HomePage> {
                                     color: backgroundColor2,
                                   ),
                                   Text(
-                                    "4.5",
+                                    "${promoProduct.data?[i].rating}",
                                     style: poppins.copyWith(
                                       fontWeight: semiBold,
                                     ),
@@ -570,7 +597,7 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   Expanded(
                                     child: Text(
-                                      "Cab. Malang Kota",
+                                      "Cabang Pusat",
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
                                       style: poppins.copyWith(
@@ -589,26 +616,49 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
+              Container(
+                alignment: Alignment.center,
+                width: 150,
+                height: 300,
+                child: Text(
+                  'Lihat Selengkapnya',
+                  style: poppins.copyWith(
+                    fontSize: 18,
+                    fontWeight: medium,
+                    color: backgroundColor1,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
             ],
           ),
         ),
       );
     }
 
-    Widget verticalListItem(String imageUrl,
-        {bool isOnDiscountContent = false}) {
+    Widget verticalListItem(int i) {
       return InkWell(
         onTap: () {
           Navigator.push(
             context,
             PageTransition(
               child: ProductDetailPage(
-                imageURL: imageUrl,
-                productLoct: "Cabang Malang Kota",
-                productName: "Lorem Ipsum dolor sit amet",
-                productPrice: "18000",
-                productStar: "4.5",
-                isDiscount: isOnDiscountContent,
+                productId: "${(palingLarisProduct.data?[i].id ?? 0)}",
+                imageURL: palingLarisProduct.data?[i].gambar?.first,
+                productLoct: "Pusat",
+                discountPercentage: palingLarisProduct.data?[i].diskon == null
+                    ? ""
+                    : "${palingLarisProduct.data?[i].diskon}%",
+                beforeDiscountPrice: palingLarisProduct.data?[i].diskon == null
+                    ? ""
+                    : "${palingLarisProduct.data?[i].harga}",
+                productName: palingLarisProduct.data?[i].namaProduk,
+                productPrice: palingLarisProduct.data?[i].diskon == null
+                    ? "${palingLarisProduct.data?[i].harga}"
+                    : palingLarisProduct.data?[i].hargaDiskon.toString(),
+                productStar: palingLarisProduct.data?[i].rating.toString(),
+                isDiscount:
+                    palingLarisProduct.data?[i].diskon == null ? false : true,
               ),
               type: PageTransitionType.bottomToTop,
             ),
@@ -620,7 +670,7 @@ class _HomePageState extends State<HomePage> {
             color: Colors.white,
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.withOpacity(0.2),
+                color: Colors.grey.withOpacity(0.5),
                 blurRadius: 4,
                 offset: const Offset(0, 8), // Shadow position
               ),
@@ -632,7 +682,7 @@ class _HomePageState extends State<HomePage> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: Image.network(
-                  imageUrl,
+                  "${palingLarisProduct.data?[i].gambar?.first}",
                   width: 140,
                   height: 140,
                   fit: BoxFit.cover,
@@ -646,7 +696,7 @@ class _HomePageState extends State<HomePage> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Text(
-                        "Lorem Ipsum Dolor sit Amet",
+                        "${palingLarisProduct.data?[i].namaProduk}",
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
                         style: poppins.copyWith(
@@ -658,7 +708,9 @@ class _HomePageState extends State<HomePage> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Text(
-                        "Rp 18.000,00",
+                        palingLarisProduct.data?[i].diskon == null
+                            ? "Rp ${currencyFormatter.format(palingLarisProduct.data?[i].harga)}"
+                            : "Rp ${currencyFormatter.format(palingLarisProduct.data?[i].hargaDiskon)}",
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                         style: poppins.copyWith(
@@ -678,7 +730,7 @@ class _HomePageState extends State<HomePage> {
                             color: backgroundColor2,
                           ),
                           Text(
-                            "4.5",
+                            "${palingLarisProduct.data?[i].rating}",
                             style: poppins.copyWith(
                               fontWeight: semiBold,
                             ),
@@ -686,7 +738,9 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                     ),
-                    if (isOnDiscountContent == true)
+                    if (palingLarisProduct.data?[i].diskon == null
+                        ? false
+                        : true)
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: Row(
@@ -694,7 +748,7 @@ class _HomePageState extends State<HomePage> {
                           children: [
                             Flexible(
                               child: Text(
-                                "Rp 180.000,00",
+                                "Rp ${currencyFormatter.format(palingLarisProduct.data?[i].harga)}",
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                                 style: poppins.copyWith(
@@ -706,7 +760,7 @@ class _HomePageState extends State<HomePage> {
                             Container(
                               margin: const EdgeInsets.only(left: 5),
                               child: Text(
-                                "50%",
+                                "${palingLarisProduct.data?[i].diskon}%",
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                                 style: poppins.copyWith(
@@ -731,7 +785,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                           Expanded(
                             child: Text(
-                              "Cab. Malang Kota",
+                              "Cabang Pusat",
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                               style: poppins.copyWith(
@@ -754,32 +808,45 @@ class _HomePageState extends State<HomePage> {
     }
 
     Widget homePageContent() {
-      return ListView(
-        children: [
-          carouselSlider(),
-          const SizedBox(
-            height: 20,
-          ),
-          titleText("Barang Populer"),
-          horizontalListItem(forTitle: 'Barang Populer'),
-          const SizedBox(
-            height: 20,
-          ),
-          titleText("Sedang Promo"),
-          horizontalListItem(
-              isOnDiscountContent: true, forTitle: 'Sedang Promo'),
-          const SizedBox(
-            height: 20,
-          ),
-          titleText("Paling Laris"),
-          const SizedBox(
-            height: 5,
-          ),
-          for (var data in imgList) verticalListItem(data),
-          const SizedBox(
-            height: 20,
-          ),
-        ],
+      return SingleChildScrollView(
+        controller: scrollController,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            carouselSlider(),
+            const SizedBox(
+              height: 20,
+            ),
+            titleText("Sedang Promo"),
+            horizontalListItem(isOnDiscountContent: true),
+            const SizedBox(
+              height: 20,
+            ),
+            titleText("Paling Laris"),
+            const SizedBox(
+              height: 5,
+            ),
+            for (int i = 0; i < (palingLarisProduct.data?.length ?? 0); i++)
+              verticalListItem(i),
+            scrollIsAtEnd == true && palingLarisProductisReachEnd == false
+                ? Center(
+                    child: Container(
+                      margin: const EdgeInsets.only(
+                        top: 10,
+                      ),
+                      width: 15,
+                      height: 15,
+                      child: CircularProgressIndicator(
+                        color: backgroundColor1,
+                      ),
+                    ),
+                  )
+                : const SizedBox(),
+            const SizedBox(
+              height: 40,
+            ),
+          ],
+        ),
       );
     }
 
@@ -790,7 +857,6 @@ class _HomePageState extends State<HomePage> {
           width: MediaQuery.sizeOf(context).width,
           child: Column(
             children: [
-              header(),
               searchBar(),
               Expanded(
                 child: searchTextFieldFocusNode.hasFocus
