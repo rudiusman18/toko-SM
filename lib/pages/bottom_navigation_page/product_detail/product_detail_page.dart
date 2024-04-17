@@ -90,12 +90,14 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         Provider.of<LoginProvider>(context, listen: false);
     if (await productProvider.getFavoriteProduct(
         token: loginProvider.loginModel.token ?? "")) {
-      favoriteProduct = productProvider.favoriteModel;
-      favoriteProduct.data = favoriteProduct.data
-          ?.where((element) =>
-              element.namaProduk?.toLowerCase() ==
-              widget.productName?.toLowerCase())
-          .toList();
+      setState(() {
+        favoriteProduct = productProvider.favoriteModel;
+        favoriteProduct.data = favoriteProduct.data
+            ?.where((element) =>
+                element.namaProduk?.toLowerCase() ==
+                widget.productName?.toLowerCase())
+            .toList();
+      });
 
       print(
           "isi favorite page untuk product ${widget.productName} adalah ${favoriteProduct.data}");

@@ -1,4 +1,5 @@
 import 'package:tokoSM/pages/splash_page.dart';
+import 'package:tokoSM/providers/category_provider.dart';
 import 'package:tokoSM/providers/favorite_provider.dart';
 import 'package:tokoSM/providers/login_provider.dart';
 import 'package:tokoSM/providers/page_provider.dart';
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => PageProvider()),
         ChangeNotifierProvider(create: (context) => FavoriteProvider()),
         ChangeNotifierProvider(create: (context) => ProductProvider()),
+        ChangeNotifierProvider(create: (context) => CategoryProvider()),
       ],
       child: MaterialApp(
         builder: (context, child) {

@@ -1,3 +1,7 @@
+import 'package:provider/provider.dart';
+import 'package:tokoSM/models/product_model.dart';
+import 'package:tokoSM/providers/login_provider.dart';
+import 'package:tokoSM/providers/product_provider.dart';
 import 'package:tokoSM/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
@@ -6,7 +10,9 @@ import '../product_detail/product_detail_page.dart';
 
 class ProductListSearchResult extends StatefulWidget {
   String searchKeyword;
-  ProductListSearchResult({super.key, required this.searchKeyword});
+  bool isCategory;
+  ProductListSearchResult(
+      {super.key, required this.searchKeyword, this.isCategory = false});
 
   @override
   State<ProductListSearchResult> createState() =>
@@ -35,11 +41,25 @@ class _ProductListSearchResultState extends State<ProductListSearchResult> {
     "sabun"
   ];
   int productIndex = 0;
-
+  // Diatas ini kemungkinan tidak akan digunakan
+  ProductModel productModel = ProductModel();
   @override
   void initState() {
     super.initState();
     searchTextFieldFocusNode.addListener(_onFocusChange);
+    ProductProvider productProvider =
+        Provider.of<ProductProvider>(context, listen: false);
+    LoginProvider loginProvider =
+        Provider.of<LoginProvider>(context, listen: false);
+    Future.delayed(Duration.zero, () async {
+      if (await productProvider.getProduct(
+        cabangId: "1",
+        token: "${loginProvider.loginModel.token}",
+        page: "1",
+        limit: "20",
+        sort: "",
+      )) {}
+    });
   }
 
   @override
@@ -212,171 +232,177 @@ class _ProductListSearchResultState extends State<ProductListSearchResult> {
       }
 
       return SingleChildScrollView(
-        child: Wrap(
-          crossAxisAlignment: WrapCrossAlignment.center,
-          runSpacing: 20,
-          spacing: 10,
-          children: [
-            for (var i = 0; i < 20; i++)
-              InkWell(
-                onTap: () {
-                  print("ditekan untuk object foto: $i");
-                  Navigator.push(
-                    context,
-                    PageTransition(
-                      child: ProductDetailPage(
-                        imageURL: listImageData[i],
-                        productLoct: "Cabang Malang Kota",
-                        productName: "Lorem Ipsum dolor sit amet",
-                        productPrice: "Rp 18.000,00",
-                        productStar: "4.5",
-                        beforeDiscountPrice:
-                            isOnDiscountContent ? "Rp 180.000,00" : null,
-                        discountPercentage: isOnDiscountContent ? "50%" : null,
-                        isDiscount: isOnDiscountContent,
-                      ),
-                      type: PageTransitionType.bottomToTop,
-                    ),
-                  );
-                },
-                child: Container(
-                  width: (MediaQuery.sizeOf(context).width - 50) / 2,
-                  height: 300,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        blurRadius: 4,
-                        offset: const Offset(0, 8), // Shadow position
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      ClipRRect(
-                        borderRadius: const BorderRadius.vertical(
-                            top: Radius.circular(8)),
-                        child: Image.network(
-                          (listImageData[i]),
-                          width: (MediaQuery.sizeOf(context).width - 50) / 2,
-                          height: 150,
-                          fit: BoxFit.cover,
+        child: Container(
+          margin: const EdgeInsets.only(
+            bottom: 30,
+          ),
+          child: Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
+            runSpacing: 20,
+            spacing: 10,
+            children: [
+              for (var i = 0; i < 20; i++)
+                InkWell(
+                  onTap: () {
+                    print("ditekan untuk object foto: $i");
+                    Navigator.push(
+                      context,
+                      PageTransition(
+                        child: ProductDetailPage(
+                          imageURL: listImageData[i],
+                          productLoct: "Cabang Malang Kota",
+                          productName: "Lorem Ipsum dolor sit amet",
+                          productPrice: "Rp 18.000,00",
+                          productStar: "4.5",
+                          beforeDiscountPrice:
+                              isOnDiscountContent ? "Rp 180.000,00" : null,
+                          discountPercentage:
+                              isOnDiscountContent ? "50%" : null,
+                          isDiscount: isOnDiscountContent,
                         ),
+                        type: PageTransitionType.bottomToTop,
                       ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 5),
-                              child: Text(
-                                "Lorem Ipsum dolor sit amet",
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 2,
-                                style: poppins.copyWith(
-                                  color: backgroundColor1,
-                                  fontWeight: semiBold,
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 5),
-                              child: Text(
-                                "Rp 18.000,00",
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                                style: poppins.copyWith(
-                                  color: backgroundColor1,
-                                  fontWeight: medium,
-                                ),
-                              ),
-                            ),
-                            if (isOnDiscountContent == true)
+                    );
+                  },
+                  child: Container(
+                    width: (MediaQuery.sizeOf(context).width - 50) / 2,
+                    height: 300,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          blurRadius: 4,
+                          offset: const Offset(0, 8), // Shadow position
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        ClipRRect(
+                          borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(8)),
+                          child: Image.network(
+                            (listImageData[i]),
+                            width: (MediaQuery.sizeOf(context).width - 50) / 2,
+                            height: 150,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
                               Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 5),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Flexible(
-                                      child: Text(
-                                        "Rp 180.000,00",
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
-                                        style: poppins.copyWith(
-                                            decoration:
-                                                TextDecoration.lineThrough,
-                                            color: Colors.grey,
-                                            fontSize: 10),
-                                      ),
-                                    ),
-                                    Container(
-                                      margin: const EdgeInsets.only(left: 5),
-                                      child: Text(
-                                        "50%",
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
-                                        style: poppins.copyWith(
-                                          color: Colors.red,
-                                          fontSize: 10,
-                                          fontWeight: bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Icon(
-                                  Icons.star,
-                                  color: backgroundColor2,
-                                ),
-                                Text(
-                                  "4.5",
+                                child: Text(
+                                  "Lorem Ipsum dolor sit amet",
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
                                   style: poppins.copyWith(
+                                    color: backgroundColor1,
                                     fontWeight: semiBold,
                                   ),
                                 ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Icon(
-                                  Icons.location_city,
-                                  color: backgroundColor2,
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    "Cab. Malang Kota",
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    style: poppins.copyWith(
-                                      color: backgroundColor2,
-                                      fontWeight: medium,
-                                      fontSize: 12,
-                                    ),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 5),
+                                child: Text(
+                                  "Rp 18.000,00",
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  style: poppins.copyWith(
+                                    color: backgroundColor1,
+                                    fontWeight: medium,
                                   ),
                                 ),
-                              ],
-                            )
-                          ],
+                              ),
+                              if (isOnDiscountContent == true)
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 5),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Flexible(
+                                        child: Text(
+                                          "Rp 180.000,00",
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                          style: poppins.copyWith(
+                                              decoration:
+                                                  TextDecoration.lineThrough,
+                                              color: Colors.grey,
+                                              fontSize: 10),
+                                        ),
+                                      ),
+                                      Container(
+                                        margin: const EdgeInsets.only(left: 5),
+                                        child: Text(
+                                          "50%",
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                          style: poppins.copyWith(
+                                            color: Colors.red,
+                                            fontSize: 10,
+                                            fontWeight: bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Icon(
+                                    Icons.star,
+                                    color: backgroundColor2,
+                                  ),
+                                  Text(
+                                    "4.5",
+                                    style: poppins.copyWith(
+                                      fontWeight: semiBold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Icon(
+                                    Icons.location_city,
+                                    color: backgroundColor2,
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      "Cab. Malang Kota",
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      style: poppins.copyWith(
+                                        color: backgroundColor2,
+                                        fontWeight: medium,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-          ],
+            ],
+          ),
         ),
       );
     }
