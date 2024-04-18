@@ -24,14 +24,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<Map<String, dynamic>> adsBannerList = [];
-  final List<String> imgList = [
-    'https://images.unsplash.com/photo-1519420573924-65fcd45245f8?auto=format&fit=crop&q=80&w=1935&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    'https://images.unsplash.com/photo-1591184510259-b6f1be3d7aff?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    'https://images.unsplash.com/photo-1472141521881-95d0e87e2e39?auto=format&fit=crop&q=80&w=2072&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    'https://images.unsplash.com/photo-1611945007935-925b09ddcf1b?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    'https://images.unsplash.com/photo-1591184510259-b6f1be3d7aff?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    'https://images.unsplash.com/photo-1591254460606-fab865bf82b8?auto=format&fit=crop&q=80&w=1932&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-  ];
 
   List<String> textSuggestion = [];
   List<String> textDatabase = [];
@@ -92,19 +84,21 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  _initSuggestionText()async{
-      LoginProvider loginProvider = Provider.of<LoginProvider>(context, listen: false);
-      ProductProvider productProvider = Provider.of<ProductProvider>(context, listen: false);
-      if(await productProvider.getSuggestion(token: loginProvider.loginModel.token ?? "")){
-        setState(() {
-          textDatabase = productProvider.suggestionModel.data ?? [];
-          print("data suggestion adalah: ${textDatabase} dengan isi data ${productProvider.suggestionModel.data!}");
-        });
-      }else{
-        print("data suggestion mengalami kegagalan");
-      }
-
-
+  _initSuggestionText() async {
+    LoginProvider loginProvider =
+        Provider.of<LoginProvider>(context, listen: false);
+    ProductProvider productProvider =
+        Provider.of<ProductProvider>(context, listen: false);
+    if (await productProvider.getSuggestion(
+        token: loginProvider.loginModel.token ?? "")) {
+      setState(() {
+        textDatabase = productProvider.suggestionModel.data ?? [];
+        print(
+            "data suggestion adalah: ${textDatabase} dengan isi data ${productProvider.suggestionModel.data!}");
+      });
+    } else {
+      print("data suggestion mengalami kegagalan");
+    }
   }
 
   _initBannerProduct() async {
@@ -140,6 +134,8 @@ class _HomePageState extends State<HomePage> {
         Provider.of<LoginProvider>(context, listen: false);
     setState(() {
       promoIsLoading = true;
+      print(
+          "cabang yang diakses adalah: ${"${loginProvider.loginModel.data?.cabangId}"}");
     });
     if (await productProvider.getProduct(
       cabangId: "${loginProvider.loginModel.data?.cabangId ?? 1}",
@@ -259,7 +255,11 @@ class _HomePageState extends State<HomePage> {
                         context,
                         PageTransition(
                             child: ProductListSearchResult(
-                                searchKeyword: searchTextFieldController.text, sort: "promo", category: "",),
+                              searchKeyword: searchTextFieldController.text,
+                              sort: "promo",
+                              category: "",
+                              categoryToShow: "",
+                            ),
                             type: PageTransitionType.fade));
                     setState(() {
                       searchTextFieldController.text = "";
@@ -326,7 +326,11 @@ class _HomePageState extends State<HomePage> {
                               context,
                               PageTransition(
                                   child: ProductListSearchResult(
-                                      searchKeyword: text[index], category: "", sort: ""),
+                                    searchKeyword: text[index],
+                                    category: "",
+                                    sort: "",
+                                    categoryToShow: "",
+                                  ),
                                   type: PageTransitionType.fade));
                           setState(() {
                             searchTextFieldController.text = "";
@@ -441,19 +445,7 @@ class _HomePageState extends State<HomePage> {
     }
 
     Widget horizontalListItem({bool isOnDiscountContent = false}) {
-      // Data dibawah ini hanya bersifat sementara
-      List<String> listImageData = [];
       var numberofItem = promoProduct.data?.length ?? 0;
-      var counter = 0;
-      for (var i = 0; i < numberofItem; i++) {
-        if (counter <= imgList.length - 1) {
-          listImageData.add(imgList[counter]);
-          counter += 1;
-        } else {
-          counter = 0;
-          listImageData.add(imgList[counter]);
-        }
-      }
 
       return SingleChildScrollView(
         scrollDirection: Axis.horizontal,
@@ -471,7 +463,8 @@ class _HomePageState extends State<HomePage> {
                         child: ProductDetailPage(
                           imageURL: "${promoProduct.data?[i].gambar?.first}",
                           productId: "${promoProduct.data?[i].id}",
-                          productLoct: loginProvider.loginModel.data?.namaCabang ?? "",
+                          productLoct:
+                              loginProvider.loginModel.data?.namaCabang ?? "",
                           productName: "${promoProduct.data?[i].namaProduk}",
                           productPrice: "${promoProduct.data?[i].hargaDiskon}",
                           productStar: "${promoProduct.data?[i].rating}",
@@ -626,31 +619,36 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-              numberofItem < 5 ? SizedBox() :
-              InkWell(
-                onTap: (){
-                  Navigator.push(
-                      context,
-                      PageTransition(
-                          child: ProductListSearchResult(
-                            searchKeyword: "", sort: "promo", category: "",),
-                          type: PageTransitionType.fade));
-                },
-                child:  Container(
-                  alignment: Alignment.center,
-                  width: 150,
-                  height: 300,
-                  child: Text(
-                    'Lihat Selengkapnya',
-                    style: poppins.copyWith(
-                      fontSize: 18,
-                      fontWeight: medium,
-                      color: backgroundColor1,
+              numberofItem < 5
+                  ? SizedBox()
+                  : InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            PageTransition(
+                                child: ProductListSearchResult(
+                                  searchKeyword: "",
+                                  sort: "promo",
+                                  category: "",
+                                  categoryToShow: "",
+                                ),
+                                type: PageTransitionType.fade));
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        width: 150,
+                        height: 300,
+                        child: Text(
+                          'Lihat Selengkapnya',
+                          style: poppins.copyWith(
+                            fontSize: 18,
+                            fontWeight: medium,
+                            color: backgroundColor1,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
             ],
           ),
         ),

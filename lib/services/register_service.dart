@@ -21,7 +21,6 @@ class RegisterService {
       "password": password,
       "email": email,
       "nama_lengkap": namaLengkap,
-      "cabang_id": '1',
     };
     var body = jsonEncode(data);
     var response = await http.post(url, headers: header, body: body);

@@ -90,10 +90,12 @@ class _CategoryPageState extends State<CategoryPage> {
                     context,
                     PageTransition(
                         child: ProductListSearchResult(
-                          searchKeyword:
-                              "",
+                          searchKeyword: "",
                           sort: "",
-                          category: "${categoryModel.data?[kat1Index].kat1Slug},${categoryModel.data?[kat1Index].child?[kat2Index].kat2Slug},${categoryModel.data?[kat1Index].child?[kat2Index].child1?[i].kat3Slug}",
+                          category:
+                              "${categoryModel.data?[kat1Index].kat1Slug},${categoryModel.data?[kat1Index].child?[kat2Index].kat2Slug},${categoryModel.data?[kat1Index].child?[kat2Index].child1?[i].kat3Slug}",
+                          categoryToShow:
+                              "${categoryModel.data?[kat1Index].child?[kat2Index].child1?[i].kat3}",
                         ),
                         type: PageTransitionType.bottomToTop));
               },
