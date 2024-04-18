@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:tokoSM/models/favorite_model.dart';
 import 'package:tokoSM/models/product_model.dart';
+import 'package:tokoSM/models/suggestion_model.dart';
 
 import '../models/detail_product_model.dart';
 
@@ -161,6 +162,28 @@ class ProductService {
     } else {
       throw Exception(
           "gagal menghapus data favorite product error: ${jsonDecode(response.body)}");
+    }
+  }
+
+  Future<SuggestionModel> suggestion({required String token})async{
+    var baseURL = "http://103.127.132.116/api/v1/";
+
+    var url = Uri.parse("${baseURL}produk/suggestion");
+    var header = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    };
+    var response = await http.get(url, headers: header);
+    // ignore: avoid_print
+    print("suggestion: ${response.body}");
+
+// **success menghapus data favorite product
+    if (response.statusCode >= 200 && response.statusCode <= 299) {
+      var data = jsonDecode(response.body);
+      SuggestionModel suggestionModel = SuggestionModel.fromJson(data);
+      return suggestionModel;
+    } else {
+      throw Exception("Gagal mendapatkan data suggestion");
     }
   }
 }

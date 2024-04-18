@@ -34,15 +34,7 @@ class _HomePageState extends State<HomePage> {
   ];
 
   List<String> textSuggestion = [];
-  List<String> dummyTextDatabase = [
-    "sambal",
-    "Kecap",
-    "saos",
-    "coca-cola",
-    "meses",
-    "shampo",
-    "sabun"
-  ];
+  List<String> textDatabase = [];
 
   TextEditingController searchTextFieldController = TextEditingController();
   FocusNode searchTextFieldFocusNode = FocusNode();
@@ -80,6 +72,7 @@ class _HomePageState extends State<HomePage> {
     _initBannerProduct();
     _initPromoProduct();
     _initPalingLarisProduct();
+    _initSuggestionText();
   }
 
   _scrollController() {
@@ -97,6 +90,21 @@ class _HomePageState extends State<HomePage> {
         scrollIsAtEnd = false;
       });
     }
+  }
+
+  _initSuggestionText()async{
+      LoginProvider loginProvider = Provider.of<LoginProvider>(context, listen: false);
+      ProductProvider productProvider = Provider.of<ProductProvider>(context, listen: false);
+      if(await productProvider.getSuggestion(token: loginProvider.loginModel.token ?? "")){
+        setState(() {
+          textDatabase = productProvider.suggestionModel.data ?? [];
+          print("data suggestion adalah: ${textDatabase} dengan isi data ${productProvider.suggestionModel.data!}");
+        });
+      }else{
+        print("data suggestion mengalami kegagalan");
+      }
+
+
   }
 
   _initBannerProduct() async {
@@ -230,7 +238,7 @@ class _HomePageState extends State<HomePage> {
                   setState(() {
                     print("search object: ${searchTextFieldController.text}");
                     textSuggestion.clear();
-                    textSuggestion = dummyTextDatabase
+                    textSuggestion = textDatabase
                         .where((element) =>
                             element.toLowerCase().contains(value.toLowerCase()))
                         .toList();

@@ -5,6 +5,7 @@ import 'package:tokoSM/models/detail_product_model.dart';
 import 'package:tokoSM/models/favorite_model.dart';
 import 'package:tokoSM/models/product_model.dart';
 import 'package:flutter/material.dart';
+import 'package:tokoSM/models/suggestion_model.dart';
 import 'package:tokoSM/services/product_service.dart';
 
 class ProductProvider extends ChangeNotifier {
@@ -166,6 +167,24 @@ class ProductProvider extends ChangeNotifier {
       return true;
     } catch (e) {
       throw Exception("gagal menghapus favorite product: $e");
+    }
+  }
+
+  SuggestionModel _suggestionModel = SuggestionModel();
+  SuggestionModel get suggestionModel => _suggestionModel;
+  set suggestionModel(SuggestionModel suggestionModel){
+    _suggestionModel = suggestionModel;
+    notifyListeners();
+  }
+
+  Future<bool>getSuggestion({required String token}) async{
+    try{
+       SuggestionModel suggestionModel = await ProductService().suggestion(token: token);
+      _suggestionModel = suggestionModel;
+      return true;
+    }catch(e){
+      print("Gagal mendapatkan suggestion: $e");
+      return false;
     }
   }
 }

@@ -15,7 +15,7 @@ class LoginService {
     var body = jsonEncode(data);
     var response = await http.post(url, headers: header, body: body);
     // ignore: avoid_print
-    print("Login: ${response.body}");
+    print("Login ${response.statusCode}: ${response.body}");
 
 // **success melakukan login
     if (response.statusCode >= 200 && response.statusCode <= 299) {
