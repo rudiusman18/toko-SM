@@ -24,20 +24,11 @@ class ProductListSearchResult extends StatefulWidget {
 class _ProductListSearchResultState extends State<ProductListSearchResult> {
   TextEditingController searchTextFieldController = TextEditingController();
   FocusNode searchTextFieldFocusNode = FocusNode();
-  final List<String> imgList = [
-    'https://images.unsplash.com/photo-1519420573924-65fcd45245f8?auto=format&fit=crop&q=80&w=1935&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    'https://images.unsplash.com/photo-1591184510259-b6f1be3d7aff?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    'https://images.unsplash.com/photo-1472141521881-95d0e87e2e39?auto=format&fit=crop&q=80&w=2072&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    'https://images.unsplash.com/photo-1611945007935-925b09ddcf1b?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    'https://images.unsplash.com/photo-1591184510259-b6f1be3d7aff?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    'https://images.unsplash.com/photo-1591254460606-fab865bf82b8?auto=format&fit=crop&q=80&w=1932&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-  ];
   List<String> textSuggestion = [];
   List<String> textDatabase = [];
-  int productIndex = 0;
-  // Diatas ini kemungkinan tidak akan digunakan
   final currencyFormatter = NumberFormat('#,##0.00', 'ID');
   ProductModel productModel = ProductModel();
+
   @override
   void initState() {
     super.initState();
@@ -243,21 +234,7 @@ class _ProductListSearchResultState extends State<ProductListSearchResult> {
     }
 
     Widget horizontalListItem({bool isOnDiscountContent = false}) {
-      List<String> listImageData = [];
-      for (var i = 0; i < 20; i++) {
-        // var imageData = (imgList..shuffle()).first;
-        // listImageData.add(imageData);
-        productIndex = (productIndex + 1);
-        if (productIndex == imgList.length - 1) {
-          productIndex = 0;
-          listImageData.add(imgList[productIndex]);
-        } else {
-          listImageData.add(imgList[productIndex]);
-        }
-      }
-
-      return SingleChildScrollView(
-
+      return (productModel.data ?? []).isEmpty ? Center( child: Text("hasil pencarian tidak ditemukan", style: poppins.copyWith(color: backgroundColor1))) : SingleChildScrollView(
         child: Container(
           alignment: (productModel.data?.length ?? 0) > 1 ? Alignment.center :  Alignment.topLeft,
           margin: const EdgeInsets.only(
@@ -451,7 +428,7 @@ class _ProductListSearchResultState extends State<ProductListSearchResult> {
                   ? SizedBox()
                   : Container(
                       margin: const EdgeInsets.only(top: 10, bottom: 10),
-                      child: RichText(
+                      child: widget.searchKeyword.isEmpty ? SizedBox() : RichText(
                         text: TextSpan(
                           text: 'Hasil Pencarian : ',
                           style: poppins.copyWith(

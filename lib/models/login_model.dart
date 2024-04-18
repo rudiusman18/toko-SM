@@ -34,9 +34,7 @@ class Data {
   String? emailPelanggan;
   String? lat;
   String? lon;
-  String? createdAt;
-  String? updatedAt;
-  String? deletedAt;
+ String? namaCabang;
 
   Data(
       {this.id,
@@ -53,9 +51,7 @@ class Data {
       this.emailPelanggan,
       this.lat,
       this.lon,
-      this.createdAt,
-      this.updatedAt,
-      this.deletedAt});
+      this.namaCabang});
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -72,9 +68,8 @@ class Data {
     emailPelanggan = json['email_pelanggan'];
     lat = json['lat'];
     lon = json['lon'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-    deletedAt = json['deleted_at'];
+    namaCabang = json['nama_cabang'];
+
   }
 
   Map<String, dynamic> toJson() {
@@ -93,9 +88,7 @@ class Data {
     data['email_pelanggan'] = emailPelanggan;
     data['lat'] = lat;
     data['lon'] = lon;
-    data['created_at'] = createdAt;
-    data['updated_at'] = updatedAt;
-    data['deleted_at'] = deletedAt;
+    data['nama_cabang'] = this.namaCabang;
     return data;
   }
 }

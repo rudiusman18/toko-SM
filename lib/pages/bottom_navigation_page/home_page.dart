@@ -142,7 +142,7 @@ class _HomePageState extends State<HomePage> {
       promoIsLoading = true;
     });
     if (await productProvider.getProduct(
-      cabangId: "1",
+      cabangId: "${loginProvider.loginModel.data?.cabangId ?? 1}",
       token: loginProvider.loginModel.token ?? "",
       page: "1",
       limit: "5",
@@ -169,7 +169,7 @@ class _HomePageState extends State<HomePage> {
       palingLarisLoading = true;
     });
     if (await productProvider.getProduct(
-      cabangId: "1",
+      cabangId: "${loginProvider.loginModel.data?.cabangId ?? 1}",
       token: loginProvider.loginModel.token ?? "",
       page: page,
       limit: "5",
@@ -212,6 +212,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    LoginProvider loginProvider = Provider.of<LoginProvider>(context);
+
 //  Fungsi untuk membuat title text
     Widget titleText(String title) {
       return Padding(
@@ -469,7 +471,7 @@ class _HomePageState extends State<HomePage> {
                         child: ProductDetailPage(
                           imageURL: "${promoProduct.data?[i].gambar?.first}",
                           productId: "${promoProduct.data?[i].id}",
-                          productLoct: "Pusat",
+                          productLoct: loginProvider.loginModel.data?.namaCabang ?? "",
                           productName: "${promoProduct.data?[i].namaProduk}",
                           productPrice: "${promoProduct.data?[i].hargaDiskon}",
                           productStar: "${promoProduct.data?[i].rating}",
@@ -605,7 +607,7 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   Expanded(
                                     child: Text(
-                                      "Cabang Pusat",
+                                      "Cabang ${loginProvider.loginModel.data?.namaCabang ?? ""}",
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
                                       style: poppins.copyWith(
@@ -624,6 +626,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
+              numberofItem < 5 ? SizedBox() :
               InkWell(
                 onTap: (){
                   Navigator.push(
@@ -633,7 +636,7 @@ class _HomePageState extends State<HomePage> {
                             searchKeyword: "", sort: "promo", category: "",),
                           type: PageTransitionType.fade));
                 },
-                child: Container(
+                child:  Container(
                   alignment: Alignment.center,
                   width: 150,
                   height: 300,
@@ -663,7 +666,7 @@ class _HomePageState extends State<HomePage> {
               child: ProductDetailPage(
                 productId: "${(palingLarisProduct.data?[i].id ?? 0)}",
                 imageURL: palingLarisProduct.data?[i].gambar?.first,
-                productLoct: "Pusat",
+                productLoct: loginProvider.loginModel.data?.namaCabang ?? "",
                 discountPercentage: palingLarisProduct.data?[i].diskon == null
                     ? ""
                     : "${palingLarisProduct.data?[i].diskon}%",
@@ -803,7 +806,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                           Expanded(
                             child: Text(
-                              "Cabang Pusat",
+                              "Cabang ${loginProvider.loginModel.data?.namaCabang ?? ""}",
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                               style: poppins.copyWith(
