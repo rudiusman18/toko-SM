@@ -416,6 +416,12 @@ class _ProductListSearchResultState extends State<ProductListSearchResult> {
       );
     }
 
+    Widget horizontalTag(){
+      return Container(
+        child: Text("data"),
+      );
+    }
+
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -424,6 +430,7 @@ class _ProductListSearchResultState extends State<ProductListSearchResult> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               searchBar(),
+              horizontalTag(),
               searchTextFieldFocusNode.hasFocus
                   ? SizedBox()
                   : Container(
