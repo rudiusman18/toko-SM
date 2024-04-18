@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:tokoSM/models/product_model.dart';
 import 'package:tokoSM/providers/login_provider.dart';
@@ -10,9 +11,10 @@ import '../product_detail/product_detail_page.dart';
 
 class ProductListSearchResult extends StatefulWidget {
   String searchKeyword;
-  bool isCategory;
+  String sort;
+  String category;
   ProductListSearchResult(
-      {super.key, required this.searchKeyword, this.isCategory = false});
+      {super.key, required this.searchKeyword, required this.sort, required this.category});
 
   @override
   State<ProductListSearchResult> createState() =>
@@ -31,21 +33,15 @@ class _ProductListSearchResultState extends State<ProductListSearchResult> {
     'https://images.unsplash.com/photo-1591254460606-fab865bf82b8?auto=format&fit=crop&q=80&w=1932&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
   ];
   List<String> textSuggestion = [];
-  List<String> dummyTextDatabase = [
-    "sambal",
-    "Kecap",
-    "saos",
-    "coca-cola",
-    "meses",
-    "shampo",
-    "sabun"
-  ];
+  List<String> textDatabase = [];
   int productIndex = 0;
   // Diatas ini kemungkinan tidak akan digunakan
+  final currencyFormatter = NumberFormat('#,##0.00', 'ID');
   ProductModel productModel = ProductModel();
   @override
   void initState() {
     super.initState();
+    print("yang dicari adalah: ${widget.searchKeyword}");
     searchTextFieldFocusNode.addListener(_onFocusChange);
     ProductProvider productProvider =
         Provider.of<ProductProvider>(context, listen: false);
@@ -57,9 +53,39 @@ class _ProductListSearchResultState extends State<ProductListSearchResult> {
         token: "${loginProvider.loginModel.token}",
         page: "1",
         limit: "20",
-        sort: "",
-      )) {}
+        sort: widget.sort,
+        category: widget.category,
+        search: widget.searchKeyword
+      )) {
+        setState(() {
+          if (widget.sort == "promo") {
+            productModel = productProvider.promoProduct;
+          } else if (widget.sort == "terlaris") {
+            productModel = productProvider.palingLarisProduct;
+          } else {
+            productModel = productProvider.product;
+          }
+          print("isi product model yang dicari: ${productModel.message}");
+        });
+      }
     });
+
+    _initSuggestionText();
+  }
+
+  _initSuggestionText()async{
+    LoginProvider loginProvider = Provider.of<LoginProvider>(context, listen: false);
+    ProductProvider productProvider = Provider.of<ProductProvider>(context, listen: false);
+    if(await productProvider.getSuggestion(token: loginProvider.loginModel.token ?? "")){
+      setState(() {
+        textDatabase = productProvider.suggestionModel.data ?? [];
+        print("data suggestion adalah: ${textDatabase} dengan isi data ${productProvider.suggestionModel.data!}");
+      });
+    }else{
+      print("data suggestion mengalami kegagalan");
+    }
+
+
   }
 
   @override
@@ -102,7 +128,7 @@ class _ProductListSearchResultState extends State<ProductListSearchResult> {
                   setState(() {
                     print("search object: ${searchTextFieldController.text}");
                     textSuggestion.clear();
-                    textSuggestion = dummyTextDatabase
+                    textSuggestion = textDatabase
                         .where((element) =>
                             element.toLowerCase().contains(value.toLowerCase()))
                         .toList();
@@ -116,18 +142,17 @@ class _ProductListSearchResultState extends State<ProductListSearchResult> {
                 onFieldSubmitted: (_) {
                   print(
                       "object yang dicari adalah ${searchTextFieldController.text}");
-                  if (searchTextFieldController.text.isNotEmpty) {
                     Navigator.pushReplacement(
                         context,
                         PageTransition(
                             child: ProductListSearchResult(
-                                searchKeyword: searchTextFieldController.text),
+                                searchKeyword: searchTextFieldController.text,
+                            sort: widget.sort,category: widget.category),
                             type: PageTransitionType.fade));
                     setState(() {
                       searchTextFieldController.text = "";
                       searchTextFieldFocusNode.canRequestFocus = false;
                     });
-                  }
                 },
                 decoration: InputDecoration(
                   hintText: "Cari Barang",
@@ -170,7 +195,7 @@ class _ProductListSearchResultState extends State<ProductListSearchResult> {
                               context,
                               PageTransition(
                                   child: ProductListSearchResult(
-                                      searchKeyword: text[index]),
+                                      searchKeyword: text[index], category: widget.category, sort: widget.sort),
                                   type: PageTransitionType.fade));
                           setState(() {
                             searchTextFieldController.text = "";
@@ -232,8 +257,11 @@ class _ProductListSearchResultState extends State<ProductListSearchResult> {
       }
 
       return SingleChildScrollView(
+
         child: Container(
+          alignment: (productModel.data?.length ?? 0) > 1 ? Alignment.center :  Alignment.topLeft,
           margin: const EdgeInsets.only(
+            top: 30,
             bottom: 30,
           ),
           child: Wrap(
@@ -241,23 +269,25 @@ class _ProductListSearchResultState extends State<ProductListSearchResult> {
             runSpacing: 20,
             spacing: 10,
             children: [
-              for (var i = 0; i < 20; i++)
+              for (var i = 0; i < (productModel.data?.length ?? 0); i++)
                 InkWell(
                   onTap: () {
-                    print("ditekan untuk object foto: $i");
                     Navigator.push(
                       context,
                       PageTransition(
                         child: ProductDetailPage(
-                          imageURL: listImageData[i],
-                          productLoct: "Cabang Malang Kota",
-                          productName: "Lorem Ipsum dolor sit amet",
-                          productPrice: "Rp 18.000,00",
-                          productStar: "4.5",
-                          beforeDiscountPrice:
-                              isOnDiscountContent ? "Rp 180.000,00" : null,
-                          discountPercentage:
-                              isOnDiscountContent ? "50%" : null,
+                          imageURL: "${productModel.data?[i].gambar?.first}",
+                          productId: "${productModel.data?[i].id}",
+                          productLoct: "Pusat",
+                          productName: "${productModel.data?[i].namaProduk}",
+                          productPrice: "${productModel.data?[i].hargaDiskon}",
+                          productStar: "${productModel.data?[i].rating}",
+                          beforeDiscountPrice: isOnDiscountContent
+                              ? "${productModel.data?[i].harga}"
+                              : null,
+                          discountPercentage: isOnDiscountContent
+                              ? "${productModel.data?[i].diskon}%"
+                              : null,
                           isDiscount: isOnDiscountContent,
                         ),
                         type: PageTransitionType.bottomToTop,
@@ -265,7 +295,7 @@ class _ProductListSearchResultState extends State<ProductListSearchResult> {
                     );
                   },
                   child: Container(
-                    width: (MediaQuery.sizeOf(context).width - 50) / 2,
+                    width: 150,
                     height: 300,
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -278,14 +308,16 @@ class _ProductListSearchResultState extends State<ProductListSearchResult> {
                         ),
                       ],
                     ),
+                    margin: EdgeInsets.only(right: i < 19 ? 10 : 0),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         ClipRRect(
                           borderRadius: const BorderRadius.vertical(
                               top: Radius.circular(8)),
                           child: Image.network(
-                            (listImageData[i]),
-                            width: (MediaQuery.sizeOf(context).width - 50) / 2,
+                            ('${productModel.data?[i].gambar?.first}'),
+                            width: 150,
                             height: 150,
                             fit: BoxFit.cover,
                           ),
@@ -297,45 +329,45 @@ class _ProductListSearchResultState extends State<ProductListSearchResult> {
                             children: [
                               Padding(
                                 padding:
-                                    const EdgeInsets.symmetric(horizontal: 5),
+                                const EdgeInsets.symmetric(horizontal: 5),
                                 child: Text(
-                                  "Lorem Ipsum dolor sit amet",
+                                  "${productModel.data?[i].namaProduk}",
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 2,
-                                  style: poppins.copyWith(
-                                    color: backgroundColor1,
-                                    fontWeight: semiBold,
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 5),
-                                child: Text(
-                                  "Rp 18.000,00",
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
                                   style: poppins.copyWith(
                                     color: backgroundColor1,
                                     fontWeight: medium,
                                   ),
                                 ),
                               ),
-                              if (isOnDiscountContent == true)
+                              Padding(
+                                padding:
+                                const EdgeInsets.symmetric(horizontal: 5),
+                                child: Text(
+                                  "Rp ${currencyFormatter.format(productModel.data?[i].hargaDiskon)}",
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  style: poppins.copyWith(
+                                    color: backgroundColor1,
+                                    fontWeight: semiBold,
+                                  ),
+                                ),
+                              ),
+                              if (productModel.data?[i].diskon != null)
                                 Padding(
                                   padding:
-                                      const EdgeInsets.symmetric(horizontal: 5),
+                                  const EdgeInsets.symmetric(horizontal: 5),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Flexible(
                                         child: Text(
-                                          "Rp 180.000,00",
+                                          "Rp ${currencyFormatter.format(productModel.data?[i].harga)}",
                                           overflow: TextOverflow.ellipsis,
                                           maxLines: 1,
                                           style: poppins.copyWith(
                                               decoration:
-                                                  TextDecoration.lineThrough,
+                                              TextDecoration.lineThrough,
                                               color: Colors.grey,
                                               fontSize: 10),
                                         ),
@@ -343,7 +375,7 @@ class _ProductListSearchResultState extends State<ProductListSearchResult> {
                                       Container(
                                         margin: const EdgeInsets.only(left: 5),
                                         child: Text(
-                                          "50%",
+                                          "${productModel.data?[i].diskon}%",
                                           overflow: TextOverflow.ellipsis,
                                           maxLines: 1,
                                           style: poppins.copyWith(
@@ -365,7 +397,7 @@ class _ProductListSearchResultState extends State<ProductListSearchResult> {
                                     color: backgroundColor2,
                                   ),
                                   Text(
-                                    "4.5",
+                                    "${productModel.data?[i].rating}",
                                     style: poppins.copyWith(
                                       fontWeight: semiBold,
                                     ),
@@ -382,7 +414,7 @@ class _ProductListSearchResultState extends State<ProductListSearchResult> {
                                   ),
                                   Expanded(
                                     child: Text(
-                                      "Cab. Malang Kota",
+                                      "Cabang Pusat",
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
                                       style: poppins.copyWith(

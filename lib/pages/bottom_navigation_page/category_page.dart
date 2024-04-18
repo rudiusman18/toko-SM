@@ -91,8 +91,9 @@ class _CategoryPageState extends State<CategoryPage> {
                     PageTransition(
                         child: ProductListSearchResult(
                           searchKeyword:
-                              "${categoryModel.data?[kat1Index].child?[kat2Index].child1?[i].kat3}",
-                          isCategory: true,
+                              "",
+                          sort: "",
+                          category: "${categoryModel.data?[kat1Index].kat1Slug},${categoryModel.data?[kat1Index].child?[kat2Index].kat2Slug},${categoryModel.data?[kat1Index].child?[kat2Index].child1?[i].kat3Slug}",
                         ),
                         type: PageTransitionType.bottomToTop));
               },

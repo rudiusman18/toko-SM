@@ -48,10 +48,12 @@ class ProductProvider extends ChangeNotifier {
 
   Future<bool> getProduct({
     required String cabangId,
+    String category = "",
     required String token,
     required String page,
     required String limit,
-    required String sort,
+    String sort = "",
+    String search = "",
   }) async {
     try {
       ProductModel product = await ProductService().product(
@@ -60,6 +62,8 @@ class ProductProvider extends ChangeNotifier {
         page: page,
         limit: limit,
         sort: sort,
+        search: search,
+        category: category,
       );
       if (sort == "promo") {
         _promoProduct = product;

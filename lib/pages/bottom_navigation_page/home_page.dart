@@ -257,7 +257,7 @@ class _HomePageState extends State<HomePage> {
                         context,
                         PageTransition(
                             child: ProductListSearchResult(
-                                searchKeyword: searchTextFieldController.text),
+                                searchKeyword: searchTextFieldController.text, sort: "promo", category: "",),
                             type: PageTransitionType.fade));
                     setState(() {
                       searchTextFieldController.text = "";
@@ -324,7 +324,7 @@ class _HomePageState extends State<HomePage> {
                               context,
                               PageTransition(
                                   child: ProductListSearchResult(
-                                      searchKeyword: text[index]),
+                                      searchKeyword: text[index], category: "", sort: ""),
                                   type: PageTransitionType.fade));
                           setState(() {
                             searchTextFieldController.text = "";
@@ -624,18 +624,28 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-              Container(
-                alignment: Alignment.center,
-                width: 150,
-                height: 300,
-                child: Text(
-                  'Lihat Selengkapnya',
-                  style: poppins.copyWith(
-                    fontSize: 18,
-                    fontWeight: medium,
-                    color: backgroundColor1,
+              InkWell(
+                onTap: (){
+                  Navigator.push(
+                      context,
+                      PageTransition(
+                          child: ProductListSearchResult(
+                            searchKeyword: "", sort: "promo", category: "",),
+                          type: PageTransitionType.fade));
+                },
+                child: Container(
+                  alignment: Alignment.center,
+                  width: 150,
+                  height: 300,
+                  child: Text(
+                    'Lihat Selengkapnya',
+                    style: poppins.copyWith(
+                      fontSize: 18,
+                      fontWeight: medium,
+                      color: backgroundColor1,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
                 ),
               ),
             ],

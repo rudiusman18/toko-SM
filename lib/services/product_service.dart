@@ -9,15 +9,19 @@ import '../models/detail_product_model.dart';
 class ProductService {
   Future<ProductModel> product({
     required String cabangId,
+    String category = "",
     required String token,
     required String page,
     required String limit,
-    required String sort,
+    String sort = "",
+    String search = "",
+
   }) async {
     var baseURL = "http://103.127.132.116/api/v1/";
 
     var url = Uri.parse(
-        "${baseURL}produk?cabang=$cabangId&page=$page&limit=$limit&sort=$sort");
+        "${baseURL}produk?cabang=$cabangId&cat=$category&sort=$sort&page=$page&limit=$limit&q=$search");
+    print("URL yang diakses adalah: ${url}");
     var header = {
       'Authorization': 'Bearer $token',
       'Content-Type': 'application/json',
