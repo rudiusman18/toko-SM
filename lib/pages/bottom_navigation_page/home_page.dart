@@ -256,7 +256,7 @@ class _HomePageState extends State<HomePage> {
                         PageTransition(
                             child: ProductListSearchResult(
                               searchKeyword: searchTextFieldController.text,
-                              sort: "promo",
+                              sort: "",
                               category: "",
                               categoryToShow: "",
                             ),
