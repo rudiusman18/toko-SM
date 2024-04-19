@@ -51,6 +51,7 @@ dependencies:
   geolocator: ^11.0.0
   permission_handler: ^11.0.1
   animated_custom_dropdown: ^3.0.0
+  flutter_keyboard_visibility: ^6.0.0
 
 dev_dependencies:
   flutter_test:

@@ -33,6 +33,7 @@ class Data {
   int? harga;
   int? hargaDiskon;
   int? diskon;
+  double? rating;
 
   Data(
       {this.sId,
@@ -42,7 +43,8 @@ class Data {
       this.imageUrl,
       this.harga,
       this.hargaDiskon,
-      this.diskon});
+      this.diskon,
+      this.rating});
 
   Data.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -53,6 +55,7 @@ class Data {
     harga = json['harga'];
     hargaDiskon = json['harga_diskon'];
     diskon = json['diskon'];
+    rating = json['rating'];
   }
 
   Map<String, dynamic> toJson() {
@@ -65,6 +68,7 @@ class Data {
     data['harga'] = harga;
     data['harga_diskon'] = hargaDiskon;
     data['diskon'] = diskon;
+    data['rating'] = rating;
     return data;
   }
 }

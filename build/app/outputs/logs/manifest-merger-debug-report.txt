@@ -30,6 +30,7 @@ MERGED from /Users/enygma/Documents/github/toko-SM/android/app/src/main/AndroidM
 MERGED from [:shared_preferences_android] /Users/enygma/Documents/github/toko-SM/build/shared_preferences_android/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
 MERGED from [:permission_handler_android] /Users/enygma/Documents/github/toko-SM/build/permission_handler_android/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
 MERGED from [:geolocator_android] /Users/enygma/Documents/github/toko-SM/build/geolocator_android/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-17:12
+MERGED from [:flutter_keyboard_visibility] /Users/enygma/Documents/github/toko-SM/build/flutter_keyboard_visibility/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
 MERGED from [:fluttertoast] /Users/enygma/Documents/github/toko-SM/build/fluttertoast/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
 MERGED from [:path_provider_android] /Users/enygma/Documents/github/toko-SM/build/path_provider_android/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
 MERGED from [androidx.window:window-java:1.0.0-beta04] /Users/enygma/.gradle/caches/transforms-3/ae81e06d24c799147c26814497a2a305/transformed/jetified-window-java-1.0.0-beta04/AndroidManifest.xml:17:1-23:12
@@ -94,6 +95,8 @@ MERGED from [:permission_handler_android] /Users/enygma/Documents/github/toko-SM
 MERGED from [:permission_handler_android] /Users/enygma/Documents/github/toko-SM/build/permission_handler_android/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:geolocator_android] /Users/enygma/Documents/github/toko-SM/build/geolocator_android/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:geolocator_android] /Users/enygma/Documents/github/toko-SM/build/geolocator_android/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:flutter_keyboard_visibility] /Users/enygma/Documents/github/toko-SM/build/flutter_keyboard_visibility/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:flutter_keyboard_visibility] /Users/enygma/Documents/github/toko-SM/build/flutter_keyboard_visibility/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:fluttertoast] /Users/enygma/Documents/github/toko-SM/build/fluttertoast/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:fluttertoast] /Users/enygma/Documents/github/toko-SM/build/fluttertoast/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:path_provider_android] /Users/enygma/Documents/github/toko-SM/build/path_provider_android/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41

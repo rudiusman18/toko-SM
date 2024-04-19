@@ -1,6 +1,10 @@
 import 'dart:ffi';
 
+import 'package:intl/intl.dart';
+import 'package:tokoSM/models/favorite_model.dart';
+import 'package:tokoSM/models/login_model.dart';
 import 'package:tokoSM/pages/bottom_navigation_page/product_detail/product_detail_page.dart';
+import 'package:tokoSM/providers/login_provider.dart';
 import 'package:tokoSM/providers/product_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
@@ -17,192 +21,202 @@ class WishlistPage extends StatefulWidget {
 }
 
 class _WishlistPageState extends State<WishlistPage> {
+
+  final currencyFormatter = NumberFormat('#,##0.00', 'ID');
+  FavoriteModel favoriteProduct = FavoriteModel();
+  LoginModel loginModel = LoginModel();
+
+  @override
+  void initState() {
+    super.initState();
+    _initFavoriteProduct();
+  }
+
+  _initFavoriteProduct() async{
+    final loginProvider = Provider.of<LoginProvider>(context, listen: false);
+    final productProvider = Provider.of<ProductProvider>(context, listen: false);
+
+    if (await productProvider.getFavoriteProduct(token: loginProvider.loginModel.token ?? "")){
+      setState(() {
+        favoriteProduct = productProvider.favoriteModel;
+        loginModel = loginProvider.loginModel;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    ProductProvider wishlistProductProvider =
-        Provider.of<ProductProvider>(context);
 
-    // Widget verticalListItem(String imageUrl, int numberContent, ProductModel product, {bool isOnDiscountContent = false}){
-    //   return InkWell(
-    //     onTap: (){
-    //       Navigator.push(
-    //         context,
-    //         PageTransition(
-    //           child: ProductDetailPage(
-    //             imageURL: product.urlImg.toString(),
-    //             productLoct: "Cabang Malang Kota",
-    //             productName: product.productName.toString(),
-    //             productPrice: product.productPrice.toString(),
-    //             productStar: "4.5",
-    //             isDiscount: isOnDiscountContent,
-    //             discountPercentage: product.discountPercentage,
-    //             beforeDiscountPrice: product.beforeDiscountPrice,
-    //           ),
-    //           type: PageTransitionType.bottomToTop,
-    //         ),
-    //       ).then((_){
-    //         setState(() {});
-    //       });
-    //     },
-    //     child: Container(
-    //       margin: EdgeInsets.only(left: 20, right: 20, top: numberContent == 0 ? 30 : 5, bottom: numberContent == 19 ? 30 : 5),
-    //       padding: const EdgeInsets.only(right: 20),
-    //       decoration: BoxDecoration(
-    //         color: Colors.white,
-    //         boxShadow: [
-    //           BoxShadow(
-    //             color: Colors.grey.withOpacity(0.2),
-    //             blurRadius: 4,
-    //             offset:  const Offset(0, 8), // Shadow position
-    //           ),
-    //         ],
-    //         borderRadius: BorderRadius.circular(10),
-    //       ),
-    //       child: Row(
-    //         children: [
-    //           ClipRRect(
-    //             borderRadius: BorderRadius.circular(10),
-    //             child: Image.network(
-    //               imageUrl,
-    //               width: 140,
-    //               height: 140,
-    //               fit: BoxFit.cover,
-    //             ),
-    //           ),
-
-    //           Expanded(
-    //             child: Column(
-    //               crossAxisAlignment: CrossAxisAlignment.start,
-    //               mainAxisAlignment: MainAxisAlignment.center,
-    //               children: [
-    //                 Padding(
-    //                   padding: const EdgeInsets.symmetric(horizontal: 10),
-    //                   child: Text(
-    //                     "${product.productName}",
-    //                     overflow: TextOverflow.ellipsis,
-    //                     maxLines: 2,
-    //                     style: poppins.copyWith(
-    //                       color: backgroundColor1,
-    //                       fontWeight: medium,
-    //                     ),
-    //                   ),
-    //                 ),
-
-    //                 Padding(
-    //                   padding: const EdgeInsets.symmetric(horizontal: 10),
-    //                   child: Text(
-    //                     "Rp 18,000.00",
-    //                     overflow: TextOverflow.ellipsis,
-    //                     maxLines: 1,
-    //                     style: poppins.copyWith(
-    //                       color: backgroundColor1,
-    //                       fontWeight: semiBold,
-    //                     ),
-    //                   ),
-    //                 ),
-
-    //                 if(isOnDiscountContent == true)
-    //                   Padding(
-    //                     padding: const EdgeInsets.symmetric(horizontal: 10),
-    //                     child: Row(
-    //                       mainAxisSize: MainAxisSize.min,
-    //                       children: [
-    //                         Flexible(
-    //                           child: Text(
-    //                             "Rp 180,000.00",
-    //                             overflow: TextOverflow.ellipsis,
-    //                             maxLines: 1,
-    //                             style: poppins.copyWith(
-    //                                 decoration: TextDecoration.lineThrough,
-    //                                 color: Colors.grey,
-    //                                 fontSize: 10
-    //                             ),
-    //                           ),
-    //                         ),
-
-    //                         Container(
-    //                           margin: const EdgeInsets.only(left: 5),
-    //                           child: Text(
-    //                             "50%",
-    //                             overflow: TextOverflow.ellipsis,
-    //                             maxLines: 1,
-    //                             style: poppins.copyWith(
-    //                               color: Colors.red,
-    //                               fontSize: 10,
-    //                               fontWeight: bold,
-    //                             ),
-    //                           ),
-    //                         ),
-    //                       ],
-    //                     ),
-    //                   ),
-
-    //                 Padding(
-    //                   padding: const EdgeInsets.symmetric(horizontal: 5),
-    //                   child: Row(
-    //                     mainAxisSize: MainAxisSize.min,
-    //                     mainAxisAlignment: MainAxisAlignment.start,
-    //                     children: [
-    //                       Icon(
-    //                         Icons.star,
-    //                         color: backgroundColor2,
-    //                       ),
-    //                       Text(
-    //                         "4.5",
-    //                         style: poppins.copyWith(
-    //                           fontWeight: semiBold,
-    //                         ),
-    //                       ),
-    //                     ],
-    //                   ),
-    //                 ),
-
-    //                 Padding(
-    //                   padding: const EdgeInsets.symmetric(horizontal: 5),
-    //                   child: Row(
-    //                     mainAxisAlignment: MainAxisAlignment.start,
-    //                     crossAxisAlignment: CrossAxisAlignment.end,
-    //                     children: [
-    //                       Icon(
-    //                         Icons.location_city,
-    //                         color: backgroundColor2,
-    //                       ),
-    //                       Expanded(
-    //                         child: Text(
-    //                           "Cab. Malang Kota",
-    //                           overflow: TextOverflow.ellipsis,
-    //                           maxLines: 1,
-    //                           style: poppins.copyWith(
-    //                             color: backgroundColor2,
-    //                             fontWeight: medium,
-    //                             fontSize: 12,
-    //                           ),
-    //                         ),
-    //                       ),
-    //                     ],
-    //                   ),
-    //                 )
-    //               ],
-    //             ),
-    //           ),
-
-    //           Container(
-    //             padding: EdgeInsets.all(8),
-    //             decoration: BoxDecoration(
-    //               color: backgroundColor3,
-    //               shape: BoxShape.circle,
-    //             ),
-    //             child: const Icon(
-    //               Icons.favorite,
-    //               size: 30,
-    //               color: Colors.white,
-    //             ),
-    //           ),
-    //         ],
-    //       ),
-    //     ),
-    //   );
-    // }
+    Widget verticalListItem(int i) {
+      return InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            PageTransition(
+              child: ProductDetailPage(
+                productId: "${(favoriteProduct.data?[i].produkId ?? 0)}",
+                imageURL: favoriteProduct.data?[i].imageUrl,
+                productLoct: loginModel.data?.namaCabang ?? "",
+                discountPercentage: favoriteProduct.data?[i].diskon == null
+                    ? ""
+                    : "${favoriteProduct.data?[i].diskon}%",
+                beforeDiscountPrice: favoriteProduct.data?[i].diskon == null
+                    ? ""
+                    : "${favoriteProduct.data?[i].harga}",
+                productName: favoriteProduct.data?[i].namaProduk,
+                productPrice: favoriteProduct.data?[i].diskon == null
+                    ? "${favoriteProduct.data?[i].harga}"
+                    : favoriteProduct.data?[i].hargaDiskon.toString(),
+                productStar: favoriteProduct.data?[i].rating.toString(),
+                isDiscount:
+                favoriteProduct.data?[i].diskon == null ? false : true,
+              ),
+              type: PageTransitionType.bottomToTop,
+            ),
+          );
+        },
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                blurRadius: 4,
+                offset: const Offset(0, 8), // Shadow position
+              ),
+            ],
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Row(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.network(
+                  "${favoriteProduct.data?[i].imageUrl}",
+                  width: 140,
+                  height: 140,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(
+                        "${favoriteProduct.data?[i].namaProduk}",
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        style: poppins.copyWith(
+                          color: backgroundColor1,
+                          fontWeight: medium,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(
+                        favoriteProduct.data?[i].diskon == null
+                            ? "Rp ${currencyFormatter.format(favoriteProduct.data?[i].harga)}"
+                            : "Rp ${currencyFormatter.format(favoriteProduct.data?[i].hargaDiskon)}",
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: poppins.copyWith(
+                          color: backgroundColor1,
+                          fontWeight: semiBold,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Icon(
+                            Icons.star,
+                            color: backgroundColor2,
+                          ),
+                          Text(
+                            "${favoriteProduct.data?[i].rating}",
+                            style: poppins.copyWith(
+                              fontWeight: semiBold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    if (favoriteProduct.data?[i].diskon == null
+                        ? false
+                        : true)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Flexible(
+                              child: Text(
+                                "Rp ${currencyFormatter.format(favoriteProduct.data?[i].harga)}",
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: poppins.copyWith(
+                                    decoration: TextDecoration.lineThrough,
+                                    color: Colors.grey,
+                                    fontSize: 10),
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(left: 5),
+                              child: Text(
+                                "${favoriteProduct.data?[i].diskon}%",
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: poppins.copyWith(
+                                  color: Colors.red,
+                                  fontSize: 10,
+                                  fontWeight: bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Icon(
+                            Icons.location_city,
+                            color: backgroundColor2,
+                          ),
+                          Expanded(
+                            child: Text(
+                              "Cabang ${loginModel.data?.namaCabang ?? ""}",
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: poppins.copyWith(
+                                color: backgroundColor2,
+                                fontWeight: medium,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
 
     Widget header() {
       return Container(
@@ -220,7 +234,7 @@ class _WishlistPageState extends State<WishlistPage> {
               ),
             ),
             Text(
-              "${wishlistProductProvider.wishlistData.length} Produk",
+              "${favoriteProduct.data?.length} Produk",
               style: poppins.copyWith(
                 color: Colors.white,
                 fontWeight: light,
@@ -268,13 +282,13 @@ class _WishlistPageState extends State<WishlistPage> {
           children: [
             header(),
             Expanded(
-              child: //wishlistProductProvider.wishlistData.isNotEmpty ?
-                  // ListView(
-                  //       children: [
-                  //         for (var i=0; i<wishlistProductProvider.wishlistData.length; i++)
-                  //           verticalListItem(wishlistProductProvider.wishlistData[i].urlImg.toString(), i, wishlistProductProvider.wishlistData[i], isOnDiscountContent: wishlistProductProvider.wishlistData[i].isDiscount!)
-                  //       ],
-                  //     ) :
+              child: (favoriteProduct.data ?? []).isNotEmpty ?
+                  ListView(
+                        children: [
+                          for (var i=0; i<(favoriteProduct.data?.length ?? 0); i++)
+                            verticalListItem(i),
+                        ],
+                      ) :
                   emptyWishlist(),
             ),
           ],

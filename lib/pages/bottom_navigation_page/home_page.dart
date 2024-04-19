@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 import '../../providers/page_provider.dart';
 
@@ -30,9 +31,6 @@ class _HomePageState extends State<HomePage> {
 
   TextEditingController searchTextFieldController = TextEditingController();
   FocusNode searchTextFieldFocusNode = FocusNode();
-
-  // Keyboard
-  bool keyboardIsVisible = false;
 
   int carouselIndex = 0;
   int productIndex = 0;
@@ -869,23 +867,29 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
-    return Scaffold(
-      body: SafeArea(
-        child: Container(
-          color: Colors.white,
-          width: MediaQuery.sizeOf(context).width,
-          child: Column(
-            children: [
-              searchBar(),
-              Expanded(
-                child: searchTextFieldFocusNode.hasFocus
-                    ? searchSuggestion(text: textSuggestion)
-                    : homePageContent(),
+
+    return KeyboardVisibilityBuilder(
+      builder: (BuildContext , bool isKeyboardVisible) {
+        print("kondisi keyboard: $isKeyboardVisible");
+        return Scaffold(
+          body: SafeArea(
+            child: Container(
+              color: Colors.white,
+              width: MediaQuery.sizeOf(context).width,
+              child: Column(
+                children: [
+                  searchBar(),
+                  Expanded(
+                    child: isKeyboardVisible
+                        ? searchSuggestion(text: textSuggestion)
+                        : homePageContent(),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
