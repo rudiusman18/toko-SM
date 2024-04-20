@@ -441,7 +441,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       List<String> dataCabang = <String>[];
       var numberofStocks = detailProduct.data?.stok?.length ?? 0;
       if ((detailProduct.data?.stok?.length ?? 0) <= 0) {
-        dataCabang.add("Pusat");
+        dataCabang.add(widget.productLoct ?? "Pusat");
       } else {
         dataCabang.clear();
         for (int i = 0; i < numberofStocks; i++) {
@@ -542,22 +542,20 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       fontWeight: medium,
                     ),
                   ),
-                  Expanded(
-                    child: DropdownMenu<String>(
-                      initialSelection: widget.productLoct,
-                      onSelected: (String? value) {
-                        // This is called when the user selects an item.
-                        setState(() {
-                          widget.productLoct = value!;
-                          print(' value $value');
-                        });
-                      },
-                      dropdownMenuEntries: dataCabang
-                          .map<DropdownMenuEntry<String>>((String value) {
-                        return DropdownMenuEntry<String>(
-                            value: value, label: value);
-                      }).toList(),
-                    ),
+                  DropdownMenu<String>(
+                    initialSelection: widget.productLoct,
+                    onSelected: (String? value) {
+                      // This is called when the user selects an item.
+                      setState(() {
+                        widget.productLoct = value!;
+                        print(' value $value');
+                      });
+                    },
+                    dropdownMenuEntries: dataCabang
+                        .map<DropdownMenuEntry<String>>((String value) {
+                      return DropdownMenuEntry<String>(
+                          value: value, label: value);
+                    }).toList(),
                   ),
                 ],
               ),
@@ -643,16 +641,25 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       color: backgroundColor1,
                     ),
                   ),
-                  Text(
-                    "Lihat Semua",
-                    style: poppins.copyWith(
-                      color: backgroundColor1,
-                    ),
-                  ),
+                  // Text(
+                  //   "Lihat Semua",
+                  //   style: poppins.copyWith(
+                  //     color: backgroundColor1,
+                  //   ),
+                  // ),
                 ],
               ),
             ),
-            productReviewContent(),
+            Center(
+              child: Container(
+                margin: const EdgeInsets.only(top: 10),
+                child: Text(
+                  "Produk ini belum memiliki ulasan",
+                  style: poppins,
+                ),
+              ),
+            ),
+            // productReviewContent(),
           ],
         ),
       );

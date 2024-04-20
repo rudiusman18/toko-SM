@@ -660,20 +660,18 @@ class _HomePageState extends State<HomePage> {
             context,
             PageTransition(
               child: ProductDetailPage(
-                productId: "${(palingLarisProduct.data?[i].id ?? 0)}",
-                imageURL: palingLarisProduct.data?[i].gambar?.first,
+                imageURL: "${palingLarisProduct.data?[i].gambar?.first}",
+                productId: "${palingLarisProduct.data?[i].id}",
                 productLoct: loginProvider.loginModel.data?.namaCabang ?? "",
-                discountPercentage: palingLarisProduct.data?[i].diskon == null
-                    ? ""
-                    : "${palingLarisProduct.data?[i].diskon}%",
+                productName: "${palingLarisProduct.data?[i].namaProduk}",
+                productPrice: "${palingLarisProduct.data?[i].hargaDiskon}",
+                productStar: "${palingLarisProduct.data?[i].rating}",
                 beforeDiscountPrice: palingLarisProduct.data?[i].diskon == null
                     ? ""
                     : "${palingLarisProduct.data?[i].harga}",
-                productName: palingLarisProduct.data?[i].namaProduk,
-                productPrice: palingLarisProduct.data?[i].diskon == null
-                    ? "${palingLarisProduct.data?[i].harga}"
-                    : palingLarisProduct.data?[i].hargaDiskon.toString(),
-                productStar: palingLarisProduct.data?[i].rating.toString(),
+                discountPercentage: palingLarisProduct.data?[i].diskon == null
+                    ? ""
+                    : "${palingLarisProduct.data?[i].diskon}%",
                 isDiscount:
                     palingLarisProduct.data?[i].diskon == null ? false : true,
               ),
@@ -867,9 +865,8 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
-
     return KeyboardVisibilityBuilder(
-      builder: (BuildContext , bool isKeyboardVisible) {
+      builder: (BuildContext, bool isKeyboardVisible) {
         print("kondisi keyboard: $isKeyboardVisible");
         return Scaffold(
           body: SafeArea(

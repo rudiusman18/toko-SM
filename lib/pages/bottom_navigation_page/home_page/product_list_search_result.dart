@@ -1,5 +1,6 @@
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:tokoSM/models/login_model.dart';
 import 'package:tokoSM/models/product_model.dart';
 import 'package:tokoSM/providers/login_provider.dart';
 import 'package:tokoSM/providers/product_provider.dart';
@@ -36,6 +37,7 @@ class _ProductListSearchResultState extends State<ProductListSearchResult> {
   ProductModel productModel = ProductModel();
   ProductModel product = ProductModel(); // Hanya digunakan di initproduct
   int tagCounter = 0;
+  LoginModel loginModel = LoginModel();
 
 // Scroll Controller
   final scrollController = ScrollController();
@@ -77,7 +79,7 @@ class _ProductListSearchResultState extends State<ProductListSearchResult> {
     LoginProvider loginProvider =
         Provider.of<LoginProvider>(context, listen: false);
     if (await productProvider.getProduct(
-        cabangId: "1",
+        cabangId: "${loginProvider.loginModel.data?.cabangId ?? "1"}",
         token: "${loginProvider.loginModel.token}",
         page: page,
         limit: "20",
@@ -85,6 +87,7 @@ class _ProductListSearchResultState extends State<ProductListSearchResult> {
         category: widget.category,
         search: widget.searchKeyword)) {
       setState(() {
+        loginModel = loginProvider.loginModel;
         if (widget.sort == "promo") {
           product = productProvider.promoProduct;
         } else if (widget.sort == "terlaris") {
@@ -330,20 +333,27 @@ class _ProductListSearchResultState extends State<ProductListSearchResult> {
                                     imageURL:
                                         "${productModel.data?[i].gambar?.first}",
                                     productId: "${productModel.data?[i].id}",
-                                    productLoct: "Pusat",
+                                    productLoct:
+                                        loginModel.data?.namaCabang ?? "",
                                     productName:
                                         "${productModel.data?[i].namaProduk}",
                                     productPrice:
                                         "${productModel.data?[i].hargaDiskon}",
                                     productStar:
                                         "${productModel.data?[i].rating}",
-                                    beforeDiscountPrice: isOnDiscountContent
-                                        ? "${productModel.data?[i].harga}"
-                                        : null,
-                                    discountPercentage: isOnDiscountContent
-                                        ? "${productModel.data?[i].diskon}%"
-                                        : null,
-                                    isDiscount: isOnDiscountContent,
+                                    beforeDiscountPrice:
+                                        productModel.data?[i].diskon == null
+                                            ? ""
+                                            : "${productModel.data?[i].harga}",
+                                    discountPercentage: productModel
+                                                .data?[i].diskon ==
+                                            null
+                                        ? ""
+                                        : "${productModel.data?[i].diskon}%",
+                                    isDiscount:
+                                        productModel.data?[i].diskon == null
+                                            ? false
+                                            : true,
                                   ),
                                   type: PageTransitionType.bottomToTop,
                                 ),
@@ -480,7 +490,7 @@ class _ProductListSearchResultState extends State<ProductListSearchResult> {
                                             ),
                                             Expanded(
                                               child: Text(
-                                                "Cabang Pusat",
+                                                "Cabang ${loginModel.data?.namaCabang ?? ""}",
                                                 overflow: TextOverflow.ellipsis,
                                                 maxLines: 1,
                                                 style: poppins.copyWith(
