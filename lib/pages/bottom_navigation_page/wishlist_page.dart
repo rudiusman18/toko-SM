@@ -25,22 +25,60 @@ class _WishlistPageState extends State<WishlistPage> {
   FavoriteModel favoriteProduct = FavoriteModel();
   LoginModel loginModel = LoginModel();
 
+  // scroll controller
+  final scrollController = ScrollController();
+  bool scrollIsAtEnd = false;
+  int page = 1;
+  bool favoriteProductisReachEnd = false;
+
   @override
   void initState() {
     super.initState();
+    scrollController.addListener(_scrollController);
     _initFavoriteProduct();
   }
 
-  _initFavoriteProduct() async {
+  _scrollController() {
+    if (scrollController.offset >= scrollController.position.maxScrollExtent &&
+        !scrollController.position.outOfRange) {
+      setState(() {
+        scrollIsAtEnd = true;
+        if (favoriteProductisReachEnd == false) {
+          page += 1;
+          _initFavoriteProduct(page: page.toString());
+        }
+      });
+    } else {
+      setState(() {
+        scrollIsAtEnd = false;
+      });
+    }
+  }
+
+  _initFavoriteProduct({String page = "1"}) async {
     final loginProvider = Provider.of<LoginProvider>(context, listen: false);
     final productProvider =
         Provider.of<ProductProvider>(context, listen: false);
 
     if (await productProvider.getFavoriteProduct(
-        token: loginProvider.loginModel.token ?? "")) {
+      token: loginProvider.loginModel.token ?? "",
+      page: page,
+      limit: "5",
+    )) {
       setState(() {
-        favoriteProduct = productProvider.favoriteModel;
         loginModel = loginProvider.loginModel;
+        if (page == "1" && productProvider.favoriteModel.data != null) {
+          favoriteProductisReachEnd = false;
+          favoriteProduct = productProvider.favoriteModel;
+        } else if (productProvider.favoriteModel.data?.isEmpty == false) {
+          favoriteProductisReachEnd = false;
+          favoriteProduct.data
+              ?.addAll(productProvider.favoriteModel.data?.toList() ?? []);
+        } else {
+          setState(() {
+            favoriteProductisReachEnd = true;
+          });
+        }
       });
     }
   }
@@ -76,7 +114,9 @@ class _WishlistPageState extends State<WishlistPage> {
                 ),
                 type: PageTransitionType.bottomToTop,
               ),
-            );
+            ).then((_) => setState(() {
+                  _initFavoriteProduct();
+                }));
           },
           child: Container(
             margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -287,13 +327,34 @@ class _WishlistPageState extends State<WishlistPage> {
             header(),
             Expanded(
               child: (favoriteProduct.data ?? []).isNotEmpty
-                  ? ListView(
-                      children: [
-                        for (var i = 0;
-                            i < (favoriteProduct.data?.length ?? 0);
-                            i++)
-                          verticalListItem(i),
-                      ],
+                  ? SingleChildScrollView(
+                      controller: scrollController,
+                      child: Column(
+                        children: [
+                          for (var i = 0;
+                              i < (favoriteProduct.data?.length ?? 0);
+                              i++)
+                            verticalListItem(i),
+                          scrollIsAtEnd == true &&
+                                  favoriteProductisReachEnd == false
+                              ? Center(
+                                  child: Container(
+                                    margin: const EdgeInsets.only(
+                                      top: 10,
+                                    ),
+                                    width: 15,
+                                    height: 15,
+                                    child: CircularProgressIndicator(
+                                      color: backgroundColor1,
+                                    ),
+                                  ),
+                                )
+                              : const SizedBox(),
+                          const SizedBox(
+                            height: 40,
+                          ),
+                        ],
+                      ),
                     )
                   : emptyWishlist(),
             ),

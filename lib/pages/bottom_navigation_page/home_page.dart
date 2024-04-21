@@ -14,8 +14,6 @@ import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
-import '../../providers/page_provider.dart';
-
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -866,6 +864,7 @@ class _HomePageState extends State<HomePage> {
     }
 
     return KeyboardVisibilityBuilder(
+      // ignore: avoid_types_as_parameter_names, non_constant_identifier_names
       builder: (BuildContext, bool isKeyboardVisible) {
         print("kondisi keyboard: $isKeyboardVisible");
         return Scaffold(

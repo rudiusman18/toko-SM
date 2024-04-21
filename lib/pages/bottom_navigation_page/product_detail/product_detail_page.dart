@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:tokoSM/models/detail_product_model.dart';
 import 'package:tokoSM/models/favorite_model.dart';
 import 'package:tokoSM/pages/main_page.dart';
+import 'package:tokoSM/providers/cart_provider.dart';
 import 'package:tokoSM/providers/login_provider.dart';
 import 'package:tokoSM/providers/page_provider.dart';
 import 'package:tokoSM/providers/product_provider.dart';
@@ -26,6 +27,7 @@ class ProductDetailPage extends StatefulWidget {
   final String? beforeDiscountPrice;
   final String? discountPercentage;
   final bool? isDiscount;
+  final bool? isFavoriteDetail;
 
   ProductDetailPage(
       {super.key,
@@ -37,7 +39,8 @@ class ProductDetailPage extends StatefulWidget {
       this.productLoct,
       this.isDiscount,
       this.beforeDiscountPrice,
-      this.discountPercentage});
+      this.discountPercentage,
+      this.isFavoriteDetail = false});
 
   @override
   State<ProductDetailPage> createState() => _ProductDetailPageState();
@@ -117,6 +120,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     PageProvider pageProvider = Provider.of<PageProvider>(context);
     ProductProvider productProvider = Provider.of<ProductProvider>(context);
     LoginProvider loginProvider = Provider.of<LoginProvider>(context);
+    CartProvider cartProvider = Provider.of<CartProvider>(context);
 
     // list.firstWhere((a) => a == b, orElse: () => print('No matching element.'));
     // ProductModel wishlist = productProvider.wishlistData.firstWhere((element) => element.urlImg == widget.imageURL, orElse: ()=> ProductModel());
@@ -671,8 +675,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         width: double.infinity,
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
         child: TextButton(
-            onPressed: () {
+            onPressed: () async {
               // CartModel
+              if (await cartProvider.postCart(
+                  token: loginProvider.loginModel.token ?? "",
+                  cabangId: 1,
+                  productId: detailProduct.data?.id ?? 0)) {}
             },
             style: TextButton.styleFrom(
               backgroundColor: backgroundColor3,
