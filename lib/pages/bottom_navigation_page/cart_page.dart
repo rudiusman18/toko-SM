@@ -276,15 +276,16 @@ class _CartPageState extends State<CartPage> {
                           catatan: catatantextField.text,
                         );
                         stateSetter(() {
+                          _initCartProduct();
                           isLoading = false;
                           Navigator.pop(context);
                         });
                       },
                       child: isLoading
-                          ? Container(
+                          ? const SizedBox(
                               width: 15,
                               height: 15,
-                              child: const CircularProgressIndicator(
+                              child: CircularProgressIndicator(
                                 color: Colors.white,
                               ),
                             )
@@ -441,6 +442,11 @@ class _CartPageState extends State<CartPage> {
                           ),
                           InkWell(
                             onTap: () {
+                              setState(() {
+                                catatantextField.text = product?.catatan ?? "";
+                                print(
+                                    "textfield diisi dengan ${catatantextField.text}");
+                              });
                               showModalBottomSheet(
                                 context: context,
                                 isScrollControlled: true,
