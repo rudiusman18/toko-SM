@@ -24,7 +24,7 @@ class ProfileProvider with ChangeNotifier{
     }
   }
 
-  Future<bool>updateProfile({required String token, required String userId, required int cabangId, required String username, required String namaLengkap, required String email, required String telp, required String alamat, required String wilayah, required String tglLahir, required String jenisKelamin,})async{
+  Future<bool>updateProfile({required String token, required int userId, required int cabangId, required String username, required String namaLengkap, required String email, required String telp, required String alamat, required String wilayah, required String tglLahir, required String jenisKelamin,})async{
     try{
       await ProfileService().updateProfile(token: token, userId: userId, cabangId: cabangId, username: username, namaLengkap: namaLengkap, email: email, telp: telp, alamat: alamat, wilayah: wilayah, tglLahir: tglLahir, jenisKelamin: jenisKelamin);
       return true;

@@ -4,10 +4,14 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:tokoSM/models/wilayah_model.dart';
+import 'package:tokoSM/providers/profile_provider.dart';
 import 'package:tokoSM/theme/theme.dart';
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
+
+import '../../providers/login_provider.dart';
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({super.key});
@@ -40,8 +44,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
   String _range = '';
   String _rangeCount = '';
 
-  /// The method for [DateRangePickerSelectionChanged] callback, which will be
-  /// called whenever a selection changed on the date picker widget.
+// simpanButton Controller
+  bool isLoading = false;
+
   void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
     setState(() {
       if (args.value is PickerDateRange) {
@@ -80,6 +85,20 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    ProfileProvider profileProvider = Provider.of<ProfileProvider>(context);
+    LoginProvider loginProvider = Provider.of<LoginProvider>(context);
+
+    // Digunakan ketika tombol simpan ditekan
+    _handleTapSimpan()async{
+      var profile = profileProvider.profileModel.data;
+        if(await profileProvider.updateProfile(token: loginProvider.loginModel.token ?? "", userId: profile?.id ?? 0, cabangId: profile?.cabangId ?? 0, username: usernameTextField.text, namaLengkap: fullnameTextField.text, email: emailTextField.text, telp: telpTextField.text, alamat: alamatTextField.text, wilayah: wilayahTextField.text, tglLahir: tglLahirTextField.text, jenisKelamin: jenisKelaminTextField.text)){
+          print("data berhasil diupdate");
+        }
+        else{
+          print("data gagal diupdate");
+        }
+    }
+
     Widget customtextFormField({
       required IconData icon,
       required String title,
@@ -488,8 +507,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     ),
                     backgroundColor: backgroundColor3,
                   ),
-                  onPressed: (){
-                  }, child: Text("Simpan",),)),
+                  onPressed: _handleTapSimpan,
+                  child: Text("Simpan",),)),
           ],
         ));
   }

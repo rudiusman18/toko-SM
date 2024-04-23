@@ -2,6 +2,7 @@ import 'package:tokoSM/models/login_model.dart';
 import 'package:tokoSM/pages/login_page.dart';
 import 'package:tokoSM/pages/profile_page/edit_profile_page.dart';
 import 'package:tokoSM/providers/login_provider.dart';
+import 'package:tokoSM/providers/profile_provider.dart';
 import 'package:tokoSM/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
@@ -23,6 +24,22 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     LoginProvider loginProvider = Provider.of<LoginProvider>(context);
     LoginModel userLogin = loginProvider.loginModel;
+    ProfileProvider profileProvider = Provider.of<ProfileProvider>(context);
+
+    _handleTapEditProfil()async{
+      if(await profileProvider.getProfile(token: loginProvider.loginModel.token ?? "", userId: "${loginProvider.loginModel.data?.id}")){
+        Navigator.push(
+          context,
+          PageTransition(
+            child: const EditProfilePage(),
+            type: PageTransitionType.rightToLeft,
+          ),
+        );
+      }
+      else{
+
+      }
+    }
 
     String getInitials(String name) {
       // Split the name into individual words
@@ -217,14 +234,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   actionWidget(
                     icon: Icons.edit,
                     title: "Edit Profil",
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        PageTransition(
-                          child: const EditProfilePage(),
-                          type: PageTransitionType.rightToLeft,
-                        ),
-                      );
+                    onTap: (){
+                      _handleTapEditProfil();
                     },
                   ),
                   actionWidget(
