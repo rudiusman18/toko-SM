@@ -53,6 +53,7 @@ dependencies:
   animated_custom_dropdown: ^3.0.0
   flutter_keyboard_visibility: ^6.0.0
   syncfusion_flutter_datepicker: 23.2.4
+  dropdown_search: ^5.0.6
 
 dev_dependencies:
   flutter_test:

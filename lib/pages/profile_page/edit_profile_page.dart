@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -56,6 +57,25 @@ class _EditProfilePageState extends State<EditProfilePage> {
         _rangeCount = args.value.length.toString();
       }
     });
+  }
+
+  @override
+  void initState() {
+    Future.delayed(Duration.zero, ()async{
+      String data =
+      await rootBundle.loadString('assets/wilayah.json');
+      var jsonResult = jsonDecode(data);
+      wilayah = WilayahModel.fromJson(jsonResult);
+
+      setState(() {
+        textDatabase = wilayah.data
+            ?.map((e) => (e.value) ?? "")
+            .toList() ??
+            [];
+        print("isi wilayahnya adalah ${textDatabase}");
+      });
+    });
+    super.initState();
   }
 
   @override
@@ -161,7 +181,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 cursorColor: backgroundColor1,
                 focusNode: searchTextFieldFocusNode,
                 decoration: InputDecoration(
-                  hintText: "Cari Barang",
+                  hintText: "Cari Wilayah",
                   hintStyle: poppins,
                   prefixIcon: const Icon(Icons.search),
                   prefixIconColor: searchTextFieldFocusNode.hasFocus
@@ -284,47 +304,24 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     ),
                   ),
                   Expanded(
-                    child: InkWell(
-                      onTap: () async {
-                        String data =
-                            await rootBundle.loadString('assets/wilayah.json');
-                        var jsonResult = jsonDecode(data);
-                        wilayah = WilayahModel.fromJson(jsonResult);
-                        setState(() {
-                          textDatabase = wilayah.data
-                                  ?.map((e) => (e.value) ?? "")
-                                  .toList() ??
-                              [];
-                          textSuggestion = textDatabase;
-                        });
-                        // ignore: use_build_context_synchronously
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                backgroundColor: Colors.transparent,
-                                content: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 20,
-                                  ),
-                                  width: MediaQuery.sizeOf(context).width,
-                                  height:
-                                      MediaQuery.sizeOf(context).height * 0.4,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.white,
-                                  ),
-                                  child: getWilayah(wilayah: wilayah),
-                                ),
-                              );
-                            });
-                      },
-                      child: Text(
-                        tglLahirTextField.text == ""
-                            ? "..."
-                            : tglLahirTextField.text,
+                    child: DropdownSearch<String>(
+                      popupProps: PopupProps.dialog(
+                        showSelectedItems: true,
+                        showSearchBox: true,
+                        disabledItemFn: (String s) => s.startsWith('I'),
                       ),
-                    ),
+                      items: textDatabase,
+                      dropdownDecoratorProps: const DropDownDecoratorProps(
+                        dropdownSearchDecoration: InputDecoration(
+                          hintText: "...",
+                        ),
+                      ),
+                      onChanged: (value){
+                        setState(() {
+                          wilayahTextField.text = value ?? "";
+                        });
+                      },
+                    )
                   ),
                 ],
               ),
@@ -481,6 +478,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 ],
               ),
             ),
+
+            Container(
+                margin: const EdgeInsets.only(left: 20, right:20, bottom:20,),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)
+                    ),
+                    backgroundColor: backgroundColor3,
+                  ),
+                  onPressed: (){
+                  }, child: Text("Simpan",),)),
           ],
         ));
   }
