@@ -1,5 +1,6 @@
 import 'package:tokoSM/models/cart_model.dart';
 import 'package:tokoSM/models/login_model.dart';
+import 'package:tokoSM/pages/bottom_navigation_page/cart_page/delivery_page.dart';
 import 'package:tokoSM/pages/bottom_navigation_page/product_detail/product_detail_page.dart';
 import 'package:tokoSM/providers/cart_provider.dart';
 import 'package:tokoSM/providers/login_provider.dart';
@@ -27,6 +28,12 @@ class _CartPageState extends State<CartPage> {
 
   TextEditingController catatantextField = TextEditingController(text: "");
 
+  // CheckBox
+  List<bool> isChecked = [];
+
+  int subTotalHarga = 0;
+  int totalHarga = 0;
+
   @override
   void initState() {
     super.initState();
@@ -49,10 +56,33 @@ class _CartPageState extends State<CartPage> {
             [];
 
         indexCabang = indexCabang < 0 ? 0 : indexCabang;
-        indexCabang = indexCabang > ((cartModel.data?.length ?? 1) - 1) ? ((cartModel.data?.length ?? 1) - 1) : indexCabang;
+        indexCabang = indexCabang > ((cartModel.data?.length ?? 1) - 1)
+            ? ((cartModel.data?.length ?? 1) - 1)
+            : indexCabang;
+
+        subTotalHarga = 0;
+        for (var i = 0;
+            i < (cartModel.data?[indexCabang].data?.length ?? 0);
+            i++) {
+          if (isChecked.length <
+              (cartModel.data?[indexCabang].data?.length ?? 0)) {
+            isChecked.add(true); // menambahkan data true untuk list checkbox
+          }
+          isChecked[i] = true;
+
+          if (isChecked[i] == true) {
+            var product = cartModel.data?[indexCabang].data?[i];
+            String? numericString =
+                "${product?.diskon != null ? product?.hargaDiskon : product?.harga ?? 0}";
+            int numericValue =
+                int.parse(numericString); // Parses the string as an integer
+            subTotalHarga += numericValue * (product?.jumlah ?? 0);
+          }
+        }
 
         loginmodel = loginProvider.loginModel;
-        print("isi loginModel adalah: ${loginmodel.data?.namaCabang} dengan index: $indexCabang dengan ${(cartModel.data?.length)}");
+        print(
+            "isi loginModel adalah: ${loginmodel.data?.namaCabang} dengan index: $indexCabang dengan ${(cartModel.data?.length)}");
       });
     }
   }
@@ -96,9 +126,7 @@ class _CartPageState extends State<CartPage> {
   @override
   Widget build(BuildContext context) {
     CartProvider cartProvider = Provider.of<CartProvider>(context);
-    PageProvider pageProvider = Provider.of<PageProvider>(context);
-    int subTotalHarga = 0;
-    int totalHarga = 0;
+
     final currencyFormatter = NumberFormat('#,##0.00', 'ID');
 
     void showAlertDialog(BuildContext context, DataKeranjang? product) {
@@ -314,10 +342,6 @@ class _CartPageState extends State<CartPage> {
       int numericValue =
           int.parse(numericString); // Parses the string as an integer
 
-      subTotalHarga += numericValue * (product?.jumlah ?? 0);
-      totalHarga = subTotalHarga;
-      print("harganya adalah $subTotalHarga");
-
       return InkWell(
         onTap: () {
           Navigator.push(
@@ -356,11 +380,30 @@ class _CartPageState extends State<CartPage> {
               ]),
           child: Row(
             children: [
+              Checkbox(
+                activeColor: backgroundColor1,
+                value: isChecked[index],
+                onChanged: (value) {
+                  print("isi value adalah: $value");
+                  setState(() {
+                    isChecked[index] = value ?? true;
+                  });
+                  if (isChecked[index] == false) {
+                    setState(() {
+                      subTotalHarga -= numericValue * (product?.jumlah ?? 0);
+                    });
+                  } else {
+                    setState(() {
+                      subTotalHarga += numericValue * (product?.jumlah ?? 0);
+                    });
+                  }
+                },
+              ),
               ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: Image.network(
                   "https://tokosm.online/uploads/images/${product?.imageUrl}",
-                  width: 130,
+                  width: 100,
                   height: 130,
                   fit: BoxFit.cover,
                 ),
@@ -551,111 +594,6 @@ class _CartPageState extends State<CartPage> {
       );
     }
 
-    Widget paymentTotalItem(
-        {required String title,
-        required String value,
-        required double bottomMargin}) {
-      return Container(
-        margin: EdgeInsets.only(bottom: bottomMargin),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  title,
-                  style: poppins.copyWith(
-                    color: backgroundColor1,
-                    fontWeight: medium,
-                  ),
-                ),
-                Text(
-                  value,
-                  style: poppins.copyWith(
-                    color: backgroundColor1,
-                    fontWeight: medium,
-                  ),
-                )
-              ],
-            ),
-            Divider(
-              color: backgroundColor1,
-              thickness: 1,
-            )
-          ],
-        ),
-      );
-    }
-
-    Widget paymentTotal() {
-      return Container(
-        alignment: Alignment.center,
-        height: 300,
-        padding:
-            const EdgeInsets.only(left: 20, right: 20, bottom: 20, top: 30),
-        decoration: BoxDecoration(
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.8),
-                blurRadius: 4,
-                offset: const Offset(0, 8), // Shadow position
-              ),
-            ],
-            borderRadius:
-                const BorderRadius.vertical(top: Radius.circular(30))),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0, right: 8, bottom: 8),
-              child: Text(
-                "Ringkasan Pembayaran",
-                style: poppins.copyWith(
-                  color: backgroundColor1,
-                  fontWeight: semiBold,
-                  fontSize: 18,
-                ),
-              ),
-            ),
-            paymentTotalItem(
-                title: "Sub Total",
-                value: "Rp ${currencyFormatter.format(subTotalHarga)}",
-                bottomMargin: 10),
-            paymentTotalItem(
-                title: "Ongkos Kirim",
-                value: "Rp ${currencyFormatter.format(0)}",
-                bottomMargin: 10),
-            paymentTotalItem(
-                title: "Total Harga",
-                value: "Rp ${currencyFormatter.format(totalHarga)}",
-                bottomMargin: 10),
-            Container(
-              width: double.infinity,
-              child: TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  pageProvider.currentIndex = 3;
-                },
-                style: TextButton.styleFrom(
-                  backgroundColor: backgroundColor3,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30)),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "Lanjutkan",
-                    style: poppins.copyWith(color: Colors.white),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
     Widget header() {
       return Container(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
@@ -741,6 +679,61 @@ class _CartPageState extends State<CartPage> {
       );
     }
 
+//  Widget untuk menampilkan bagian view bagian bawah
+    Widget bottomView() {
+      return Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 20,
+          vertical: 20,
+        ),
+        color: backgroundColor3,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Total Harga",
+                  style: poppins.copyWith(
+                    color: Colors.white,
+                  ),
+                ),
+                Text(
+                  "Rp ${currencyFormatter.format(subTotalHarga)}",
+                  style: poppins.copyWith(
+                    fontWeight: bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: backgroundColor1,
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  PageTransition(
+                    child: Deliverypage(
+                      namaCabang: cartModel.data?[indexCabang].namaCabang ?? "",
+                      product: CartModel(),
+                    ),
+                    type: PageTransitionType.rightToLeft,
+                  ),
+                );
+              },
+              child: Text(
+                "Lanjutkan",
+                style: poppins,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -757,7 +750,8 @@ class _CartPageState extends State<CartPage> {
                       margin: const EdgeInsets.only(top: 20),
                       child: DropdownMenu<String>(
                         width: MediaQuery.sizeOf(context).width - 20,
-                        initialSelection: cartModel.data?[indexCabang].namaCabang,
+                        initialSelection:
+                            cartModel.data?[indexCabang].namaCabang,
                         onSelected: (String? value) {
                           // This is called when the user selects an item.
                           setState(() {
@@ -769,6 +763,7 @@ class _CartPageState extends State<CartPage> {
                                 0;
 
                             indexCabang = indexCabang < 0 ? 0 : indexCabang;
+                            _initCartProduct();
                           });
                         },
                         dropdownMenuEntries: listCabang
@@ -800,6 +795,7 @@ class _CartPageState extends State<CartPage> {
                             ],
                           ),
               ),
+              bottomView(),
             ],
           ),
         ),
