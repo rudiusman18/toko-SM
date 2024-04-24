@@ -37,10 +37,8 @@ class _LoginPageState extends State<LoginPage> {
           isLoading = false;
         });
         // ignore: use_build_context_synchronously
-        Navigator.push(
-            context,
-            PageTransition(
-                child: const MainPage(), type: PageTransitionType.fade));
+        Navigator.pushAndRemoveUntil(context,  PageTransition(
+            child: const MainPage(), type: PageTransitionType.fade), (route) => false);
       } else {
         setState(() {
           isLoading = false;

@@ -1,6 +1,7 @@
 import 'package:tokoSM/models/login_model.dart';
 import 'package:tokoSM/pages/login_page.dart';
 import 'package:tokoSM/pages/profile_page/edit_profile_page.dart';
+import 'package:tokoSM/providers/cabang_provider.dart';
 import 'package:tokoSM/providers/login_provider.dart';
 import 'package:tokoSM/providers/profile_provider.dart';
 import 'package:tokoSM/theme/theme.dart';
@@ -25,19 +26,85 @@ class _ProfilePageState extends State<ProfilePage> {
     LoginProvider loginProvider = Provider.of<LoginProvider>(context);
     LoginModel userLogin = loginProvider.loginModel;
     ProfileProvider profileProvider = Provider.of<ProfileProvider>(context);
+    CabangProvider cabangProvider = Provider.of<CabangProvider>(context);
 
-    _handleTapEditProfil()async{
-      if(await profileProvider.getProfile(token: loginProvider.loginModel.token ?? "", userId: "${loginProvider.loginModel.data?.id}")){
-        Navigator.push(
-          context,
-          PageTransition(
-            child: const EditProfilePage(),
-            type: PageTransitionType.rightToLeft,
+    _loading(){
+      showDialog(context: context, builder: (BuildContext context){
+        return Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Center(
+            child: Container(
+              padding: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: MediaQuery.sizeOf(context).width * 0.3,
+                      height: MediaQuery.sizeOf(context).width * 0.3,
+                      child: CircularProgressIndicator(
+                        color: backgroundColor3,
+                      ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text("Loading...",style: poppins),
+                ],
+              ),
+            ),
           ),
         );
+      });
+    }
+
+    _handleTapEditProfil()async{
+      setState(() {
+        _loading();
+      });
+      if(await profileProvider.getProfile(token: loginProvider.loginModel.token ?? "", userId: "${loginProvider.loginModel.data?.id}")){
+        if(await cabangProvider.getCabang(token: loginProvider.loginModel.token ?? "")){
+          Navigator.push(
+            context,
+            PageTransition(
+              child: const EditProfilePage(),
+              type: PageTransitionType.rightToLeft,
+            ),
+          ).then((value) async{
+            Navigator.pop(context);
+            setState(() {
+              _loading();
+            });
+            if(await profileProvider.getProfile(token: loginProvider.loginModel.token ?? "", userId: "${loginProvider.loginModel.data?.id}")){
+
+            }else{}
+            setState(() {
+              Navigator.pop(context);
+            });
+          });
+        }else{
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Colors.red,
+            content: Text("Gagal mendapatkan data profile", style: poppins,),
+            duration: const Duration(seconds: 1),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+          ));
+        }
       }
       else{
-
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Colors.red,
+          content: Text("Gagal mendapatkan data profile", style: poppins,),
+          duration: const Duration(seconds: 1),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+        ));
       }
     }
 
@@ -202,7 +269,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         child: Center(
                           child: Text(
                             getInitials(
-                              userLogin.data?.namaPelanggan ??
+                              profileProvider.profileModel.data?.namaPelanggan ??
                                   "-".toUpperCase(),
                             ),
                             style: poppins.copyWith(
@@ -217,12 +284,12 @@ class _ProfilePageState extends State<ProfilePage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             profileData(
-                              title: userLogin.data?.namaPelanggan ?? "-",
+                              title: profileProvider.profileModel.data?.namaPelanggan ?? "-",
                             ),
                             profileData(
-                                title: userLogin.data?.emailPelanggan ?? "-"),
+                                title: profileProvider.profileModel.data?.emailPelanggan ?? "-"),
                             profileData(
-                                title: userLogin.data?.telpPelanggan ?? "-"),
+                                title: profileProvider.profileModel.data?.telpPelanggan ?? "-"),
                           ],
                         ),
                       ),

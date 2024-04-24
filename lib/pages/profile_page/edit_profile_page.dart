@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:tokoSM/models/wilayah_model.dart';
+import 'package:tokoSM/providers/cabang_provider.dart';
 import 'package:tokoSM/providers/profile_provider.dart';
 import 'package:tokoSM/theme/theme.dart';
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
@@ -23,6 +24,8 @@ class EditProfilePage extends StatefulWidget {
 class _EditProfilePageState extends State<EditProfilePage> {
   TextEditingController usernameTextField = TextEditingController();
   TextEditingController fullnameTextField = TextEditingController();
+  TextEditingController cabangTextField = TextEditingController();
+  TextEditingController idCabangTextField = TextEditingController();
   TextEditingController emailTextField = TextEditingController();
   TextEditingController telpTextField = TextEditingController();
   TextEditingController alamatTextField = TextEditingController();
@@ -64,8 +67,53 @@ class _EditProfilePageState extends State<EditProfilePage> {
     });
   }
 
+  _loading(){
+    showDialog(context: context, builder: (BuildContext context){
+      return Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Center(
+          child: Container(
+            padding: EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: MediaQuery.sizeOf(context).width * 0.3,
+                  height: MediaQuery.sizeOf(context).width * 0.3,
+                  child: CircularProgressIndicator(
+                    color: backgroundColor3,
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Text("Loading...",style: poppins),
+              ],
+            ),
+          ),
+        ),
+      );
+    });
+  }
+
   @override
   void initState() {
+    ProfileProvider profileProvider = Provider.of(context, listen: false);
+    var profile = profileProvider.profileModel.data;
+    usernameTextField.text = "${profile?.username}";
+    fullnameTextField.text = "${profile?.namaPelanggan}";
+    cabangTextField.text = "${profile?.namaCabang}";
+    emailTextField.text = "${profile?.emailPelanggan}";
+    telpTextField.text = "${profile?.telpPelanggan}";
+    alamatTextField.text = "${profile?.alamatPelanggan}";
+    wilayahTextField.text = "${profile?.provinsi?.toUpperCase()},${profile?.kabkota?.toUpperCase()},${profile?.kecamatan?.toUpperCase()},${profile?.kelurahan?.toUpperCase()}";
+    tglLahirTextField.text = "${profile?.tglLahirPelanggan}";
+    jenisKelaminTextField.text = "${profile?.jenisKelaminPelanggan}";
+
     Future.delayed(Duration.zero, ()async{
       String data =
       await rootBundle.loadString('assets/wilayah.json');
@@ -87,16 +135,32 @@ class _EditProfilePageState extends State<EditProfilePage> {
   Widget build(BuildContext context) {
     ProfileProvider profileProvider = Provider.of<ProfileProvider>(context);
     LoginProvider loginProvider = Provider.of<LoginProvider>(context);
+    CabangProvider cabangProvider = Provider.of<CabangProvider>(context);
+    List<String> dataCabang = cabangProvider.cabangModel.data?.map((e) => "${e.namaCabang}").toList() ?? [];
+    idCabangTextField.text = "${cabangProvider.cabangModel.data?.where((element) => element.namaCabang?.toLowerCase() == cabangTextField.text.toLowerCase()).first.id}";
 
     // Digunakan ketika tombol simpan ditekan
     _handleTapSimpan()async{
       var profile = profileProvider.profileModel.data;
-        if(await profileProvider.updateProfile(token: loginProvider.loginModel.token ?? "", userId: profile?.id ?? 0, cabangId: profile?.cabangId ?? 0, username: usernameTextField.text, namaLengkap: fullnameTextField.text, email: emailTextField.text, telp: telpTextField.text, alamat: alamatTextField.text, wilayah: wilayahTextField.text, tglLahir: tglLahirTextField.text, jenisKelamin: jenisKelaminTextField.text)){
+
+      setState(() {
+        _loading();
+      });
+
+        if(await profileProvider.updateProfile(token: loginProvider.loginModel.token ?? "", userId: profile?.id ?? 0, cabangId: int.parse(idCabangTextField.text), username: usernameTextField.text, email: emailTextField.text, telp: telpTextField.text, alamat: alamatTextField.text, wilayah: wilayahTextField.text, tglLahir: tglLahirTextField.text, jenisKelamin: jenisKelaminTextField.text, fullname: fullnameTextField.text)){
           print("data berhasil diupdate");
+          setState(() {
+            loginProvider.loginModel.data?.cabangId = int.parse(idCabangTextField.text);
+            loginProvider.loginModel.data?.namaCabang = cabangTextField.text;
+          });
         }
         else{
           print("data gagal diupdate");
         }
+        setState(() {
+          Navigator.pop(context);
+          Navigator.pop(context);
+        });
     }
 
     Widget customtextFormField({
@@ -127,17 +191,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
               height: 5,
             ),
             TextFormField(
-              onTap: () {
-                if (title.toLowerCase().contains("jenis kelamin")) {
-                  CustomDropdown<String>(
-                    hintText: '...',
-                    items: const ["Laki-Laki", "Perempuan"],
-                    onChanged: (value) {
-                      jenisKelaminTextField.text = value;
-                    },
-                  );
-                }
-              },
               readOnly: readOnly,
               textInputAction: TextInputAction.next,
               style: poppins.copyWith(
@@ -244,15 +297,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
             ),
             customtextFormField(
               icon: Icons.person,
-              title: "Nama Pengguna",
-              keyboardType: TextInputType.name,
-              controller: usernameTextField,
-            ),
-            customtextFormField(
-              icon: Icons.person,
               title: "Nama Lengkap",
               keyboardType: TextInputType.name,
               controller: fullnameTextField,
+            ),
+            customtextFormField(
+              icon: Icons.person,
+              title: "Nama Pengguna",
+              keyboardType: TextInputType.name,
+              controller: usernameTextField,
             ),
             customtextFormField(
               icon: Icons.email,
@@ -333,14 +386,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       dropdownDecoratorProps: const DropDownDecoratorProps(
                         dropdownSearchDecoration: InputDecoration(
                           hintText: "...",
+
                         ),
                       ),
+                      selectedItem: wilayahTextField.text,
                       onChanged: (value){
                         setState(() {
                           wilayahTextField.text = value ?? "";
                         });
                       },
-                    )
+                    ),
                   ),
                 ],
               ),
@@ -478,19 +533,111 @@ class _EditProfilePageState extends State<EditProfilePage> {
               child: Row(
                 children: [
                   Container(
-                    margin: const EdgeInsets.only(left: 10),
+                    margin: const EdgeInsets.only(
+                      left: 10,
+                      right: 10,
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 10,
+                    ),
                     child: Icon(
-                      Icons.man,
+                      Icons.transgender,
                       size: 25,
                       color: backgroundColor1,
                     ),
                   ),
                   Expanded(
-                    child: CustomDropdown<String>(
-                      hintText: '...',
-                      items: const ["Laki-Laki", "Perempuan"],
-                      onChanged: (value) {
-                        jenisKelaminTextField.text = value;
+                    child: DropdownSearch<String>(
+                      popupProps: PopupProps.menu(
+                        showSelectedItems: true,
+                        disabledItemFn: (String s) => s.startsWith('I'),
+                      ),
+                      items: ["laki-laki", "Perempuan"],
+                      dropdownDecoratorProps: const DropDownDecoratorProps(
+                        dropdownSearchDecoration: InputDecoration(
+                          hintText: "...",
+
+                        ),
+                      ),
+                      selectedItem: jenisKelaminTextField.text,
+                      onChanged: (value){
+                        setState(() {
+                          jenisKelaminTextField.text = value ?? "";
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            Container(
+              margin: const EdgeInsets.only(
+                left: 20,
+                right: 20,
+              ),
+              child: Text(
+                "Cabang",
+                style: poppins.copyWith(
+                  fontWeight: medium,
+                  color: backgroundColor1,
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Container(
+              margin: const EdgeInsets.only(
+                left: 20,
+                right: 20,
+                bottom: 20,
+              ),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(
+                  width: 2,
+                  color: backgroundColor1,
+                ),
+                borderRadius: BorderRadius.circular(
+                  10,
+                ),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(
+                      left: 10,
+                      right: 10,
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 10,
+                    ),
+                    child: Icon(
+                      Icons.store,
+                      size: 25,
+                      color: backgroundColor1,
+                    ),
+                  ),
+                  Expanded(
+                    child: DropdownSearch<String>(
+                      popupProps: PopupProps.dialog(
+                        showSelectedItems: true,
+                        showSearchBox: true,
+                        disabledItemFn: (String s) => s.startsWith('I'),
+                      ),
+                      items: dataCabang,
+                      dropdownDecoratorProps: const DropDownDecoratorProps(
+                        dropdownSearchDecoration: InputDecoration(
+                          hintText: "...",
+                        ),
+                      ),
+                      selectedItem: cabangTextField.text,
+                      onChanged: (value){
+                        setState(() {
+                          cabangTextField.text = value ?? "";
+                          idCabangTextField.text = "${cabangProvider.cabangModel.data?.where((element) => element.namaCabang?.toLowerCase() == value?.toLowerCase()).first.id}";
+                        });
                       },
                     ),
                   ),

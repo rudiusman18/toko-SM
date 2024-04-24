@@ -30,7 +30,7 @@ class ProfileService{
     }
   }
 
-  Future<Map<String, dynamic>>updateProfile({required String token, required int userId, required int cabangId, required String username, required String namaLengkap, required String email, required String telp, required String alamat, required String wilayah, required String tglLahir, required String jenisKelamin})async{
+  Future<Map<String, dynamic>>updateProfile({required String token, required int userId, required int cabangId, required String username, required String fullname, required String email, required String telp, required String alamat, required String wilayah, required String tglLahir, required String jenisKelamin})async{
     var baseURL = "http://103.127.132.116/api/v1/";
 
     var url = Uri.parse(
@@ -44,7 +44,7 @@ class ProfileService{
     Map data = {
       "cabang_id": cabangId,
       "username": username,
-      "nama_lengkap": namaLengkap,
+      "nama_lengkap": fullname,
       "email": email,
       "telp": telp,
       "alamat": alamat,

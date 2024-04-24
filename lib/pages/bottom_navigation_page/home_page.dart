@@ -290,7 +290,11 @@ class _HomePageState extends State<HomePage> {
                       context,
                       PageTransition(
                           child: const ProfilePage(),
-                          type: PageTransitionType.rightToLeft));
+                          type: PageTransitionType.rightToLeft)).then((value) {
+                            _initBannerProduct();
+                            _initPalingLarisProduct();
+                            _initPromoProduct();
+                  });
                 },
                 child: Icon(
                   Icons.view_list,

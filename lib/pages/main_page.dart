@@ -1,3 +1,4 @@
+import 'package:page_transition/page_transition.dart';
 import 'package:tokoSM/pages/bottom_navigation_page/cart_page.dart';
 import 'package:tokoSM/pages/bottom_navigation_page/category_page.dart';
 import 'package:tokoSM/pages/bottom_navigation_page/transaction_page.dart';

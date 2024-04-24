@@ -47,8 +47,12 @@ class _CartPageState extends State<CartPage> {
                 ?.map((e) => e.namaCabang ?? "")
                 .toList() ??
             [];
+
+        indexCabang = indexCabang < 0 ? 0 : indexCabang;
+        indexCabang = indexCabang > ((cartModel.data?.length ?? 1) - 1) ? ((cartModel.data?.length ?? 1) - 1) : indexCabang;
+
         loginmodel = loginProvider.loginModel;
-        print("isi loginModel adalah: ${loginmodel.data?.namaCabang}");
+        print("isi loginModel adalah: ${loginmodel.data?.namaCabang} dengan index: $indexCabang dengan ${(cartModel.data?.length)}");
       });
     }
   }
@@ -752,7 +756,7 @@ class _CartPageState extends State<CartPage> {
                       margin: const EdgeInsets.only(top: 20),
                       child: DropdownMenu<String>(
                         width: MediaQuery.sizeOf(context).width - 20,
-                        initialSelection: loginmodel.data?.namaCabang ?? "",
+                        initialSelection: cartModel.data?[indexCabang].namaCabang,
                         onSelected: (String? value) {
                           // This is called when the user selects an item.
                           setState(() {
@@ -762,6 +766,8 @@ class _CartPageState extends State<CartPage> {
                                         item.namaCabang?.toLowerCase() ==
                                         value?.toLowerCase()) ??
                                 0;
+
+                            indexCabang = indexCabang < 0 ? 0 : indexCabang;
                           });
                         },
                         dropdownMenuEntries: listCabang
