@@ -269,8 +269,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         child: Center(
                           child: Text(
                             getInitials(
-                              profileProvider.profileModel.data?.namaPelanggan ??
-                                  "-".toUpperCase(),
+                              (profileProvider.profileModel.data?.namaPelanggan ??
+                                  loginProvider.loginModel.data?.namaPelanggan ?? "-").toUpperCase(),
                             ),
                             style: poppins.copyWith(
                               fontWeight: bold,
@@ -284,12 +284,17 @@ class _ProfilePageState extends State<ProfilePage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             profileData(
-                              title: profileProvider.profileModel.data?.namaPelanggan ?? "-",
+                              title: (profileProvider.profileModel.data?.namaPelanggan ??
+                                  loginProvider.loginModel.data?.namaPelanggan ?? "-"),
                             ),
                             profileData(
-                                title: profileProvider.profileModel.data?.emailPelanggan ?? "-"),
+                              title: (profileProvider.profileModel.data?.emailPelanggan ??
+                                  loginProvider.loginModel.data?.emailPelanggan ?? "-"),
+                            ),
                             profileData(
-                                title: profileProvider.profileModel.data?.telpPelanggan ?? "-"),
+                              title: (profileProvider.profileModel.data?.telpPelanggan ??
+                                  loginProvider.loginModel.data?.telpPelanggan ?? "-"),
+                            ),
                           ],
                         ),
                       ),

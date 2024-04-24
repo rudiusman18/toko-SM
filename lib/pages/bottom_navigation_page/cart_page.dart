@@ -688,19 +688,20 @@ class _CartPageState extends State<CartPage> {
             (cartModel.data?.isEmpty ?? true)
                 ? const SizedBox()
                 : Align(
-                    alignment: Alignment.centerRight,
+                    alignment: Alignment.centerLeft,
                     child: InkWell(
                       onTap: () {
-                        showModalBottomSheet(
-                          context: context,
-                          backgroundColor: Colors.transparent,
-                          builder: (BuildContext context) {
-                            return paymentTotal();
-                          },
-                        );
+                        Navigator.pop(context);
+                        // showModalBottomSheet(
+                        //   context: context,
+                        //   backgroundColor: Colors.transparent,
+                        //   builder: (BuildContext context) {
+                        //     return paymentTotal();
+                        //   },
+                        // );
                       },
                       child: const Icon(
-                        Icons.local_shipping,
+                        Icons.arrow_back,
                         size: 30,
                         color: Colors.white,
                       ),

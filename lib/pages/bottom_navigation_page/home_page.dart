@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:intl/intl.dart';
 import 'package:tokoSM/models/login_model.dart';
 import 'package:tokoSM/models/product_model.dart';
+import 'package:tokoSM/pages/bottom_navigation_page/cart_page.dart';
 import 'package:tokoSM/pages/bottom_navigation_page/home_page/product_list_search_result.dart';
 import 'package:tokoSM/pages/bottom_navigation_page/product_detail/product_detail_page.dart';
 import 'package:tokoSM/pages/profile_page.dart';
@@ -277,6 +278,30 @@ class _HomePageState extends State<HomePage> {
                   border: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(7.0)),
                   ),
+                ),
+              ),
+            ),
+
+            Container(
+              margin: const EdgeInsets.only(
+                left: 20,
+              ),
+              child: InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      PageTransition(
+                          child: const CartPage(),
+                          type: PageTransitionType.rightToLeft)).then((value) {
+                    _initBannerProduct();
+                    _initPalingLarisProduct();
+                    _initPromoProduct();
+                  });
+                },
+                child: Icon(
+                  Icons.shopping_cart,
+                  size: 30,
+                  color: backgroundColor3,
                 ),
               ),
             ),

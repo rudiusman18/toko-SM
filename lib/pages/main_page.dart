@@ -32,8 +32,6 @@ class _MainPageState extends State<MainPage> {
           return const WishlistPage();
         case 3:
           return const TransactionPage();
-        case 4:
-          return const CartPage();
         default:
           return HomePage();
       }
@@ -106,19 +104,6 @@ class _MainPageState extends State<MainPage> {
                     Icons.paid,
                     size: 30,
                     color: pageProvider.currentIndex == 3
-                        ? Colors.white
-                        : Colors.black,
-                  ),
-                ),
-                label: "",
-              ),
-              BottomNavigationBarItem(
-                icon: Container(
-                  margin: const EdgeInsets.symmetric(vertical: 15),
-                  child: Icon(
-                    Icons.shopping_cart,
-                    size: 30,
-                    color: pageProvider.currentIndex == 4
                         ? Colors.white
                         : Colors.black,
                   ),
