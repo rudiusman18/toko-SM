@@ -13,8 +13,8 @@ class AlamatPage extends StatefulWidget {
 }
 
 class _AlamatPageState extends State<AlamatPage> {
-AlamatModel alamatModel = AlamatModel();
-List<bool> isSelected = [];
+  AlamatModel alamatModel = AlamatModel();
+  List<bool> isSelected = [];
 
   @override
   void initState() {
@@ -22,21 +22,38 @@ List<bool> isSelected = [];
     super.initState();
   }
 
-  _initAlamatData()async{
-    AlamatProvider alamatProvider = Provider.of<AlamatProvider>(context, listen: false);
-    LoginProvider loginProvider = Provider.of<LoginProvider>(context, listen: false);
+  _initAlamatData() async {
+    AlamatProvider alamatProvider =
+        Provider.of<AlamatProvider>(context, listen: false);
+    LoginProvider loginProvider =
+        Provider.of<LoginProvider>(context, listen: false);
 
-    if(await alamatProvider.getAlamat(token: loginProvider.loginModel.token ?? "")){
+    if (await alamatProvider.getAlamat(
+        token: loginProvider.loginModel.token ?? "")) {
       setState(() {
         alamatModel = alamatProvider.alamatModel;
-        for(var i=0; i<(alamatModel.data?.length ?? 0); i++){
-         isSelected.add(false);
+        for (var i = 0; i < (alamatModel.data?.length ?? 0); i++) {
+          if (alamatProvider.deliveryAlamat.data?.first.namaAlamat
+                  ?.toLowerCase() ==
+              alamatProvider.alamatModel.data?[i].namaAlamat?.toLowerCase()) {
+            isSelected.add(true);
+          } else {
+            if (alamatProvider.deliveryAlamat.data?.isEmpty ?? true && i == 0) {
+              isSelected.add(true);
+            } else {
+              isSelected.add(false);
+            }
+          }
         }
       });
-    }else{
+    } else {
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         backgroundColor: Colors.red,
-        content: Text("Gagal mendapatkan data alamat", style: poppins,),
+        content: Text(
+          "Gagal mendapatkan data alamat",
+          style: poppins,
+        ),
         duration: const Duration(seconds: 1),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
@@ -47,17 +64,28 @@ List<bool> isSelected = [];
 
   @override
   Widget build(BuildContext context) {
-    Widget alamatItem({required int index}){
+    AlamatProvider alamatProvider = Provider.of<AlamatProvider>(context);
+    Widget alamatItem({required int index}) {
       var alamat = alamatModel.data?[index];
       return InkWell(
-        onTap: (){
+        onTap: () {
           setState(() {
             isSelected = isSelected.map((e) => e = false).toList();
             isSelected[index] = !isSelected[index];
+            if (isSelected[index] == true) {
+              alamatProvider.deliveryAlamat =
+                  AlamatModel.fromJson(alamatProvider.alamatModel.toJson());
+              alamatProvider.deliveryAlamat.data?.clear();
+              alamatProvider.deliveryAlamat.data?.add(alamat ?? Data());
+            }
           });
         },
         child: Container(
-          margin: const EdgeInsets.only(left: 20, right: 20, bottom: 10,),
+          margin: const EdgeInsets.only(
+            left: 20,
+            right: 20,
+            bottom: 10,
+          ),
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             border: Border.all(
@@ -88,30 +116,41 @@ List<bool> isSelected = [];
                   fontSize: 11,
                 ),
               ),
-              Text("${alamat?.alamatLengkap}, ${alamat?.kelurahan?.toLowerCase()}, ${alamat?.kecamatan?.toLowerCase()}, ${alamat?.kabkota?.toLowerCase()}, ${alamat?.provinsi?.toLowerCase()}, ${alamat?.kodepos?.toLowerCase()}",
+              Text(
+                "${alamat?.alamatLengkap}, ${alamat?.kelurahan?.toLowerCase()}, ${alamat?.kecamatan?.toLowerCase()}, ${alamat?.kabkota?.toLowerCase()}, ${alamat?.provinsi?.toLowerCase()}, ${alamat?.kodepos?.toLowerCase()}",
                 style: poppins.copyWith(
-                fontSize: 11,
+                  fontSize: 11,
+                ),
               ),
-              ),
-              alamat?.catatan?.isEmpty ?? true ? SizedBox() : Text("[tokoSM Note: ${alamat?.catatan}]",  style: poppins.copyWith(
-                fontSize: 11,
-              ),),
-              alamat?.lat == null || alamat?.lon == null ? SizedBox() : Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Icon(Icons.location_on, color: backgroundColor3,),
-                  Expanded(child:
-                  Text(
-                    "Sudah Pinpoint",
-                    style: poppins.copyWith(
-                      fontWeight: bold,
-                      fontSize: 12,
+              alamat?.catatan?.isEmpty ?? true
+                  ? SizedBox()
+                  : Text(
+                      "[tokoSM Note: ${alamat?.catatan}]",
+                      style: poppins.copyWith(
+                        fontSize: 11,
+                      ),
                     ),
+              alamat?.lat == null || alamat?.lon == null
+                  ? SizedBox()
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Icon(
+                          Icons.location_on,
+                          color: backgroundColor3,
+                        ),
+                        Expanded(
+                          child: Text(
+                            "Sudah Pinpoint",
+                            style: poppins.copyWith(
+                              fontWeight: bold,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
               SizedBox(
                 height: 10,
               ),
@@ -128,7 +167,9 @@ List<bool> isSelected = [];
                           color: Colors.grey,
                           width: 1,
                         ),
-                        borderRadius: BorderRadius.circular(10,),
+                        borderRadius: BorderRadius.circular(
+                          10,
+                        ),
                       ),
                       child: Text(
                         "Ubah Alamat",
@@ -138,7 +179,9 @@ List<bool> isSelected = [];
                       ),
                     ),
                   ),
-                  SizedBox(width: 10,),
+                  SizedBox(
+                    width: 10,
+                  ),
                   Container(
                     decoration: BoxDecoration(
                       border: Border.all(
@@ -148,7 +191,7 @@ List<bool> isSelected = [];
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: IconButton(
-                      onPressed: (){},
+                      onPressed: () {},
                       icon: Icon(
                         Icons.settings,
                       ),
@@ -161,20 +204,28 @@ List<bool> isSelected = [];
         ),
       );
     }
-    
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Daftar Alamat"),
         backgroundColor: backgroundColor3,
         actions: [
           Container(
-            margin: const EdgeInsets.only(right: 10,),
-              child: Center(child: Text("Tambah Alamat",))),
+              margin: const EdgeInsets.only(
+                right: 10,
+              ),
+              child: Center(
+                  child: Text(
+                "Tambah Alamat",
+              ))),
         ],
       ),
-      body: ListView(children: [
-        const SizedBox(height: 20,),
-          for(var i=0; i<(alamatModel.data?.length ?? 0);i++)...{
+      body: ListView(
+        children: [
+          const SizedBox(
+            height: 20,
+          ),
+          for (var i = 0; i < (alamatModel.data?.length ?? 0); i++) ...{
             alamatItem(index: i),
           }
         ],

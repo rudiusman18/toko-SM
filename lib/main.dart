@@ -5,6 +5,7 @@ import 'package:tokoSM/providers/cart_provider.dart';
 import 'package:tokoSM/providers/category_provider.dart';
 import 'package:tokoSM/providers/kurir_provider.dart';
 import 'package:tokoSM/providers/login_provider.dart';
+import 'package:tokoSM/providers/metode_pembayaran_provider.dart';
 import 'package:tokoSM/providers/page_provider.dart';
 import 'package:tokoSM/providers/product_provider.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => CabangProvider()),
         ChangeNotifierProvider(create: (context) => KurirProvider()),
         ChangeNotifierProvider(create: (context) => AlamatProvider()),
+        ChangeNotifierProvider(create: (context) => MetodePembayaranProvider()),
       ],
       child: MaterialApp(
         builder: (context, child) {

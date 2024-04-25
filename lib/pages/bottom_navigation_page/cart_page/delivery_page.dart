@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-import 'package:tokoSM/models/alamat_model.dart';
 import 'package:tokoSM/models/cart_model.dart';
-import 'package:tokoSM/models/kurir_model.dart';
 import 'package:tokoSM/pages/bottom_navigation_page/cart_page/alamat_page.dart';
+import 'package:tokoSM/pages/bottom_navigation_page/cart_page/pembayaran_page.dart';
+import 'package:tokoSM/providers/alamat_provider.dart';
 import 'package:tokoSM/providers/kurir_provider.dart';
 import 'package:tokoSM/providers/login_provider.dart';
 import 'package:tokoSM/theme/theme.dart';
@@ -15,7 +15,10 @@ class Deliverypage extends StatefulWidget {
   final int indexCabang;
   final CartModel product;
   const Deliverypage(
-      {super.key, required this.namaCabang, required this.indexCabang, required this.product});
+      {super.key,
+      required this.namaCabang,
+      required this.indexCabang,
+      required this.product});
 
   @override
   State<Deliverypage> createState() => _DeliverypageState();
@@ -25,37 +28,70 @@ class _DeliverypageState extends State<Deliverypage> {
   final currencyFormatter = NumberFormat('#,##0.00', 'ID');
   String kurirDigunakan = "";
 
-  _loading(){
-    showDialog(context: context, builder: (BuildContext context){
-      return Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Center(
-          child: Container(
-            padding: EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: MediaQuery.sizeOf(context).width * 0.3,
-                  height: MediaQuery.sizeOf(context).width * 0.3,
-                  child: CircularProgressIndicator(
-                    color: backgroundColor3,
-                  ),
+  _loading() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Scaffold(
+            backgroundColor: Colors.transparent,
+            body: Center(
+              child: Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
                 ),
-                SizedBox(
-                  height: 20,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.sizeOf(context).width * 0.3,
+                      height: MediaQuery.sizeOf(context).width * 0.3,
+                      child: CircularProgressIndicator(
+                        color: backgroundColor3,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text("Loading...", style: poppins),
+                  ],
                 ),
-                Text("Loading...",style: poppins),
-              ],
+              ),
             ),
-          ),
+          );
+        });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initAlamatData();
+  }
+
+  _initAlamatData() async {
+    AlamatProvider alamatProvider =
+        Provider.of<AlamatProvider>(context, listen: false);
+    LoginProvider loginProvider =
+        Provider.of<LoginProvider>(context, listen: false);
+
+    if (await alamatProvider.getAlamat(
+        token: loginProvider.loginModel.token ?? "")) {
+      setState(() {});
+    } else {
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        backgroundColor: Colors.red,
+        content: Text(
+          "Gagal mendapatkan data alamat",
+          style: poppins,
         ),
-      );
-    });
+        duration: const Duration(seconds: 1),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+      ));
+    }
   }
 
   @override
@@ -63,11 +99,19 @@ class _DeliverypageState extends State<Deliverypage> {
     double totalHargaRingkasan = 0.0;
     KurirProvider kurirProvider = Provider.of<KurirProvider>(context);
     LoginProvider loginProvider = Provider.of<LoginProvider>(context);
+    AlamatProvider alamatProvider = Provider.of<AlamatProvider>(context);
 
     Widget alamatPengiriman() {
       return InkWell(
-        onTap: (){
-          Navigator.push(context, PageTransition(child: AlamatPage(), type: PageTransitionType.rightToLeft,));
+        onTap: () {
+          Navigator.push(
+              context,
+              PageTransition(
+                child: const AlamatPage(),
+                type: PageTransitionType.rightToLeft,
+              )).then((value) {
+            setState(() {});
+          });
         },
         child: Container(
           margin: const EdgeInsets.only(
@@ -108,7 +152,9 @@ class _DeliverypageState extends State<Deliverypage> {
                           color: backgroundColor3,
                         ),
                         Text(
-                          "ini isinya alamat",
+                          alamatProvider.deliveryAlamat.data?.isEmpty ?? true
+                              ? "${alamatProvider.alamatModel.data?.first.namaAlamat} - ${alamatProvider.alamatModel.data?.first.namaPenerima}"
+                              : "${alamatProvider.deliveryAlamat.data?.first.namaAlamat} - ${alamatProvider.deliveryAlamat.data?.first.namaPenerima}",
                           style: poppins.copyWith(
                             fontWeight: bold,
                           ),
@@ -116,7 +162,9 @@ class _DeliverypageState extends State<Deliverypage> {
                       ],
                     ),
                     Text(
-                      "ini isinya alamat lebih detail ini isinya alamat lebih detail ini isinya alamat lebih detail ini isinya alamat lebih detail",
+                      alamatProvider.deliveryAlamat.data?.isEmpty ?? true
+                          ? "${alamatProvider.alamatModel.data?.first.alamatLengkap}, ${alamatProvider.alamatModel.data?.first.kelurahan?.toLowerCase()}, ${alamatProvider.alamatModel.data?.first.kecamatan?.toLowerCase()}, ${alamatProvider.alamatModel.data?.first.kabkota?.toLowerCase()}, ${alamatProvider.alamatModel.data?.first.provinsi?.toLowerCase()}, ${alamatProvider.alamatModel.data?.first.kodepos?.toLowerCase()}"
+                          : "${alamatProvider.deliveryAlamat.data?.first.alamatLengkap}, ${alamatProvider.deliveryAlamat.data?.first.kelurahan?.toLowerCase()}, ${alamatProvider.deliveryAlamat.data?.first.kecamatan?.toLowerCase()}, ${alamatProvider.deliveryAlamat.data?.first.kabkota?.toLowerCase()}, ${alamatProvider.deliveryAlamat.data?.first.provinsi?.toLowerCase()}, ${alamatProvider.deliveryAlamat.data?.first.kodepos?.toLowerCase()}",
                       style: poppins.copyWith(
                         fontWeight: light,
                         fontSize: 12,
@@ -138,7 +186,10 @@ class _DeliverypageState extends State<Deliverypage> {
 
     Widget productItem({required int index}) {
       var product = widget.product.data?[widget.indexCabang].data?[index];
-      var totalharga = (product?.jumlah ?? 0) * ((product?.diskon != null) ? (product?.harga ?? 0) : (product?.hargaDiskon ?? 0));
+      var totalharga = (product?.jumlah ?? 0) *
+          ((product?.diskon != null)
+              ? (product?.harga ?? 0)
+              : (product?.hargaDiskon ?? 0));
       totalHargaRingkasan += totalharga;
       return Container(
         margin: const EdgeInsets.only(
@@ -196,118 +247,161 @@ class _DeliverypageState extends State<Deliverypage> {
       );
     }
 
-    Widget listKurir({required int index}){
-        return InkWell(
-          onTap: (){
-            setState(() {
-              kurirDigunakan = "${kurirProvider.kurirModel.data?[index].namaKurir}";
-              Navigator.pop(context);
-            });
-          },
-          child: Container(
-            padding: EdgeInsets.only(bottom: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("${kurirProvider.kurirModel.data?[index].namaKurir} (Rp${currencyFormatter.format(15000)})", style: poppins.copyWith(
-                  fontWeight: bold,
-                  ),
-                ),
-                const Divider(
-                  thickness: 1,
-                ),
-              ],
-            ),
+    Widget listKurir({required int index}) {
+      return InkWell(
+        onTap: () {
+          setState(() {
+            kurirDigunakan =
+                "${kurirProvider.kurirModel.data?[index].namaKurir}";
+            Navigator.pop(context);
+          });
+        },
+        child: Container(
+          padding: const EdgeInsets.only(
+            bottom: 20,
           ),
-        );
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "${kurirProvider.kurirModel.data?[index].namaKurir} (Rp${currencyFormatter.format(15000)})",
+                style: poppins.copyWith(
+                  fontWeight: bold,
+                ),
+              ),
+              const Divider(
+                thickness: 1,
+              ),
+            ],
+          ),
+        ),
+      );
     }
 
     Widget kurir() {
       return InkWell(
-        onTap: (){
-         setState(() {
-           kurirProvider.kurirModel.data = null;
-           print("apakah saat ini kurir model dalam keadaan koson: ${kurirProvider.kurirModel.data?.isEmpty ?? true}");
-         });
-         if(kurirProvider.kurirModel.data?.isEmpty ?? true){
-           Future.delayed(Duration.zero, ()async{
-             setState(() {
-               _loading();
-             });
-             if(await kurirProvider.getKurir(token: loginProvider.loginModel.token ?? "", cabangId: "${widget.product.data?[widget.indexCabang].id}")){
-               // print("isi kurir adalah: ${kurirProvider.kurirModel.data?.first.namaKurir}");
-               setState(() {
-                Navigator.pop(context);
-               });
-               showModalBottomSheet<void>(
-                 context: context,
-                 builder: (BuildContext context) {
-                   return Container(
-                     padding: const EdgeInsets.only(left: 20, right: 20, top: 10,),
-                     height: 400,
-                     color: Colors.white,
-                     child: Column(
-                       crossAxisAlignment: CrossAxisAlignment.start,
-                       mainAxisSize: MainAxisSize.min,
-                       children: <Widget>[
-                         Row(
-                           children: [
-                             InkWell(
-                               onTap: (){
-                                 Navigator.pop(context);
-                               },
-                               child: const Icon(
-                                 Icons.close,
-                                 size: 30,
-                               ),
-                             ),
-                             const SizedBox(width: 10,),
-                             Text("Kurir", style: poppins.copyWith(
-                               fontSize: 20,
-                               fontWeight: bold,
-                             ),
-                             ),
-                           ],
-                         ),
-                         Container(
-                           margin: EdgeInsets.symmetric(vertical: 20),
-                           padding: EdgeInsets.all(20),
-                           width: double.infinity,
-                           decoration: BoxDecoration(
-                             border: Border.all(
-                               width: 1,
-                               color: Colors.grey,
-                             ),
-                             borderRadius: BorderRadius.circular(20,),
-                           ),
-                           child: Row(
-                             children: [
-                               const Icon(Icons.storefront,),
-                               const SizedBox(width: 10,),
-                               Text("Dikirim dari cabang ${widget.namaCabang}", style: poppins,),
-                             ],
-                           ),
-                         ),
-                         Expanded(
-                           child: kurirProvider.kurirModel.data?.isEmpty ?? true ? Center(child: Text("Tidak ada data kurir", style: poppins,),) : ListView(
-                             children: [
-                               for(var i=0; i<(kurirProvider.kurirModel.data?.length ?? 0);i++)listKurir(index: i)
-                             ],
-                           ),
-                         )
-                       ],
-                     ),
-                   );
-                 },
-               );
-             }else{
-               setState(() {
-                 Navigator.pop(context);
-               });
-             }
-           });
-         }
-
+        onTap: () {
+          setState(() {
+            kurirProvider.kurirModel.data = null;
+            print(
+                "apakah saat ini kurir model dalam keadaan koson: ${kurirProvider.kurirModel.data?.isEmpty ?? true}");
+          });
+          if (kurirProvider.kurirModel.data?.isEmpty ?? true) {
+            Future.delayed(Duration.zero, () async {
+              setState(() {
+                _loading();
+              });
+              if (await kurirProvider.getKurir(
+                  token: loginProvider.loginModel.token ?? "",
+                  cabangId: "${widget.product.data?[widget.indexCabang].id}")) {
+                // print("isi kurir adalah: ${kurirProvider.kurirModel.data?.first.namaKurir}");
+                setState(() {
+                  Navigator.pop(context);
+                });
+                // ignore: use_build_context_synchronously
+                showModalBottomSheet<void>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Container(
+                      padding: const EdgeInsets.only(
+                        left: 20,
+                        right: 20,
+                        top: 10,
+                      ),
+                      height: 400,
+                      color: Colors.white,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Row(
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Icon(
+                                  Icons.close,
+                                  size: 30,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                "Kurir",
+                                style: poppins.copyWith(
+                                  fontSize: 20,
+                                  fontWeight: bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            margin: const EdgeInsets.symmetric(
+                              vertical: 20,
+                            ),
+                            padding: const EdgeInsets.all(
+                              20,
+                            ),
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                width: 1,
+                                color: Colors.grey,
+                              ),
+                              borderRadius: BorderRadius.circular(
+                                20,
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.storefront,
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  "Dikirim dari cabang ${widget.namaCabang}",
+                                  style: poppins,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child:
+                                kurirProvider.kurirModel.data?.isEmpty ?? true
+                                    ? Center(
+                                        child: Text(
+                                          "Tidak ada data kurir",
+                                          style: poppins,
+                                        ),
+                                      )
+                                    : ListView(
+                                        children: [
+                                          for (var i = 0;
+                                              i <
+                                                  (kurirProvider.kurirModel.data
+                                                          ?.length ??
+                                                      0);
+                                              i++)
+                                            listKurir(index: i)
+                                        ],
+                                      ),
+                          )
+                        ],
+                      ),
+                    );
+                  },
+                );
+              } else {
+                setState(() {
+                  Navigator.pop(context);
+                });
+              }
+            });
+          }
         },
         child: Container(
           margin: const EdgeInsets.only(
@@ -334,7 +428,9 @@ class _DeliverypageState extends State<Deliverypage> {
             children: [
               Expanded(
                 child: Text(
-                  (kurirDigunakan == "" ? "Pilih Kurir" : "$kurirDigunakan (Rp ${currencyFormatter.format(15000)})"),
+                  (kurirDigunakan == ""
+                      ? "Pilih Kurir"
+                      : "$kurirDigunakan (Rp ${currencyFormatter.format(15000)})"),
                   style: poppins.copyWith(
                     fontWeight: bold,
                   ),
@@ -371,6 +467,8 @@ class _DeliverypageState extends State<Deliverypage> {
               value,
               style: poppins.copyWith(
                 fontSize: 12,
+                fontWeight:
+                    title.toLowerCase() == "total belanja" ? bold : regular,
               ),
               textAlign: TextAlign.end,
             )),
@@ -416,11 +514,14 @@ class _DeliverypageState extends State<Deliverypage> {
             ),
             ringkasanItem(
               title: "Total ongkos kirim",
-              value: kurirDigunakan == "" ? "-" : "Rp ${currencyFormatter.format(15000)}",
+              value: kurirDigunakan == ""
+                  ? "-"
+                  : "Rp ${currencyFormatter.format(15000)}",
             ),
             ringkasanItem(
               title: "Total belanja",
-              value: "Rp ${currencyFormatter.format(totalHargaRingkasan + (kurirDigunakan == "" ? 0 : 15000))}",
+              value:
+                  "Rp ${currencyFormatter.format(totalHargaRingkasan + (kurirDigunakan == "" ? 0 : 15000))}",
             ),
           ],
         ),
@@ -473,7 +574,12 @@ class _DeliverypageState extends State<Deliverypage> {
                 ),
               ],
             ),
-            for (var i = 0; i < (widget.product.data?[widget.indexCabang].data?.length ?? 0); i++) productItem(index: i),
+            for (var i = 0;
+                i <
+                    (widget.product.data?[widget.indexCabang].data?.length ??
+                        0);
+                i++)
+              productItem(index: i),
           ],
         ),
       );
@@ -496,14 +602,46 @@ class _DeliverypageState extends State<Deliverypage> {
           kurir(),
           ringkasan(),
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            margin: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 20,
+            ),
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                if (kurirDigunakan == "") {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    backgroundColor: Colors.red,
+                    content: Text(
+                      "Anda belum memilih kurir",
+                      style: poppins,
+                    ),
+                    duration: const Duration(seconds: 1),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ));
+                } else {
+                  print(
+                      "total tagihannya adalah:${totalHargaRingkasan + (kurirDigunakan == "" ? 0 : 15000)}");
+                  Navigator.push(
+                      context,
+                      PageTransition(
+                        child: PembayaranPage(
+                          cabangId:
+                              "${widget.product.data?[widget.indexCabang].id}",
+                          totaltagihan:
+                              "${totalHargaRingkasan + (kurirDigunakan == "" ? 0 : 15000)}",
+                        ),
+                        type: PageTransitionType.rightToLeft,
+                      ));
+                }
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: backgroundColor3,
               ),
               child: Text(
                 "Pilih Pembayaran",
+                style: poppins,
               ),
             ),
           ),

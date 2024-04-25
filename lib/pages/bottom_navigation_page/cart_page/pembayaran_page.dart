@@ -1,0 +1,180 @@
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:tokoSM/models/pembayaran_model.dart';
+import 'package:tokoSM/providers/login_provider.dart';
+import 'package:tokoSM/providers/metode_pembayaran_provider.dart';
+import 'package:tokoSM/theme/theme.dart';
+
+class PembayaranPage extends StatefulWidget {
+  final String cabangId;
+  final String totaltagihan;
+  const PembayaranPage(
+      {super.key, required this.cabangId, required this.totaltagihan});
+
+  @override
+  State<PembayaranPage> createState() => _PembayaranPageState();
+}
+
+class _PembayaranPageState extends State<PembayaranPage> {
+  PembayaranModel metodePembayaranModel = PembayaranModel();
+  final currencyFormatter = NumberFormat('#,##0.00', 'ID');
+  List<bool> isChecked = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _initPilihMetodePembayaran();
+  }
+
+  _initPilihMetodePembayaran() async {
+    LoginProvider loginProvider =
+        Provider.of<LoginProvider>(context, listen: false);
+    MetodePembayaranProvider metodePembayaranProvider =
+        Provider.of<MetodePembayaranProvider>(context, listen: false);
+    if (await metodePembayaranProvider.getMetodePembayaran(
+        token: loginProvider.loginModel.token ?? "",
+        cabangId: widget.cabangId)) {
+      setState(() {
+        metodePembayaranModel = metodePembayaranProvider.metodePembayaranModel;
+        for (var i = 0; i < (metodePembayaranModel.data?.length ?? 0); i++) {
+          isChecked.add(false);
+        }
+      });
+    }
+  }
+
+  Widget pembayaranItem({required int index}) {
+    var metodePembayaran = metodePembayaranModel.data?[index];
+    return Container(
+      margin: const EdgeInsets.only(
+        left: 20,
+        right: 20,
+        bottom: 20,
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Checkbox(
+                activeColor: backgroundColor3,
+                value: isChecked[index],
+                onChanged: (_) {
+                  setState(() {
+                    isChecked = isChecked.map((e) => e = false).toList();
+                    isChecked[index] = !isChecked[index];
+                  });
+                },
+              ),
+              SizedBox(
+                width: 80,
+                height: 80,
+                child: Image.network(
+                  "${metodePembayaran?.logoBank}",
+                ),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "${metodePembayaran?.namaBank}",
+                    style: poppins.copyWith(
+                      fontWeight: bold,
+                    ),
+                  ),
+                  Text(
+                    "${metodePembayaran?.noRekening}",
+                    style: poppins.copyWith(
+                      fontWeight: regular,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const Divider(
+            color: Colors.grey,
+            thickness: 1,
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Pilih Metode Pembayaran",
+          style: poppins,
+        ),
+        backgroundColor: backgroundColor3,
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView(
+              children: [
+                for (var i = 0;
+                    i < (metodePembayaranModel.data?.length ?? 0);
+                    i++)
+                  pembayaranItem(index: i)
+              ],
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.all(
+              20,
+            ),
+            color: backgroundColor3,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Total Tagihan: ",
+                        style: poppins.copyWith(
+                          color: Colors.white,
+                          fontWeight: bold,
+                        ),
+                      ),
+                      Text(
+                        "Rp ${currencyFormatter.format(double.parse(widget.totaltagihan))}",
+                        style: poppins.copyWith(
+                          color: Colors.white,
+                          fontWeight: bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: backgroundColor1,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                          10,
+                        ),
+                      )),
+                  onPressed: () {},
+                  icon: const Icon(Icons.check_circle),
+                  label: Text(
+                    "Bayar",
+                    style: poppins,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
