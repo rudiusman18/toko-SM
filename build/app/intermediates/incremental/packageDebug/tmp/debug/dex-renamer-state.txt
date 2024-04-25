@@ -1,4 +1,4 @@
-#Wed Apr 24 18:56:57 ICT 2024
-base.0=D\:\\My_Project\\Project with mas galang\\toko-SM\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
+#Thu Apr 25 15:35:45 WIB 2024
+base.0=/Users/enygma/Documents/github/toko-SM/build/app/intermediates/dex/debug/mergeDexDebug/classes.dex
 path.0=classes.dex
 renamed.0=classes.dex

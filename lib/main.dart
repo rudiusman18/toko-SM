@@ -2,6 +2,7 @@ import 'package:tokoSM/pages/splash_page.dart';
 import 'package:tokoSM/providers/cabang_provider.dart';
 import 'package:tokoSM/providers/cart_provider.dart';
 import 'package:tokoSM/providers/category_provider.dart';
+import 'package:tokoSM/providers/kurir_provider.dart';
 import 'package:tokoSM/providers/login_provider.dart';
 import 'package:tokoSM/providers/page_provider.dart';
 import 'package:tokoSM/providers/product_provider.dart';
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => CartProvider()),
         ChangeNotifierProvider(create: (context) => ProfileProvider()),
         ChangeNotifierProvider(create: (context) => CabangProvider()),
+        ChangeNotifierProvider(create: (context) => KurirProvider()),
       ],
       child: MaterialApp(
         builder: (context, child) {

@@ -34,6 +34,8 @@ class _CartPageState extends State<CartPage> {
   int subTotalHarga = 0;
   int totalHarga = 0;
 
+  CartModel deliveryProduct = CartModel();
+
   @override
   void initState() {
     super.initState();
@@ -50,6 +52,7 @@ class _CartPageState extends State<CartPage> {
         token: loginProvider.loginModel.token ?? "")) {
       setState(() {
         cartModel = cartProvider.cartModel;
+        deliveryProduct = CartModel.fromJson(cartModel.toJson());
         listCabang = cartProvider.cartModel.data
                 ?.map((e) => e.namaCabang ?? "")
                 .toList() ??
@@ -391,10 +394,12 @@ class _CartPageState extends State<CartPage> {
                   if (isChecked[index] == false) {
                     setState(() {
                       subTotalHarga -= numericValue * (product?.jumlah ?? 0);
+                      deliveryProduct.data?[indexCabang].data?.removeWhere((element) => element.namaProduk?.toLowerCase() == product?.namaProduk?.toLowerCase());
                     });
                   } else {
                     setState(() {
                       subTotalHarga += numericValue * (product?.jumlah ?? 0);
+                      deliveryProduct.data?[indexCabang].data?.add(product!);
                     });
                   }
                 },
@@ -718,7 +723,8 @@ class _CartPageState extends State<CartPage> {
                   PageTransition(
                     child: Deliverypage(
                       namaCabang: cartModel.data?[indexCabang].namaCabang ?? "",
-                      product: CartModel(),
+                      indexCabang: indexCabang,
+                      product: deliveryProduct,
                     ),
                     type: PageTransitionType.rightToLeft,
                   ),
