@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+import 'package:tokoSM/models/alamat_model.dart';
 import 'package:tokoSM/models/cart_model.dart';
 import 'package:tokoSM/models/kurir_model.dart';
 import 'package:tokoSM/pages/bottom_navigation_page/cart_page/alamat_page.dart';
@@ -24,44 +25,44 @@ class _DeliverypageState extends State<Deliverypage> {
   final currencyFormatter = NumberFormat('#,##0.00', 'ID');
   String kurirDigunakan = "";
 
+  _loading(){
+    showDialog(context: context, builder: (BuildContext context){
+      return Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Center(
+          child: Container(
+            padding: EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: MediaQuery.sizeOf(context).width * 0.3,
+                  height: MediaQuery.sizeOf(context).width * 0.3,
+                  child: CircularProgressIndicator(
+                    color: backgroundColor3,
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Text("Loading...",style: poppins),
+              ],
+            ),
+          ),
+        ),
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     double totalHargaRingkasan = 0.0;
     KurirProvider kurirProvider = Provider.of<KurirProvider>(context);
     LoginProvider loginProvider = Provider.of<LoginProvider>(context);
-
-    _loading(){
-      showDialog(context: context, builder: (BuildContext context){
-        return Scaffold(
-          backgroundColor: Colors.transparent,
-          body: Center(
-            child: Container(
-              padding: EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    width: MediaQuery.sizeOf(context).width * 0.3,
-                    height: MediaQuery.sizeOf(context).width * 0.3,
-                    child: CircularProgressIndicator(
-                      color: backgroundColor3,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text("Loading...",style: poppins),
-                ],
-              ),
-            ),
-          ),
-        );
-      });
-    }
 
     Widget alamatPengiriman() {
       return InkWell(

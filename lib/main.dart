@@ -1,4 +1,5 @@
 import 'package:tokoSM/pages/splash_page.dart';
+import 'package:tokoSM/providers/alamat_provider.dart';
 import 'package:tokoSM/providers/cabang_provider.dart';
 import 'package:tokoSM/providers/cart_provider.dart';
 import 'package:tokoSM/providers/category_provider.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => ProfileProvider()),
         ChangeNotifierProvider(create: (context) => CabangProvider()),
         ChangeNotifierProvider(create: (context) => KurirProvider()),
+        ChangeNotifierProvider(create: (context) => AlamatProvider()),
       ],
       child: MaterialApp(
         builder: (context, child) {

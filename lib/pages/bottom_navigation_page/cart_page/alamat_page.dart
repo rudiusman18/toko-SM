@@ -1,11 +1,167 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tokoSM/models/alamat_model.dart';
+import 'package:tokoSM/providers/alamat_provider.dart';
+import 'package:tokoSM/providers/login_provider.dart';
 import 'package:tokoSM/theme/theme.dart';
 
-class AlamatPage extends StatelessWidget {
+class AlamatPage extends StatefulWidget {
   const AlamatPage({super.key});
 
   @override
+  State<AlamatPage> createState() => _AlamatPageState();
+}
+
+class _AlamatPageState extends State<AlamatPage> {
+AlamatModel alamatModel = AlamatModel();
+List<bool> isSelected = [];
+
+  @override
+  void initState() {
+    _initAlamatData();
+    super.initState();
+  }
+
+  _initAlamatData()async{
+    AlamatProvider alamatProvider = Provider.of<AlamatProvider>(context, listen: false);
+    LoginProvider loginProvider = Provider.of<LoginProvider>(context, listen: false);
+
+    if(await alamatProvider.getAlamat(token: loginProvider.loginModel.token ?? "")){
+      setState(() {
+        alamatModel = alamatProvider.alamatModel;
+        for(var i=0; i<(alamatModel.data?.length ?? 0); i++){
+         isSelected.add(false);
+        }
+      });
+    }else{
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        backgroundColor: Colors.red,
+        content: Text("Gagal mendapatkan data alamat", style: poppins,),
+        duration: const Duration(seconds: 1),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+      ));
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    Widget alamatItem({required int index}){
+      var alamat = alamatModel.data?[index];
+      return InkWell(
+        onTap: (){
+          setState(() {
+            isSelected = isSelected.map((e) => e = false).toList();
+            isSelected[index] = !isSelected[index];
+          });
+        },
+        child: Container(
+          margin: const EdgeInsets.only(left: 20, right: 20, bottom: 10,),
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: isSelected[index] == true ? backgroundColor1 : Colors.grey,
+              width: isSelected[index] == true ? 3 : 1,
+            ),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "${alamat?.namaAlamat}",
+                style: poppins.copyWith(
+                  fontWeight: bold,
+                  fontSize: 11,
+                ),
+              ),
+              Text(
+                "${alamat?.namaPenerima}",
+                style: poppins.copyWith(
+                  fontWeight: bold,
+                ),
+              ),
+              Text(
+                "${alamat?.telpPenerima}",
+                style: poppins.copyWith(
+                  fontSize: 11,
+                ),
+              ),
+              Text("${alamat?.alamatLengkap}, ${alamat?.kelurahan?.toLowerCase()}, ${alamat?.kecamatan?.toLowerCase()}, ${alamat?.kabkota?.toLowerCase()}, ${alamat?.provinsi?.toLowerCase()}, ${alamat?.kodepos?.toLowerCase()}",
+                style: poppins.copyWith(
+                fontSize: 11,
+              ),
+              ),
+              alamat?.catatan?.isEmpty ?? true ? SizedBox() : Text("[tokoSM Note: ${alamat?.catatan}]",  style: poppins.copyWith(
+                fontSize: 11,
+              ),),
+              alamat?.lat == null || alamat?.lon == null ? SizedBox() : Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Icon(Icons.location_on, color: backgroundColor3,),
+                  Expanded(child:
+                  Text(
+                    "Sudah Pinpoint",
+                    style: poppins.copyWith(
+                      fontWeight: bold,
+                      fontSize: 12,
+                    ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.all(13),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.grey,
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(10,),
+                      ),
+                      child: Text(
+                        "Ubah Alamat",
+                        style: poppins.copyWith(
+                          fontWeight: bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 10,),
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        width: 1,
+                        color: Colors.grey,
+                      ),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: IconButton(
+                      onPressed: (){},
+                      icon: Icon(
+                        Icons.settings,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+    
     return Scaffold(
       appBar: AppBar(
         title: Text("Daftar Alamat"),
@@ -16,8 +172,12 @@ class AlamatPage extends StatelessWidget {
               child: Center(child: Text("Tambah Alamat",))),
         ],
       ),
-      body: Center(
-        child: Text("Ini adalah halaman alamat"),
+      body: ListView(children: [
+        const SizedBox(height: 20,),
+          for(var i=0; i<(alamatModel.data?.length ?? 0);i++)...{
+            alamatItem(index: i),
+          }
+        ],
       ),
     );
   }
