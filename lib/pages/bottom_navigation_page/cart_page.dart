@@ -50,38 +50,65 @@ class _CartPageState extends State<CartPage> {
         Provider.of<CartProvider>(context, listen: false);
     if (await cartProvider.getCart(
         token: loginProvider.loginModel.token ?? "")) {
+
       setState(() {
+        // Ensure indexCabang is within bounds
+        indexCabang = indexCabang < 0 ? 0 : indexCabang;
+        final int maxIndex = (cartModel.data?.length ?? 1) - 1;
+        indexCabang = indexCabang > maxIndex ? maxIndex : indexCabang;
+
+// Print indexCabang and maxIndex for debugging
+        print("indexCabang: $indexCabang, maxIndex: $maxIndex");
+
+// Update cartModel with the latest data from cartProvider
         cartModel = cartProvider.cartModel;
+
+// Update deliveryProduct with the updated cartModel
         deliveryProduct = CartModel.fromJson(cartModel.toJson());
+
+// Update listCabang with the latest data from cartProvider
         listCabang = cartProvider.cartModel.data
-                ?.map((e) => e.namaCabang ?? "")
-                .toList() ??
+            ?.map((e) => e.namaCabang ?? "")
+            .toList() ??
             [];
 
+// Ensure that indexCabang is within bounds after updating cartModel
         indexCabang = indexCabang < 0 ? 0 : indexCabang;
-        indexCabang = indexCabang > ((cartModel.data?.length ?? 1) - 1)
+        final int updatedMaxIndex = (cartModel.data?.length ?? 1) - 1;
+        indexCabang = indexCabang > updatedMaxIndex ? updatedMaxIndex : indexCabang;
+
+// Print updated indexCabang and updated maxIndex for debugging
+        print("Updated indexCabang: $indexCabang, Updated maxIndex: $updatedMaxIndex");
+
+
+
+
+        print("indexCabang saat ini adalah ${indexCabang > ((cartModel.data?.length ?? 1) - 1)
             ? ((cartModel.data?.length ?? 1) - 1)
-            : indexCabang;
+            : indexCabang} ${(cartModel.data?.length ?? 1) - 1} ${indexCabang} dengan jumlah isChecked ${isChecked.length}");
 
         subTotalHarga = 0;
-        for (var i = 0;
-            i < (cartModel.data?[indexCabang].data?.length ?? 0);
-            i++) {
-          if (isChecked.length <
-              (cartModel.data?[indexCabang].data?.length ?? 0)) {
-            isChecked.add(true); // menambahkan data true untuk list checkbox
-          }
-          isChecked[i] = true;
+        if (cartModel.data?.isNotEmpty ?? false){
+          for (var i = 0;
+          i < (cartModel.data?[indexCabang].data?.length ?? 0);
+          i++) {
+            if (isChecked.length <
+                (cartModel.data?[indexCabang].data?.length ?? 0)) {
+              isChecked.add(true); // menambahkan data true untuk list checkbox
+            }
+            isChecked[i] = true;
 
-          if (isChecked[i] == true) {
-            var product = cartModel.data?[indexCabang].data?[i];
-            String? numericString =
-                "${product?.diskon != null ? product?.hargaDiskon : product?.harga ?? 0}";
-            int numericValue =
-                int.parse(numericString); // Parses the string as an integer
-            subTotalHarga += numericValue * (product?.jumlah ?? 0);
+            if (isChecked[i] == true) {
+              var product = cartModel.data?[indexCabang].data?[i];
+              String? numericString =
+                  "${product?.diskon != null ? product?.hargaDiskon : product?.harga ?? 0}";
+              int numericValue =
+              int.parse(numericString); // Parses the string as an integer
+              subTotalHarga += numericValue * (product?.jumlah ?? 0);
+            }
           }
         }
+
 
         loginmodel = loginProvider.loginModel;
         print(
@@ -801,6 +828,7 @@ class _CartPageState extends State<CartPage> {
                             ],
                           ),
               ),
+              cartModel.data?.isEmpty ?? true ? SizedBox() :
               bottomView(),
             ],
           ),

@@ -22,7 +22,7 @@ class TransaksiService {
     required String alamatPenerima,
     required String banktransfer,
     required String noRekeningTransfer,
-    required CartModel product,
+    required List<DataKeranjang> product,
   }) async {
     var url = Uri.parse("${baseURL}transaksi");
     var header = {
@@ -44,16 +44,7 @@ class TransaksiService {
       "alamat_penerima": alamatPenerima, // alamat dari id alamat pengiriman
       "bank_transfer": banktransfer,
       "norekening_transfer": noRekeningTransfer,
-      "produk": [
-        {
-          "id": 1,
-          "nama_produk": "Sunco 2 liter",
-          "image_url": "filename.jpg",
-          "harga": 35000,
-          "jumlah": 2,
-          "total_harga": 70000
-        }
-      ]
+      "produk": generateProducts(initProducts: product)
     };
 
     var body = jsonEncode(data);
@@ -75,4 +66,24 @@ class TransaksiService {
       throw Exception("${jsonDecode(response.body)['message']}");
     }
   }
+
+  List<Map<String, dynamic>> generateProducts({required List<DataKeranjang> initProducts}) {
+    // Create a list to hold the dynamic products
+    List<Map<String, dynamic>> products = [];
+
+    // Convert Product objects to Map and add them to the list
+    for (DataKeranjang product in initProducts) {
+      products.add({
+        "id": product.produkId,
+        "nama_produk": product.namaProduk,
+        "image_url": product.imageUrl,
+        "harga": product.harga,
+        "jumlah": product.jumlah,
+        "total_harga": (product?.harga ?? 0) * (product?.jumlah ?? 0),
+      });
+    }
+
+    return products;
+  }
+
 }

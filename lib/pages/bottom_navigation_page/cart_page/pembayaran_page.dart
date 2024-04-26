@@ -1,16 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:tokoSM/models/cart_model.dart';
 import 'package:tokoSM/models/pembayaran_model.dart';
 import 'package:tokoSM/providers/login_provider.dart';
 import 'package:tokoSM/providers/metode_pembayaran_provider.dart';
+import 'package:tokoSM/providers/transaksi_provider.dart';
 import 'package:tokoSM/theme/theme.dart';
 
 class PembayaranPage extends StatefulWidget {
   final String cabangId;
+  final int pelangganId;
+  final int pengirimanId;
+  final int kurirId;
+  final String namaKurir;
+  final int totalharga;
+  final int totalOngkosKirim;
+  final String namaPenerima;
+  final String alamatPenerima;
+  final List<DataKeranjang> product;
+
   final String totaltagihan;
+
+
   const PembayaranPage(
-      {super.key, required this.cabangId, required this.totaltagihan});
+      {super.key, required this.cabangId, required this.totaltagihan, required this.pelangganId, required this.pengirimanId, required this.kurirId, required this.namaKurir, required this.totalharga, required this.totalOngkosKirim, required this.namaPenerima, required this.alamatPenerima, required this.product});
 
   @override
   State<PembayaranPage> createState() => _PembayaranPageState();
@@ -18,8 +32,33 @@ class PembayaranPage extends StatefulWidget {
 
 class _PembayaranPageState extends State<PembayaranPage> {
   PembayaranModel metodePembayaranModel = PembayaranModel();
+  PembayaranModel pembayaranTerpilih = PembayaranModel();
   final currencyFormatter = NumberFormat('#,##0.00', 'ID');
   List<bool> isChecked = [];
+
+  _handleTapbayar()async{
+    print("data yang harus dibayarkan adalah: ${widget.totalharga}, ${widget.totalOngkosKirim}, ${widget.totaltagihan}");
+    LoginProvider loginProvider = Provider.of<LoginProvider>(context, listen: false);
+    TransaksiProvider transaksiProvider = Provider.of<TransaksiProvider>(context, listen: false);
+    if(pembayaranTerpilih.data?.isEmpty ?? true){
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        backgroundColor: Colors.red,
+        content: Text(
+          "Bank tujuan belum dipilih",
+          style: poppins,
+        ),
+        duration: const Duration(seconds: 1),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+      ));
+    }
+    else{
+      if(await transaksiProvider.postTransaksi(token: loginProvider.loginModel.token ?? "", pelangganId: widget.pelangganId, cabangId: int.parse(widget.cabangId), pengirimanId: widget.pengirimanId, kurirId: widget.kurirId, namaKurir: widget.namaKurir, totalHarga: widget.totalharga, totalOngkosKirim: widget.totalOngkosKirim, totalBelanja: int.parse(widget.totaltagihan), metodePembayaran: "transfer", namaPenerima: widget.namaPenerima, alamatPenerima: widget.alamatPenerima, banktransfer: pembayaranTerpilih.data?.first.namaBank ?? "", noRekeningTransfer: pembayaranTerpilih.data?.first.noRekening ?? "", product: widget.product)){
+
+      }
+    }
+  }
 
   @override
   void initState() {
@@ -63,6 +102,13 @@ class _PembayaranPageState extends State<PembayaranPage> {
                   setState(() {
                     isChecked = isChecked.map((e) => e = false).toList();
                     isChecked[index] = !isChecked[index];
+                    pembayaranTerpilih = PembayaranModel.fromJson(metodePembayaranModel.toJson());
+                    if(isChecked[index] == true){
+                      pembayaranTerpilih.data?.clear();
+                      pembayaranTerpilih.data?.add(metodePembayaranModel.data![index]);
+                      print("bank yang dipilih adalah ${pembayaranTerpilih.data?.first.namaBank}");
+                    }
+
                   });
                 },
               ),
@@ -163,7 +209,7 @@ class _PembayaranPageState extends State<PembayaranPage> {
                           10,
                         ),
                       )),
-                  onPressed: () {},
+                  onPressed: _handleTapbayar,
                   icon: const Icon(Icons.check_circle),
                   label: Text(
                     "Bayar",

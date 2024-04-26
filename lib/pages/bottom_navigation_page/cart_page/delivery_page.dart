@@ -27,6 +27,7 @@ class Deliverypage extends StatefulWidget {
 class _DeliverypageState extends State<Deliverypage> {
   final currencyFormatter = NumberFormat('#,##0.00', 'ID');
   String kurirDigunakan = "";
+  int kurirId = 0;
 
   _loading() {
     showDialog(
@@ -253,6 +254,7 @@ class _DeliverypageState extends State<Deliverypage> {
           setState(() {
             kurirDigunakan =
                 "${kurirProvider.kurirModel.data?[index].namaKurir}";
+            kurirId = kurirProvider.kurirModel.data?[index].id ?? 0;
             Navigator.pop(context);
           });
         },
@@ -630,7 +632,19 @@ class _DeliverypageState extends State<Deliverypage> {
                           cabangId:
                               "${widget.product.data?[widget.indexCabang].id}",
                           totaltagihan:
-                              "${totalHargaRingkasan + (kurirDigunakan == "" ? 0 : 15000)}",
+                              "${totalHargaRingkasan.toInt() + (kurirDigunakan == "" ? 0 : 15000)}",
+                          alamatPenerima:  alamatProvider.deliveryAlamat.data?.isEmpty ?? true
+                              ? "${alamatProvider.alamatModel.data?.first.alamatLengkap}, ${alamatProvider.alamatModel.data?.first.kelurahan?.toLowerCase()}, ${alamatProvider.alamatModel.data?.first.kecamatan?.toLowerCase()}, ${alamatProvider.alamatModel.data?.first.kabkota?.toLowerCase()}, ${alamatProvider.alamatModel.data?.first.provinsi?.toLowerCase()}, ${alamatProvider.alamatModel.data?.first.kodepos?.toLowerCase()}"
+                              : "${alamatProvider.deliveryAlamat.data?.first.alamatLengkap}, ${alamatProvider.deliveryAlamat.data?.first.kelurahan?.toLowerCase()}, ${alamatProvider.deliveryAlamat.data?.first.kecamatan?.toLowerCase()}, ${alamatProvider.deliveryAlamat.data?.first.kabkota?.toLowerCase()}, ${alamatProvider.deliveryAlamat.data?.first.provinsi?.toLowerCase()}, ${alamatProvider.deliveryAlamat.data?.first.kodepos?.toLowerCase()}",
+                          kurirId: kurirId,
+                          namaKurir: kurirDigunakan,
+                          namaPenerima: "${alamatProvider.alamatModel.data?.first.namaPenerima}",
+                          pelangganId: loginProvider.loginModel.data?.id ?? 0,
+                          pengirimanId: alamatProvider.deliveryAlamat.data?.isEmpty ?? true
+                              ? alamatProvider.alamatModel.data?.first.id ?? 0 : alamatProvider.deliveryAlamat.data?.first.id ?? 0,
+                          product: widget.product.data![widget.indexCabang].data!,
+                          totalharga: totalHargaRingkasan.toInt(),
+                          totalOngkosKirim: 15000,
                         ),
                         type: PageTransitionType.rightToLeft,
                       ));
