@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:tokoSM/models/cart_model.dart';
 
+import '../models/transaction_model.dart';
+
 class TransaksiService {
   var client = HttpClient();
   var baseURL = "http://103.127.132.116/api/v1/";
@@ -84,6 +86,28 @@ class TransaksiService {
     }
 
     return products;
+  }
+
+  Future<TransactionModel> retrieveTransaction({required String token, required int customerId,})async{
+    var url = Uri.parse("${baseURL}transaksi?customer_id=$customerId"); // Ini masih bisa ditambahkan banyak hal
+    var header = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token'
+    };
+
+    var response = await http.get(url, headers: header);
+    // ignore: avoid_print
+    print("transactionModel: ${response.body}");
+
+// **success melakukan get cart
+    if (response.statusCode >= 200 && response.statusCode <= 299) {
+      var data = jsonDecode(response.body);
+      TransactionModel transactionModel = TransactionModel.fromJson(data);
+
+      return transactionModel;
+    } else {
+      throw Exception("${jsonDecode(response.body)['message']}");
+    }
   }
 
 }

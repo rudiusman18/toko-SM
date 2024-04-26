@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:tokoSM/models/cart_model.dart';
 import 'package:tokoSM/models/pembayaran_model.dart';
+import 'package:tokoSM/pages/main_page.dart';
 import 'package:tokoSM/providers/login_provider.dart';
 import 'package:tokoSM/providers/metode_pembayaran_provider.dart';
+import 'package:tokoSM/providers/page_provider.dart';
 import 'package:tokoSM/providers/transaksi_provider.dart';
 import 'package:tokoSM/theme/theme.dart';
 
@@ -40,6 +43,7 @@ class _PembayaranPageState extends State<PembayaranPage> {
     print("data yang harus dibayarkan adalah: ${widget.totalharga}, ${widget.totalOngkosKirim}, ${widget.totaltagihan}");
     LoginProvider loginProvider = Provider.of<LoginProvider>(context, listen: false);
     TransaksiProvider transaksiProvider = Provider.of<TransaksiProvider>(context, listen: false);
+    PageProvider pageProvider = Provider.of<PageProvider>(context, listen: false);
     if(pembayaranTerpilih.data?.isEmpty ?? true){
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         backgroundColor: Colors.red,
@@ -55,6 +59,29 @@ class _PembayaranPageState extends State<PembayaranPage> {
     }
     else{
       if(await transaksiProvider.postTransaksi(token: loginProvider.loginModel.token ?? "", pelangganId: widget.pelangganId, cabangId: int.parse(widget.cabangId), pengirimanId: widget.pengirimanId, kurirId: widget.kurirId, namaKurir: widget.namaKurir, totalHarga: widget.totalharga, totalOngkosKirim: widget.totalOngkosKirim, totalBelanja: int.parse(widget.totaltagihan), metodePembayaran: "transfer", namaPenerima: widget.namaPenerima, alamatPenerima: widget.alamatPenerima, banktransfer: pembayaranTerpilih.data?.first.namaBank ?? "", noRekeningTransfer: pembayaranTerpilih.data?.first.noRekening ?? "", product: widget.product)){
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: backgroundColor1,
+          content: Text("Berhasil Melakukan Transaksi", style: poppins,),
+          duration: const Duration(seconds: 1),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+        ));
+        Future.delayed(Duration(seconds: 1), (){
+          setState(() {
+            pageProvider.currentIndex = 3;
+          });
+          Navigator.pushAndRemoveUntil(context, PageTransition(child: const MainPage(), type: PageTransitionType.leftToRight), (route) => false);
+
+        });
+      }else{ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        backgroundColor: Colors.red,
+        content: Text("Gagal mengirimkan data transaksi", style: poppins,),
+        duration: const Duration(seconds: 1),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+      ));
 
       }
     }
