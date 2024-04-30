@@ -66,7 +66,7 @@ class DetailTransactionPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "${transactionDetailItem.noInvoice}",
+                  "${transactionDetailItem.noInvoice} aiosdjioajsdioajsdioajsdiojadiojaiosdjaiodsj",
                   style: poppins.copyWith(
                     color: Colors.grey,
                     fontSize: 12,
