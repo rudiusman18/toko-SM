@@ -397,15 +397,16 @@ class _CartPageState extends State<CartPage> {
           margin: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
           padding: const EdgeInsets.only(right: 10),
           decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
-                  blurRadius: 4,
-                  offset: const Offset(2, 8), // Shadow position
-                ),
-              ]),
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                blurRadius: 4,
+                offset: const Offset(2, 8), // Shadow position
+              ),
+            ],
+          ),
           child: Row(
             children: [
               Checkbox(
