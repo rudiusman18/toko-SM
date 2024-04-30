@@ -25,9 +25,19 @@ class PembayaranPage extends StatefulWidget {
 
   final String totaltagihan;
 
-
   const PembayaranPage(
-      {super.key, required this.cabangId, required this.totaltagihan, required this.pelangganId, required this.pengirimanId, required this.kurirId, required this.namaKurir, required this.totalharga, required this.totalOngkosKirim, required this.namaPenerima, required this.alamatPenerima, required this.product});
+      {super.key,
+      required this.cabangId,
+      required this.totaltagihan,
+      required this.pelangganId,
+      required this.pengirimanId,
+      required this.kurirId,
+      required this.namaKurir,
+      required this.totalharga,
+      required this.totalOngkosKirim,
+      required this.namaPenerima,
+      required this.alamatPenerima,
+      required this.product});
 
   @override
   State<PembayaranPage> createState() => _PembayaranPageState();
@@ -39,12 +49,16 @@ class _PembayaranPageState extends State<PembayaranPage> {
   final currencyFormatter = NumberFormat('#,##0.00', 'ID');
   List<bool> isChecked = [];
 
-  _handleTapbayar()async{
-    print("data yang harus dibayarkan adalah: ${widget.totalharga}, ${widget.totalOngkosKirim}, ${widget.totaltagihan}");
-    LoginProvider loginProvider = Provider.of<LoginProvider>(context, listen: false);
-    TransaksiProvider transaksiProvider = Provider.of<TransaksiProvider>(context, listen: false);
-    PageProvider pageProvider = Provider.of<PageProvider>(context, listen: false);
-    if(pembayaranTerpilih.data?.isEmpty ?? true){
+  _handleTapbayar() async {
+    print(
+        "data yang harus dibayarkan adalah: ${widget.totalharga}, ${widget.totalOngkosKirim}, ${widget.totaltagihan}");
+    LoginProvider loginProvider =
+        Provider.of<LoginProvider>(context, listen: false);
+    TransaksiProvider transaksiProvider =
+        Provider.of<TransaksiProvider>(context, listen: false);
+    PageProvider pageProvider =
+        Provider.of<PageProvider>(context, listen: false);
+    if (pembayaranTerpilih.data?.isEmpty ?? true) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         backgroundColor: Colors.red,
         content: Text(
@@ -56,33 +70,57 @@ class _PembayaranPageState extends State<PembayaranPage> {
           borderRadius: BorderRadius.circular(20),
         ),
       ));
-    }
-    else{
-      if(await transaksiProvider.postTransaksi(token: loginProvider.loginModel.token ?? "", pelangganId: widget.pelangganId, cabangId: int.parse(widget.cabangId), pengirimanId: widget.pengirimanId, kurirId: widget.kurirId, namaKurir: widget.namaKurir, totalHarga: widget.totalharga, totalOngkosKirim: widget.totalOngkosKirim, totalBelanja: int.parse(widget.totaltagihan), metodePembayaran: "transfer", namaPenerima: widget.namaPenerima, alamatPenerima: widget.alamatPenerima, banktransfer: pembayaranTerpilih.data?.first.namaBank ?? "", noRekeningTransfer: pembayaranTerpilih.data?.first.noRekening ?? "", product: widget.product)){
+    } else {
+      if (await transaksiProvider.postTransaksi(
+          token: loginProvider.loginModel.token ?? "",
+          pelangganId: widget.pelangganId,
+          cabangId: int.parse(widget.cabangId),
+          pengirimanId: widget.pengirimanId,
+          kurirId: widget.kurirId,
+          namaKurir: widget.namaKurir,
+          totalHarga: widget.totalharga,
+          totalOngkosKirim: widget.totalOngkosKirim,
+          totalBelanja: int.parse(widget.totaltagihan),
+          metodePembayaran: "transfer",
+          namaPenerima: widget.namaPenerima,
+          alamatPenerima: widget.alamatPenerima,
+          banktransfer: pembayaranTerpilih.data?.first.namaBank ?? "",
+          noRekeningTransfer: pembayaranTerpilih.data?.first.noRekening ?? "",
+          product: widget.product)) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           backgroundColor: backgroundColor1,
-          content: Text("Berhasil Melakukan Transaksi", style: poppins,),
+          content: Text(
+            "Berhasil Melakukan Transaksi",
+            style: poppins,
+          ),
           duration: const Duration(seconds: 1),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
         ));
-        Future.delayed(Duration(seconds: 1), (){
+        Future.delayed(Duration(seconds: 1), () {
           setState(() {
             pageProvider.currentIndex = 3;
           });
-          Navigator.pushAndRemoveUntil(context, PageTransition(child: const MainPage(), type: PageTransitionType.leftToRight), (route) => false);
-
+          Navigator.pushAndRemoveUntil(
+              context,
+              PageTransition(
+                  child: const MainPage(),
+                  type: PageTransitionType.leftToRight),
+              (route) => false);
         });
-      }else{ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        backgroundColor: Colors.red,
-        content: Text("Gagal mengirimkan data transaksi", style: poppins,),
-        duration: const Duration(seconds: 1),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-      ));
-
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Colors.red,
+          content: Text(
+            "Gagal mengirimkan data transaksi",
+            style: poppins,
+          ),
+          duration: const Duration(seconds: 1),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+        ));
       }
     }
   }
@@ -112,67 +150,71 @@ class _PembayaranPageState extends State<PembayaranPage> {
 
   Widget pembayaranItem({required int index}) {
     var metodePembayaran = metodePembayaranModel.data?[index];
-    return Container(
-      margin: const EdgeInsets.only(
-        left: 20,
-        right: 20,
-        bottom: 20,
-      ),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Checkbox(
-                activeColor: backgroundColor3,
-                value: isChecked[index],
-                onChanged: (_) {
-                  setState(() {
-                    isChecked = isChecked.map((e) => e = false).toList();
-                    isChecked[index] = !isChecked[index];
-                    pembayaranTerpilih = PembayaranModel.fromJson(metodePembayaranModel.toJson());
-                    if(isChecked[index] == true){
-                      pembayaranTerpilih.data?.clear();
-                      pembayaranTerpilih.data?.add(metodePembayaranModel.data![index]);
-                      print("bank yang dipilih adalah ${pembayaranTerpilih.data?.first.namaBank}");
-                    }
-
-                  });
-                },
-              ),
-              SizedBox(
-                width: 80,
-                height: 80,
-                child: Image.network(
-                  "${metodePembayaran?.logoBank}",
+    return InkWell(
+      onTap: () {
+        setState(() {
+          isChecked = isChecked.map((e) => e = false).toList();
+          isChecked[index] = !isChecked[index];
+          pembayaranTerpilih =
+              PembayaranModel.fromJson(metodePembayaranModel.toJson());
+          if (isChecked[index] == true) {
+            pembayaranTerpilih.data?.clear();
+            pembayaranTerpilih.data?.add(metodePembayaranModel.data![index]);
+            print(
+                "bank yang dipilih adalah ${pembayaranTerpilih.data?.first.namaBank}");
+          }
+        });
+      },
+      child: Container(
+        margin: const EdgeInsets.only(
+          left: 20,
+          right: 20,
+          bottom: 20,
+        ),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Checkbox(
+                  activeColor: backgroundColor3,
+                  value: isChecked[index],
+                  onChanged: (_) {},
                 ),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "${metodePembayaran?.namaBank}",
-                    style: poppins.copyWith(
-                      fontWeight: bold,
-                    ),
+                SizedBox(
+                  width: 80,
+                  height: 80,
+                  child: Image.network(
+                    "${metodePembayaran?.logoBank}",
                   ),
-                  Text(
-                    "${metodePembayaran?.noRekening}",
-                    style: poppins.copyWith(
-                      fontWeight: regular,
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "${metodePembayaran?.namaBank}",
+                      style: poppins.copyWith(
+                        fontWeight: bold,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          const Divider(
-            color: Colors.grey,
-            thickness: 1,
-          ),
-        ],
+                    Text(
+                      "${metodePembayaran?.noRekening}",
+                      style: poppins.copyWith(
+                        fontWeight: regular,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            const Divider(
+              color: Colors.grey,
+              thickness: 1,
+            ),
+          ],
+        ),
       ),
     );
   }

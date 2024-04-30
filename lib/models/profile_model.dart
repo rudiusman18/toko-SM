@@ -6,12 +6,12 @@ class ProfileModel {
 
   ProfileModel.fromJson(Map<String, dynamic> json) {
     message = json['message'];
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? Data.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['message'] = this.message;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['message'] = message;
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
@@ -22,7 +22,7 @@ class ProfileModel {
 class Data {
   int? id;
   int? cabangId;
-  Null? salesId;
+  int? salesId;
   int? kategoriPelangganId;
   String? username;
   String? password;
@@ -36,8 +36,8 @@ class Data {
   String? kabkota;
   String? kecamatan;
   String? kelurahan;
-  Null? lat;
-  Null? lon;
+  String? lat;
+  String? lon;
   String? namaCabang;
 
   Data(
@@ -84,26 +84,26 @@ class Data {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['cabang_id'] = this.cabangId;
-    data['sales_id'] = this.salesId;
-    data['kategori_pelanggan_id'] = this.kategoriPelangganId;
-    data['username'] = this.username;
-    data['password'] = this.password;
-    data['nama_pelanggan'] = this.namaPelanggan;
-    data['tgl_lahir_pelanggan'] = this.tglLahirPelanggan;
-    data['jenis_kelamin_pelanggan'] = this.jenisKelaminPelanggan;
-    data['telp_pelanggan'] = this.telpPelanggan;
-    data['email_pelanggan'] = this.emailPelanggan;
-    data['alamat_pelanggan'] = this.alamatPelanggan;
-    data['provinsi'] = this.provinsi;
-    data['kabkota'] = this.kabkota;
-    data['kecamatan'] = this.kecamatan;
-    data['kelurahan'] = this.kelurahan;
-    data['lat'] = this.lat;
-    data['lon'] = this.lon;
-    data['nama_cabang'] = this.namaCabang;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['cabang_id'] = cabangId;
+    data['sales_id'] = salesId;
+    data['kategori_pelanggan_id'] = kategoriPelangganId;
+    data['username'] = username;
+    data['password'] = password;
+    data['nama_pelanggan'] = namaPelanggan;
+    data['tgl_lahir_pelanggan'] = tglLahirPelanggan;
+    data['jenis_kelamin_pelanggan'] = jenisKelaminPelanggan;
+    data['telp_pelanggan'] = telpPelanggan;
+    data['email_pelanggan'] = emailPelanggan;
+    data['alamat_pelanggan'] = alamatPelanggan;
+    data['provinsi'] = provinsi;
+    data['kabkota'] = kabkota;
+    data['kecamatan'] = kecamatan;
+    data['kelurahan'] = kelurahan;
+    data['lat'] = lat;
+    data['lon'] = lon;
+    data['nama_cabang'] = namaCabang;
     return data;
   }
 }

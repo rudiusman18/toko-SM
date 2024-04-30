@@ -1,10 +1,11 @@
+// ignore_for_file: avoid_print
+
 import 'package:tokoSM/models/cart_model.dart';
 import 'package:tokoSM/models/login_model.dart';
 import 'package:tokoSM/pages/bottom_navigation_page/cart_page/delivery_page.dart';
 import 'package:tokoSM/pages/bottom_navigation_page/product_detail/product_detail_page.dart';
 import 'package:tokoSM/providers/cart_provider.dart';
 import 'package:tokoSM/providers/login_provider.dart';
-import 'package:tokoSM/providers/page_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
@@ -50,7 +51,6 @@ class _CartPageState extends State<CartPage> {
         Provider.of<CartProvider>(context, listen: false);
     if (await cartProvider.getCart(
         token: loginProvider.loginModel.token ?? "")) {
-
       setState(() {
         // Ensure indexCabang is within bounds
         indexCabang = indexCabang < 0 ? 0 : indexCabang;
@@ -68,30 +68,29 @@ class _CartPageState extends State<CartPage> {
 
 // Update listCabang with the latest data from cartProvider
         listCabang = cartProvider.cartModel.data
-            ?.map((e) => e.namaCabang ?? "")
-            .toList() ??
+                ?.map((e) => e.namaCabang ?? "")
+                .toList() ??
             [];
 
 // Ensure that indexCabang is within bounds after updating cartModel
         indexCabang = indexCabang < 0 ? 0 : indexCabang;
         final int updatedMaxIndex = (cartModel.data?.length ?? 1) - 1;
-        indexCabang = indexCabang > updatedMaxIndex ? updatedMaxIndex : indexCabang;
+        indexCabang =
+            indexCabang > updatedMaxIndex ? updatedMaxIndex : indexCabang;
 
 // Print updated indexCabang and updated maxIndex for debugging
-        print("Updated indexCabang: $indexCabang, Updated maxIndex: $updatedMaxIndex");
+        print(
+            "Updated indexCabang: $indexCabang, Updated maxIndex: $updatedMaxIndex");
 
-
-
-
-        print("indexCabang saat ini adalah ${indexCabang > ((cartModel.data?.length ?? 1) - 1)
-            ? ((cartModel.data?.length ?? 1) - 1)
-            : indexCabang} ${(cartModel.data?.length ?? 1) - 1} ${indexCabang} dengan jumlah isChecked ${isChecked.length}");
+        print(
+            // ignore: unnecessary_brace_in_string_interps
+            "indexCabang saat ini adalah ${indexCabang > ((cartModel.data?.length ?? 1) - 1) ? ((cartModel.data?.length ?? 1) - 1) : indexCabang} ${(cartModel.data?.length ?? 1) - 1} ${indexCabang} dengan jumlah isChecked ${isChecked.length}");
 
         subTotalHarga = 0;
-        if (cartModel.data?.isNotEmpty ?? false){
+        if (cartModel.data?.isNotEmpty ?? false) {
           for (var i = 0;
-          i < (cartModel.data?[indexCabang].data?.length ?? 0);
-          i++) {
+              i < (cartModel.data?[indexCabang].data?.length ?? 0);
+              i++) {
             if (isChecked.length <
                 (cartModel.data?[indexCabang].data?.length ?? 0)) {
               isChecked.add(true); // menambahkan data true untuk list checkbox
@@ -103,12 +102,11 @@ class _CartPageState extends State<CartPage> {
               String? numericString =
                   "${product?.diskon != null ? product?.hargaDiskon : product?.harga ?? 0}";
               int numericValue =
-              int.parse(numericString); // Parses the string as an integer
+                  int.parse(numericString); // Parses the string as an integer
               subTotalHarga += numericValue * (product?.jumlah ?? 0);
             }
           }
         }
-
 
         loginmodel = loginProvider.loginModel;
         print(
@@ -421,7 +419,10 @@ class _CartPageState extends State<CartPage> {
                   if (isChecked[index] == false) {
                     setState(() {
                       subTotalHarga -= numericValue * (product?.jumlah ?? 0);
-                      deliveryProduct.data?[indexCabang].data?.removeWhere((element) => element.namaProduk?.toLowerCase() == product?.namaProduk?.toLowerCase());
+                      deliveryProduct.data?[indexCabang].data?.removeWhere(
+                          (element) =>
+                              element.namaProduk?.toLowerCase() ==
+                              product?.namaProduk?.toLowerCase());
                     });
                   } else {
                     setState(() {
@@ -828,8 +829,8 @@ class _CartPageState extends State<CartPage> {
                             ],
                           ),
               ),
-              cartModel.data?.isEmpty ?? true ? SizedBox() :
-              bottomView(),
+              // ignore: prefer_const_constructors
+              cartModel.data?.isEmpty ?? true ? SizedBox() : bottomView(),
             ],
           ),
         ),

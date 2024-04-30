@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_question_mark
+
 class AlamatModel {
   String? message;
   List<Data>? data;
@@ -9,14 +11,14 @@ class AlamatModel {
     if (json['data'] != null) {
       data = <Data>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(Data.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['message'] = this.message;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['message'] = message;
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
@@ -39,7 +41,7 @@ class Data {
   double? lat;
   double? lon;
   int? isUtama;
-  Null? updatedAt;
+  String? updatedAt;
 
   Data(
       {this.id,
@@ -77,22 +79,22 @@ class Data {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['nama_alamat'] = this.namaAlamat;
-    data['nama_penerima'] = this.namaPenerima;
-    data['telp_penerima'] = this.telpPenerima;
-    data['alamat_lengkap'] = this.alamatLengkap;
-    data['provinsi'] = this.provinsi;
-    data['kabkota'] = this.kabkota;
-    data['kecamatan'] = this.kecamatan;
-    data['kelurahan'] = this.kelurahan;
-    data['kodepos'] = this.kodepos;
-    data['catatan'] = this.catatan;
-    data['lat'] = this.lat;
-    data['lon'] = this.lon;
-    data['is_utama'] = this.isUtama;
-    data['updated_at'] = this.updatedAt;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['nama_alamat'] = namaAlamat;
+    data['nama_penerima'] = namaPenerima;
+    data['telp_penerima'] = telpPenerima;
+    data['alamat_lengkap'] = alamatLengkap;
+    data['provinsi'] = provinsi;
+    data['kabkota'] = kabkota;
+    data['kecamatan'] = kecamatan;
+    data['kelurahan'] = kelurahan;
+    data['kodepos'] = kodepos;
+    data['catatan'] = catatan;
+    data['lat'] = lat;
+    data['lon'] = lon;
+    data['is_utama'] = isUtama;
+    data['updated_at'] = updatedAt;
     return data;
   }
 }

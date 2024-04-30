@@ -1,6 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:intl/intl.dart';
-import 'package:tokoSM/models/login_model.dart';
 import 'package:tokoSM/models/product_model.dart';
 import 'package:tokoSM/pages/bottom_navigation_page/cart_page.dart';
 import 'package:tokoSM/pages/bottom_navigation_page/home_page/product_list_search_result.dart';
@@ -281,7 +280,6 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-
             Container(
               margin: const EdgeInsets.only(
                 left: 20,
@@ -289,10 +287,11 @@ class _HomePageState extends State<HomePage> {
               child: InkWell(
                 onTap: () {
                   Navigator.push(
-                      context,
-                      PageTransition(
-                          child: const CartPage(),
-                          type: PageTransitionType.rightToLeft)).then((value) {
+                          context,
+                          PageTransition(
+                              child: const CartPage(),
+                              type: PageTransitionType.rightToLeft))
+                      .then((value) {
                     _initBannerProduct();
                     _initPalingLarisProduct();
                     _initPromoProduct();
@@ -312,13 +311,14 @@ class _HomePageState extends State<HomePage> {
               child: InkWell(
                 onTap: () {
                   Navigator.push(
-                      context,
-                      PageTransition(
-                          child: const ProfilePage(),
-                          type: PageTransitionType.rightToLeft)).then((value) {
-                            _initBannerProduct();
-                            _initPalingLarisProduct();
-                            _initPromoProduct();
+                          context,
+                          PageTransition(
+                              child: const ProfilePage(),
+                              type: PageTransitionType.rightToLeft))
+                      .then((value) {
+                    _initBannerProduct();
+                    _initPalingLarisProduct();
+                    _initPromoProduct();
                   });
                 },
                 child: Icon(

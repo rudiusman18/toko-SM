@@ -1,4 +1,5 @@
-import 'package:tokoSM/models/login_model.dart';
+// ignore_for_file: use_build_context_synchronously, no_leading_underscores_for_local_identifiers
+
 import 'package:tokoSM/pages/login_page.dart';
 import 'package:tokoSM/pages/profile_page/edit_profile_page.dart';
 import 'package:tokoSM/providers/cabang_provider.dart';
@@ -8,7 +9,6 @@ import 'package:tokoSM/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-import 'package:placeholder_images/placeholder_images.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -24,82 +24,94 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     LoginProvider loginProvider = Provider.of<LoginProvider>(context);
-    LoginModel userLogin = loginProvider.loginModel;
     ProfileProvider profileProvider = Provider.of<ProfileProvider>(context);
     CabangProvider cabangProvider = Provider.of<CabangProvider>(context);
 
-    _loading(){
-      showDialog(context: context, builder: (BuildContext context){
-        return Scaffold(
-          backgroundColor: Colors.transparent,
-          body: Center(
-            child: Container(
-              padding: EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    width: MediaQuery.sizeOf(context).width * 0.3,
-                      height: MediaQuery.sizeOf(context).width * 0.3,
-                      child: CircularProgressIndicator(
-                        color: backgroundColor3,
+    // ignore: no_leading_underscores_for_local_identifiers
+    _loading() {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Scaffold(
+              backgroundColor: Colors.transparent,
+              body: Center(
+                child: Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(
+                        width: MediaQuery.sizeOf(context).width * 0.3,
+                        height: MediaQuery.sizeOf(context).width * 0.3,
+                        child: CircularProgressIndicator(
+                          color: backgroundColor3,
+                        ),
                       ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Text("Loading...", style: poppins),
+                    ],
                   ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text("Loading...",style: poppins),
-                ],
+                ),
               ),
-            ),
-          ),
-        );
-      });
+            );
+          });
     }
 
-    _handleTapEditProfil()async{
+    _handleTapEditProfil() async {
       setState(() {
         _loading();
       });
-      if(await profileProvider.getProfile(token: loginProvider.loginModel.token ?? "", userId: "${loginProvider.loginModel.data?.id}")){
-        if(await cabangProvider.getCabang(token: loginProvider.loginModel.token ?? "")){
+      if (await profileProvider.getProfile(
+          token: loginProvider.loginModel.token ?? "",
+          userId: "${loginProvider.loginModel.data?.id}")) {
+        if (await cabangProvider.getCabang(
+            token: loginProvider.loginModel.token ?? "")) {
           Navigator.push(
             context,
             PageTransition(
               child: const EditProfilePage(),
               type: PageTransitionType.rightToLeft,
             ),
-          ).then((value) async{
+          ).then((value) async {
             Navigator.pop(context);
             setState(() {
               _loading();
             });
-            if(await profileProvider.getProfile(token: loginProvider.loginModel.token ?? "", userId: "${loginProvider.loginModel.data?.id}")){
-
-            }else{}
+            if (await profileProvider.getProfile(
+                token: loginProvider.loginModel.token ?? "",
+                userId: "${loginProvider.loginModel.data?.id}")) {
+            } else {}
             setState(() {
               Navigator.pop(context);
             });
           });
-        }else{
+        } else {
+          Navigator.pop(context);
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: Colors.red,
-            content: Text("Gagal mendapatkan data profile", style: poppins,),
+            content: Text(
+              "Gagal mendapatkan data profile",
+              style: poppins,
+            ),
             duration: const Duration(seconds: 1),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
           ));
         }
-      }
-      else{
+      } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           backgroundColor: Colors.red,
-          content: Text("Gagal mendapatkan data profile", style: poppins,),
+          content: Text(
+            "Gagal mendapatkan data profile",
+            style: poppins,
+          ),
           duration: const Duration(seconds: 1),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
@@ -173,7 +185,6 @@ class _ProfilePageState extends State<ProfilePage> {
                   SharedPreferences preferences =
                       await SharedPreferences.getInstance();
                   await preferences.remove('loginData');
-                  // ignore: use_build_context_synchronously
                   Navigator.pushAndRemoveUntil(
                       context,
                       PageTransition(
@@ -269,8 +280,12 @@ class _ProfilePageState extends State<ProfilePage> {
                         child: Center(
                           child: Text(
                             getInitials(
-                              (profileProvider.profileModel.data?.namaPelanggan ??
-                                  loginProvider.loginModel.data?.namaPelanggan ?? "-").toUpperCase(),
+                              (profileProvider
+                                          .profileModel.data?.namaPelanggan ??
+                                      loginProvider
+                                          .loginModel.data?.namaPelanggan ??
+                                      "-")
+                                  .toUpperCase(),
                             ),
                             style: poppins.copyWith(
                               fontWeight: bold,
@@ -284,16 +299,25 @@ class _ProfilePageState extends State<ProfilePage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             profileData(
-                              title: (profileProvider.profileModel.data?.namaPelanggan ??
-                                  loginProvider.loginModel.data?.namaPelanggan ?? "-"),
+                              title: (profileProvider
+                                      .profileModel.data?.namaPelanggan ??
+                                  loginProvider
+                                      .loginModel.data?.namaPelanggan ??
+                                  "-"),
                             ),
                             profileData(
-                              title: (profileProvider.profileModel.data?.emailPelanggan ??
-                                  loginProvider.loginModel.data?.emailPelanggan ?? "-"),
+                              title: (profileProvider
+                                      .profileModel.data?.emailPelanggan ??
+                                  loginProvider
+                                      .loginModel.data?.emailPelanggan ??
+                                  "-"),
                             ),
                             profileData(
-                              title: (profileProvider.profileModel.data?.telpPelanggan ??
-                                  loginProvider.loginModel.data?.telpPelanggan ?? "-"),
+                              title: (profileProvider
+                                      .profileModel.data?.telpPelanggan ??
+                                  loginProvider
+                                      .loginModel.data?.telpPelanggan ??
+                                  "-"),
                             ),
                           ],
                         ),
@@ -306,7 +330,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   actionWidget(
                     icon: Icons.edit,
                     title: "Edit Profil",
-                    onTap: (){
+                    onTap: () {
                       _handleTapEditProfil();
                     },
                   ),
