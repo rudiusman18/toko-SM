@@ -19,7 +19,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  get type => null;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -27,35 +27,39 @@ class _ProfilePageState extends State<ProfilePage> {
     ProfileProvider profileProvider = Provider.of<ProfileProvider>(context);
     CabangProvider cabangProvider = Provider.of<CabangProvider>(context);
 
-    // ignore: no_leading_underscores_for_local_identifiers
     _loading() {
       showDialog(
           context: context,
           builder: (BuildContext context) {
-            return Scaffold(
-              backgroundColor: Colors.transparent,
-              body: Center(
-                child: Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.sizeOf(context).width * 0.3,
-                        height: MediaQuery.sizeOf(context).width * 0.3,
-                        child: CircularProgressIndicator(
-                          color: backgroundColor3,
+            return WillPopScope(
+              onWillPop: () async {
+                return false;
+              },
+              child: Scaffold(
+                backgroundColor: Colors.transparent,
+                body: Center(
+                  child: Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.sizeOf(context).width * 0.3,
+                          height: MediaQuery.sizeOf(context).width * 0.3,
+                          child: CircularProgressIndicator(
+                            color: backgroundColor3,
+                          ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Text("Loading...", style: poppins),
-                    ],
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Text("Loading...", style: poppins),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -66,6 +70,7 @@ class _ProfilePageState extends State<ProfilePage> {
     _handleTapEditProfil() async {
       setState(() {
         _loading();
+        isLoading = true;
       });
       if (await profileProvider.getProfile(
           token: loginProvider.loginModel.token ?? "",
@@ -82,6 +87,7 @@ class _ProfilePageState extends State<ProfilePage> {
             Navigator.pop(context);
             setState(() {
               _loading();
+              isLoading = true;
             });
             if (await profileProvider.getProfile(
                 token: loginProvider.loginModel.token ?? "",
@@ -89,6 +95,7 @@ class _ProfilePageState extends State<ProfilePage> {
             } else {}
             setState(() {
               Navigator.pop(context);
+              isLoading = false;
             });
           });
         } else {

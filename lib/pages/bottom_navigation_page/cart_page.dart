@@ -23,6 +23,7 @@ class CartPage extends StatefulWidget {
 class _CartPageState extends State<CartPage> {
   CartModel cartModel = CartModel();
   int indexCabang = 0;
+  bool isLoading = false;
 
   LoginModel loginmodel = LoginModel();
   List<String> listCabang = [];
@@ -49,6 +50,9 @@ class _CartPageState extends State<CartPage> {
         Provider.of<LoginProvider>(context, listen: false);
     CartProvider cartProvider =
         Provider.of<CartProvider>(context, listen: false);
+    setState(() {
+      isLoading = true;
+    });
     if (await cartProvider.getCart(
         token: loginProvider.loginModel.token ?? "")) {
       setState(() {
@@ -113,6 +117,9 @@ class _CartPageState extends State<CartPage> {
             "isi loginModel adalah: ${loginmodel.data?.namaCabang} dengan index: $indexCabang dengan ${(cartModel.data?.length)}");
       });
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   _updateCartProduct({
@@ -772,66 +779,76 @@ class _CartPageState extends State<CartPage> {
     return Scaffold(
       body: SafeArea(
         child: Container(
-          color: Colors.white,
-          width: MediaQuery.sizeOf(context).width,
+          color: Colors.grey.withOpacity(0.02),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               header(),
-              cartModel.data?.isEmpty ?? true
-                  ? const SizedBox()
-                  : Container(
-                      margin: const EdgeInsets.only(top: 20),
-                      child: DropdownMenu<String>(
-                        width: MediaQuery.sizeOf(context).width - 20,
-                        initialSelection:
-                            cartModel.data?[indexCabang].namaCabang,
-                        onSelected: (String? value) {
-                          // This is called when the user selects an item.
-                          setState(() {
-                            indexCabang = cartModel.data
-                                    // ignore: unrelated_type_equality_checks
-                                    ?.indexWhere((item) =>
-                                        item.namaCabang?.toLowerCase() ==
-                                        value?.toLowerCase()) ??
-                                0;
-
-                            indexCabang = indexCabang < 0 ? 0 : indexCabang;
-                            _initCartProduct();
-                          });
-                        },
-                        dropdownMenuEntries: listCabang
-                            .map<DropdownMenuEntry<String>>((String value) {
-                          return DropdownMenuEntry<String>(
-                              value: value, label: value);
-                        }).toList(),
-                      ),
-                    ),
-              Expanded(
-                child: //emptyCart()
-                    cartModel.data?.isEmpty ?? true
-                        ? emptyCart()
-                        : ListView(
-                            children: [
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              for (var i = 0;
-                                  i <
-                                      (cartModel.data?[indexCabang].data
-                                              ?.length ??
-                                          0);
-                                  i++)
-                                cartItem(index: i),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                            ],
+              isLoading
+                  ? Expanded(
+                      child: Container(
+                        width: double.infinity,
+                        alignment:
+                            Alignment.center, // Center content vertically
+                        child: SizedBox(
+                          width: 40,
+                          height: 40,
+                          child: CircularProgressIndicator(
+                            backgroundColor: backgroundColor3,
+                            color: backgroundColor1,
                           ),
-              ),
-              // ignore: prefer_const_constructors
-              cartModel.data?.isEmpty ?? true ? SizedBox() : bottomView(),
+                        ),
+                      ),
+                    )
+                  : cartModel.data?.isEmpty ?? true
+                      ? const SizedBox()
+                      : Container(
+                          margin: const EdgeInsets.only(top: 20),
+                          child: DropdownMenu<String>(
+                            width: MediaQuery.sizeOf(context).width - 20,
+                            initialSelection:
+                                cartModel.data?[indexCabang].namaCabang,
+                            onSelected: (String? value) {
+                              setState(() {
+                                indexCabang = cartModel.data?.indexWhere(
+                                        (item) =>
+                                            item.namaCabang?.toLowerCase() ==
+                                            value?.toLowerCase()) ??
+                                    0;
+                                indexCabang = indexCabang < 0 ? 0 : indexCabang;
+                                _initCartProduct();
+                              });
+                            },
+                            dropdownMenuEntries: listCabang
+                                .map<DropdownMenuEntry<String>>((String value) {
+                              return DropdownMenuEntry<String>(
+                                  value: value, label: value);
+                            }).toList(),
+                          ),
+                        ),
+              isLoading
+                  ? const SizedBox()
+                  : Expanded(
+                      child: cartModel.data?.isEmpty ?? true
+                          ? emptyCart()
+                          : ListView(
+                              children: [
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                for (var i = 0;
+                                    i <
+                                        (cartModel.data?[indexCabang].data
+                                                ?.length ??
+                                            0);
+                                    i++)
+                                  cartItem(index: i),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                              ],
+                            ),
+                    ),
+              cartModel.data?.isEmpty ?? true ? const SizedBox() : bottomView(),
             ],
           ),
         ),

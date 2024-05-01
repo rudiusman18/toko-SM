@@ -54,6 +54,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   // detail data product
   bool isLoading = false;
+  bool initLoading = false;
+  bool favoriteLoading = false;
   DetailProductModel detailProduct = DetailProductModel();
   FavoriteModel favoriteProduct = FavoriteModel();
 
@@ -67,7 +69,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   _getDetailproduct() async {
     setState(() {
-      isLoading = true;
+      initLoading = true;
     });
     ProductProvider productProvider =
         Provider.of<ProductProvider>(context, listen: false);
@@ -77,12 +79,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         productId: widget.productId ?? "",
         token: loginProvider.loginModel.token ?? "")) {
       setState(() {
-        isLoading = false;
+        initLoading = false;
         detailProduct = productProvider.detailProductModel;
       });
     } else {
       setState(() {
-        isLoading = false;
+        initLoading = false;
       });
     }
   }
@@ -92,6 +94,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         Provider.of<ProductProvider>(context, listen: false);
     LoginProvider loginProvider =
         Provider.of<LoginProvider>(context, listen: false);
+    setState(() {
+      favoriteLoading = true;
+    });
     if (await productProvider.getFavoriteProduct(
         token: loginProvider.loginModel.token ?? "")) {
       setState(() {
@@ -102,11 +107,17 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 widget.productName?.toLowerCase())
             .toList();
       });
+      setState(() {
+        favoriteLoading = false;
+      });
 
       print(
           "isi favorite page untuk product ${widget.productName} adalah ${favoriteProduct.data}");
     } else {
       print("ada yang salah dengan logikamu");
+      setState(() {
+        favoriteLoading = false;
+      });
     }
   }
 
@@ -183,11 +194,16 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             ),
             const Spacer(),
             InkWell(
-              onTap: () async{
-                int? cabangId = detailProduct.data?.stok?.where((element) => element.cabang?.toLowerCase() == widget.productLoct?.toLowerCase()).first.cabangId;
+              onTap: () async {
+                int? cabangId = detailProduct.data?.stok
+                    ?.where((element) =>
+                        element.cabang?.toLowerCase() ==
+                        widget.productLoct?.toLowerCase())
+                    .first
+                    .cabangId;
                 print("cabangId yang akan digunakan adalah: $cabangId");
                 // CartModel
-                if(detailProduct.data != null){
+                if (detailProduct.data != null) {
                   setState(() {
                     isLoading = true;
                   });
@@ -197,7 +213,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       productId: detailProduct.data?.id ?? 0)) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       backgroundColor: backgroundColor1,
-                      content: Text("produk ${detailProduct.data?.namaProduk} berhasil ditambahkan", style: poppins,),
+                      content: Text(
+                        "produk ${detailProduct.data?.namaProduk} berhasil ditambahkan",
+                        style: poppins,
+                      ),
                       duration: const Duration(seconds: 1),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
@@ -206,15 +225,21 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         label: 'Lihat Keranjang',
                         textColor: Colors.white,
                         onPressed: () {
-                          Navigator.pushReplacement(context, PageTransition(child: const CartPage(), type: PageTransitionType.bottomToTop));
+                          Navigator.pushReplacement(
+                              context,
+                              PageTransition(
+                                  child: const CartPage(),
+                                  type: PageTransitionType.bottomToTop));
                         },
                       ),
                     ));
-                  }
-                  else{
+                  } else {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       backgroundColor: Colors.red,
-                      content: Text("Gagal memasukkan produk kedalam keranjang", style: poppins,),
+                      content: Text(
+                        "Gagal memasukkan produk kedalam keranjang",
+                        style: poppins,
+                      ),
                       duration: const Duration(seconds: 1),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
@@ -225,10 +250,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   setState(() {
                     isLoading = false;
                   });
-                }else{
+                } else {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     backgroundColor: Colors.red,
-                    content: Text("Gagal memasukkan produk kedalam keranjang", style: poppins,),
+                    content: Text(
+                      "Gagal memasukkan produk kedalam keranjang",
+                      style: poppins,
+                    ),
                     duration: const Duration(seconds: 1),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
@@ -250,6 +278,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 setState(() {});
                 fToast.removeCustomToast();
                 if (favoriteProduct.data?.isEmpty ?? true) {
+                  setState(() {
+                    favoriteLoading = true;
+                  });
                   await productProvider.postFavoriteProduct(
                     token: loginProvider.loginModel.token ?? "",
                     productId: widget.productId.toString(),
@@ -274,6 +305,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     gravity: ToastGravity.CENTER,
                   );
                 } else {
+                  setState(() {
+                    favoriteLoading = true;
+                  });
                   await productProvider.deleteFavoriteProduct(
                     token: loginProvider.loginModel.token ?? "",
                     productId: widget.productId.toString(),
@@ -283,13 +317,17 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               },
               child: Container(
                 padding: const EdgeInsets.all(10),
-                child: Icon(
-                  favoriteProduct.data?.isEmpty ?? true
-                      ? Icons.favorite_border
-                      : Icons.favorite,
-                  color: Colors.white,
-                  size: 30,
-                ),
+                child: favoriteLoading
+                    ? const CircularProgressIndicator(
+                        color: Colors.white,
+                      )
+                    : Icon(
+                        favoriteProduct.data?.isEmpty ?? true
+                            ? Icons.favorite_border
+                            : Icons.favorite,
+                        color: Colors.white,
+                        size: 30,
+                      ),
               ),
             ),
           ],
@@ -717,10 +755,15 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
         child: TextButton(
             onPressed: () async {
-              int? cabangId = detailProduct.data?.stok?.where((element) => element.cabang?.toLowerCase() == widget.productLoct?.toLowerCase()).first.cabangId;
+              int? cabangId = detailProduct.data?.stok
+                  ?.where((element) =>
+                      element.cabang?.toLowerCase() ==
+                      widget.productLoct?.toLowerCase())
+                  .first
+                  .cabangId;
               print("cabangId yang akan digunakan adalah: $cabangId");
               // CartModel
-              if(detailProduct.data != null){
+              if (detailProduct.data != null) {
                 setState(() {
                   isLoading = true;
                 });
@@ -730,7 +773,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     productId: detailProduct.data?.id ?? 0)) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     backgroundColor: backgroundColor1,
-                    content: Text("produk ${detailProduct.data?.namaProduk} berhasil ditambahkan", style: poppins,),
+                    content: Text(
+                      "produk ${detailProduct.data?.namaProduk} berhasil ditambahkan",
+                      style: poppins,
+                    ),
                     duration: const Duration(seconds: 1),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
@@ -739,35 +785,43 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       label: 'Lihat Keranjang',
                       textColor: Colors.white,
                       onPressed: () {
-                        Navigator.pushReplacement(context, PageTransition(child: const CartPage(), type: PageTransitionType.bottomToTop));
+                        Navigator.pushReplacement(
+                            context,
+                            PageTransition(
+                                child: const CartPage(),
+                                type: PageTransitionType.bottomToTop));
                       },
                     ),
                   ));
                   setState(() {
                     isLoading = false;
                   });
-                }
-                else{
+                } else {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     backgroundColor: Colors.red,
-                    content: Text("Gagal memasukkan produk kedalam keranjang", style: poppins,),
+                    content: Text(
+                      "Gagal memasukkan produk kedalam keranjang",
+                      style: poppins,
+                    ),
                     duration: const Duration(seconds: 1),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                     ),
                   ));
                 }
-              }else{
+              } else {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   backgroundColor: Colors.red,
-                  content: Text("Gagal memasukkan produk kedalam keranjang", style: poppins,),
+                  content: Text(
+                    "Gagal memasukkan produk kedalam keranjang",
+                    style: poppins,
+                  ),
                   duration: const Duration(seconds: 1),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
                 ));
               }
-
             },
             style: TextButton.styleFrom(
               backgroundColor: backgroundColor3,
@@ -779,22 +833,25 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  isLoading ? SizedBox() : const Icon(
-                    Icons.shopping_cart,
-                    color: Colors.white,
-                  ),
-                  isLoading ? Container(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(
-                      color: Colors.white,
-                    ),
-                  ) :
-                  Text(
-                    "Masukkan Keranjang",
-                    style: poppins.copyWith(
-                        fontWeight: medium, color: Colors.white),
-                  ),
+                  isLoading
+                      ? const SizedBox()
+                      : const Icon(
+                          Icons.shopping_cart,
+                          color: Colors.white,
+                        ),
+                  isLoading
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                          ),
+                        )
+                      : Text(
+                          "Masukkan Keranjang",
+                          style: poppins.copyWith(
+                              fontWeight: medium, color: Colors.white),
+                        ),
                 ],
               ),
             )),

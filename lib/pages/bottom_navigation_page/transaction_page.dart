@@ -20,6 +20,7 @@ class TransactionPage extends StatefulWidget {
 class _TransactionPageState extends State<TransactionPage> {
   TransactionModel transactionModel = TransactionModel();
   final currencyFormatter = NumberFormat('#,##0.00', 'ID');
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -32,6 +33,9 @@ class _TransactionPageState extends State<TransactionPage> {
         Provider.of<LoginProvider>(context, listen: false);
     TransaksiProvider transactionProvider =
         Provider.of<TransaksiProvider>(context, listen: false);
+    setState(() {
+      isLoading = true;
+    });
     if (await transactionProvider.getTransaction(
         token: loginProvider.loginModel.token ?? "",
         customerId: loginProvider.loginModel.data?.id ?? 0)) {
@@ -51,6 +55,9 @@ class _TransactionPageState extends State<TransactionPage> {
         ),
       ));
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
@@ -271,23 +278,33 @@ class _TransactionPageState extends State<TransactionPage> {
         backgroundColor: backgroundColor3,
       ),
       body: SafeArea(
-        child: Container(
-          color: Colors.white,
-          width: MediaQuery.sizeOf(context).width,
-          child: (transactionModel.data?.length ?? 0) == 0
-              ? emptyTransaction()
-              : ListView(
-                  children: [
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    for (var i = 0;
-                        i < (transactionModel.data?.length ?? 0);
-                        i++)
-                      transactionItem(index: i)
-                  ],
+        child: isLoading
+            ? Center(
+                child: SizedBox(
+                  width: 40,
+                  height: 40,
+                  child: CircularProgressIndicator(
+                    color: backgroundColor1,
+                  ),
                 ),
-        ),
+              )
+            : Container(
+                color: Colors.white,
+                width: MediaQuery.sizeOf(context).width,
+                child: (transactionModel.data?.length ?? 0) == 0
+                    ? emptyTransaction()
+                    : ListView(
+                        children: [
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          for (var i = 0;
+                              i < (transactionModel.data?.length ?? 0);
+                              i++)
+                            transactionItem(index: i)
+                        ],
+                      ),
+              ),
       ),
     );
   }

@@ -1,4 +1,4 @@
-import 'dart:ffi';
+// ignore_for_file: prefer_const_constructors
 
 import 'package:intl/intl.dart';
 import 'package:tokoSM/models/favorite_model.dart';
@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/product_model.dart';
 import '../../theme/theme.dart';
 
 class WishlistPage extends StatefulWidget {
@@ -30,6 +29,7 @@ class _WishlistPageState extends State<WishlistPage> {
   bool scrollIsAtEnd = false;
   int page = 1;
   bool favoriteProductisReachEnd = false;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -59,7 +59,9 @@ class _WishlistPageState extends State<WishlistPage> {
     final loginProvider = Provider.of<LoginProvider>(context, listen: false);
     final productProvider =
         Provider.of<ProductProvider>(context, listen: false);
-
+    setState(() {
+      isLoading = true;
+    });
     if (await productProvider.getFavoriteProduct(
       token: loginProvider.loginModel.token ?? "",
       page: page,
@@ -81,6 +83,9 @@ class _WishlistPageState extends State<WishlistPage> {
         }
       });
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
@@ -325,39 +330,51 @@ class _WishlistPageState extends State<WishlistPage> {
         child: Column(
           children: [
             header(),
-            Expanded(
-              child: (favoriteProduct.data ?? []).isNotEmpty
-                  ? SingleChildScrollView(
-                      controller: scrollController,
-                      child: Column(
-                        children: [
-                          for (var i = 0;
-                              i < (favoriteProduct.data?.length ?? 0);
-                              i++)
-                            verticalListItem(i),
-                          scrollIsAtEnd == true &&
-                                  favoriteProductisReachEnd == false
-                              ? Center(
-                                  child: Container(
-                                    margin: const EdgeInsets.only(
-                                      top: 10,
-                                    ),
-                                    width: 15,
-                                    height: 15,
-                                    child: CircularProgressIndicator(
-                                      color: backgroundColor1,
-                                    ),
-                                  ),
-                                )
-                              : const SizedBox(),
-                          const SizedBox(
-                            height: 40,
-                          ),
-                        ],
+            isLoading
+                ? Expanded(
+                    child: Center(
+                      child: SizedBox(
+                        width: 40,
+                        height: 40,
+                        child: CircularProgressIndicator(
+                          color: backgroundColor1,
+                        ),
                       ),
-                    )
-                  : emptyWishlist(),
-            ),
+                    ),
+                  )
+                : Expanded(
+                    child: (favoriteProduct.data ?? []).isNotEmpty
+                        ? SingleChildScrollView(
+                            controller: scrollController,
+                            child: Column(
+                              children: [
+                                for (var i = 0;
+                                    i < (favoriteProduct.data?.length ?? 0);
+                                    i++)
+                                  verticalListItem(i),
+                                scrollIsAtEnd == true &&
+                                        favoriteProductisReachEnd == false
+                                    ? Center(
+                                        child: Container(
+                                          margin: const EdgeInsets.only(
+                                            top: 10,
+                                          ),
+                                          width: 15,
+                                          height: 15,
+                                          child: CircularProgressIndicator(
+                                            color: backgroundColor1,
+                                          ),
+                                        ),
+                                      )
+                                    : const SizedBox(),
+                                const SizedBox(
+                                  height: 40,
+                                ),
+                              ],
+                            ),
+                          )
+                        : emptyWishlist(),
+                  ),
           ],
         ),
       ),

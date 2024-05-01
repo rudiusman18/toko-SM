@@ -30,6 +30,7 @@ class CategoryPage extends StatefulWidget {
 
 class _CategoryPageState extends State<CategoryPage> {
   CategoryModel categoryModel = CategoryModel();
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -38,12 +39,18 @@ class _CategoryPageState extends State<CategoryPage> {
     LoginProvider loginProvider =
         Provider.of<LoginProvider>(context, listen: false);
     Future.delayed(Duration.zero, () async {
+      setState(() {
+        isLoading = true;
+      });
       if (await categoryProvider.getCategory(
           token: loginProvider.loginModel.token ?? "")) {
         setState(() {
           categoryModel = categoryProvider.categoryModel;
         });
       }
+      setState(() {
+        isLoading = false;
+      });
     });
     super.initState();
   }
@@ -132,90 +139,107 @@ class _CategoryPageState extends State<CategoryPage> {
         child: Column(
           children: [
             header(),
-            Expanded(
-              child: ListView(
-                children: [
-                  for (var i = 0; i < (categoryModel.data?.length ?? 0); i++)
-                    ExpandableNotifier(
-                        child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Card(
-                        clipBehavior: Clip.antiAlias,
-                        child: ScrollOnExpand(
-                          scrollOnExpand: true,
-                          scrollOnCollapse: false,
-                          child: ExpandablePanel(
-                            theme: const ExpandableThemeData(
-                              headerAlignment:
-                                  ExpandablePanelHeaderAlignment.center,
-                              tapBodyToCollapse: true,
-                            ),
-                            header: Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: Text(
-                                  "${categoryModel.data?[i].kat1}",
-                                  style: poppins.copyWith(
-                                    fontWeight: bold,
-                                  ),
-                                )),
-                            collapsed: const SizedBox(),
-                            expanded: Column(
-                              children: [
-                                for (int j = 0;
-                                    j <
-                                        (categoryModel.data?[i].child?.length ??
-                                            0);
-                                    j++)
-                                  ExpandableNotifier(
-                                    child: ExpandablePanel(
-                                      theme: const ExpandableThemeData(
-                                        headerAlignment:
-                                            ExpandablePanelHeaderAlignment
-                                                .center,
-                                        tapBodyToCollapse: true,
-                                      ),
-                                      header: Padding(
-                                          padding: const EdgeInsets.all(10),
-                                          child: Text(
-                                            "${categoryModel.data?[i].child?[j].kat2}",
-                                            style: poppins.copyWith(
-                                              fontWeight: bold,
-                                            ),
-                                          )),
-                                      collapsed: const SizedBox(),
-                                      expanded: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 10,
-                                        ),
-                                        width: double.infinity,
-                                        child: expandedItem(
-                                          kat1Index: i,
-                                          kat2Index: j,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                              ],
-                            ),
-                            builder: (_, collapsed, expanded) {
-                              return Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 10, right: 10, bottom: 10),
-                                child: Expandable(
-                                  collapsed: collapsed,
-                                  expanded: expanded,
-                                  theme: const ExpandableThemeData(
-                                      crossFadePoint: 0),
-                                ),
-                              );
-                            },
-                          ),
+            isLoading
+                ? Expanded(
+                    child: Center(
+                      child: SizedBox(
+                        width: 40,
+                        height: 40,
+                        child: CircularProgressIndicator(
+                          color: backgroundColor1,
                         ),
                       ),
-                    )),
-                ],
-              ),
-            ),
+                    ),
+                  )
+                : Expanded(
+                    child: ListView(
+                      children: [
+                        for (var i = 0;
+                            i < (categoryModel.data?.length ?? 0);
+                            i++)
+                          ExpandableNotifier(
+                              child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Card(
+                              clipBehavior: Clip.antiAlias,
+                              child: ScrollOnExpand(
+                                scrollOnExpand: true,
+                                scrollOnCollapse: false,
+                                child: ExpandablePanel(
+                                  theme: const ExpandableThemeData(
+                                    headerAlignment:
+                                        ExpandablePanelHeaderAlignment.center,
+                                    tapBodyToCollapse: true,
+                                  ),
+                                  header: Padding(
+                                      padding: const EdgeInsets.all(10),
+                                      child: Text(
+                                        "${categoryModel.data?[i].kat1}",
+                                        style: poppins.copyWith(
+                                          fontWeight: bold,
+                                        ),
+                                      )),
+                                  collapsed: const SizedBox(),
+                                  expanded: Column(
+                                    children: [
+                                      for (int j = 0;
+                                          j <
+                                              (categoryModel
+                                                      .data?[i].child?.length ??
+                                                  0);
+                                          j++)
+                                        ExpandableNotifier(
+                                          child: ExpandablePanel(
+                                            theme: const ExpandableThemeData(
+                                              headerAlignment:
+                                                  ExpandablePanelHeaderAlignment
+                                                      .center,
+                                              tapBodyToCollapse: true,
+                                            ),
+                                            header: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(10),
+                                                child: Text(
+                                                  "${categoryModel.data?[i].child?[j].kat2}",
+                                                  style: poppins.copyWith(
+                                                    fontWeight: bold,
+                                                  ),
+                                                )),
+                                            collapsed: const SizedBox(),
+                                            expanded: Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                horizontal: 10,
+                                              ),
+                                              width: double.infinity,
+                                              child: expandedItem(
+                                                kat1Index: i,
+                                                kat2Index: j,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                  builder: (_, collapsed, expanded) {
+                                    return Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 10, right: 10, bottom: 10),
+                                      child: Expandable(
+                                        collapsed: collapsed,
+                                        expanded: expanded,
+                                        theme: const ExpandableThemeData(
+                                            crossFadePoint: 0),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ),
+                          )),
+                      ],
+                    ),
+                  ),
           ],
         ),
       ),

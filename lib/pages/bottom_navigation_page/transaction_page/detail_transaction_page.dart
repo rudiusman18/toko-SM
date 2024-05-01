@@ -239,11 +239,25 @@ class DetailTransactionPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "Detail Produk",
-              style: poppins.copyWith(
-                fontWeight: bold,
-              ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Detail Produk",
+                  style: poppins.copyWith(
+                    fontWeight: bold,
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    "Cabang ${transactionDetailItem.cabangId} (perlu diganti namanya)",
+                    style: poppins.copyWith(
+                      fontWeight: bold,
+                    ),
+                    textAlign: TextAlign.end,
+                  ),
+                )
+              ],
             ),
             const SizedBox(
               height: 10,
@@ -252,6 +266,265 @@ class DetailTransactionPage extends StatelessWidget {
                 i < (transactionDetailItem.produk?.length ?? 0);
                 i++)
               detailPRoductViewItem(index: i),
+          ],
+        ),
+      );
+    }
+
+    Widget infoPengirimanView() {
+      return Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.2),
+              blurRadius: 4,
+              offset: const Offset(2, 8), // Shadow position
+            ),
+          ],
+        ),
+        padding: const EdgeInsets.all(
+          20,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Informasi Pengiriman",
+              style: poppins.copyWith(
+                fontWeight: bold,
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            // NOTE: Kurir
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Kurir",
+                  style: poppins.copyWith(
+                    fontSize: 12,
+                  ),
+                ),
+                const SizedBox(
+                  width: 105,
+                ),
+                Flexible(
+                  fit: FlexFit.tight,
+                  flex: 10,
+                  child: Text(
+                    "${transactionDetailItem.namaKurir}",
+                    style: poppins.copyWith(
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            // NOTE: NO Resi
+
+            // Row(
+            //   crossAxisAlignment: CrossAxisAlignment.start,
+            //   children: [
+            //     Text(
+            //       "Nomor Resi",
+            //       style: poppins.copyWith(
+            //         fontSize: 12,
+            //       ),
+            //     ),
+            //     const SizedBox(
+            //       width: 63,
+            //     ),
+            //     Flexible(
+            //       fit: FlexFit.tight,
+            //       flex: 10,
+            //       child: Text(
+            //         "${transactionDetailItem.sId}",
+            //         style: poppins.copyWith(
+            //           fontSize: 12,
+            //         ),
+            //       ),
+            //     ),
+            //   ],
+            // ),
+            // const SizedBox(
+            //   height: 10,
+            // ),
+            // NOTE: Alamat
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Alamat",
+                  style: poppins.copyWith(
+                    fontSize: 12,
+                  ),
+                ),
+                const SizedBox(
+                  width: 88,
+                ),
+                Flexible(
+                  fit: FlexFit.tight,
+                  flex: 10,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "${transactionDetailItem.namaPenerima}",
+                        style: poppins.copyWith(
+                          fontSize: 12,
+                          fontWeight: bold,
+                        ),
+                      ),
+                      Text(
+                        "${transactionDetailItem.alamatPenerima}",
+                        style: poppins.copyWith(
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget infoPembayaranView() {
+      return Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.2),
+              blurRadius: 4,
+              offset: const Offset(2, 8), // Shadow position
+            ),
+          ],
+        ),
+        padding: const EdgeInsets.all(
+          20,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // NOTE: Metode Pembayaran
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Metode Pembayaran",
+                  style: poppins.copyWith(
+                    fontSize: 12,
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Flexible(
+                  fit: FlexFit.tight,
+                  flex: 1,
+                  child: Text(
+                    "${transactionDetailItem.bankTransfer}",
+                    style: poppins.copyWith(
+                      fontSize: 12,
+                    ),
+                    textAlign: TextAlign.end,
+                  ),
+                ),
+              ],
+            ),
+            Divider(
+              color: Colors.grey.withOpacity(0.5),
+              thickness: 1,
+            ),
+            // NOTE: Total harga
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Total Harga (${transactionDetailItem.produk?.length} Barang)",
+                  style: poppins.copyWith(
+                    fontSize: 12,
+                  ),
+                ),
+                Flexible(
+                  fit: FlexFit.tight,
+                  flex: 1,
+                  child: Text(
+                    "Rp ${currencyFormatter.format(transactionDetailItem.totalBelanja!.toInt() - 15000)}",
+                    style: poppins.copyWith(
+                      fontSize: 12,
+                    ),
+                    textAlign: TextAlign.right,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            // NOTE: Total Ongkos Kirim
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Total Ongkos Kirim",
+                  style: poppins.copyWith(
+                    fontSize: 12,
+                  ),
+                ),
+                Flexible(
+                  fit: FlexFit.tight,
+                  flex: 1,
+                  child: Text(
+                    "Rp ${currencyFormatter.format(15000)}",
+                    style: poppins.copyWith(
+                      fontSize: 12,
+                    ),
+                    textAlign: TextAlign.end,
+                  ),
+                ),
+              ],
+            ),
+            Divider(
+              color: Colors.grey.withOpacity(0.5),
+              thickness: 1,
+            ),
+            // NOTE: Total Belanja
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Total Belanja",
+                  style: poppins.copyWith(
+                    fontWeight: bold,
+                  ),
+                ),
+                Flexible(
+                  fit: FlexFit.tight,
+                  flex: 1,
+                  child: Text(
+                    "Rp ${currencyFormatter.format(transactionDetailItem.totalBelanja)}",
+                    style: poppins.copyWith(
+                      fontWeight: bold,
+                    ),
+                    textAlign: TextAlign.right,
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       );
@@ -274,6 +547,17 @@ class DetailTransactionPage extends StatelessWidget {
             height: 5,
           ),
           detailProductView(),
+          const SizedBox(
+            height: 5,
+          ),
+          infoPengirimanView(),
+          const SizedBox(
+            height: 5,
+          ),
+          infoPembayaranView(),
+          const SizedBox(
+            height: 15,
+          ),
         ],
       ),
     );
