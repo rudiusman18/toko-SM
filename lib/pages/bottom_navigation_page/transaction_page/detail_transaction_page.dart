@@ -250,7 +250,7 @@ class DetailTransactionPage extends StatelessWidget {
                 ),
                 Expanded(
                   child: Text(
-                    "Cabang ${transactionDetailItem.cabangId} (perlu diganti namanya)",
+                    "Cabang ${transactionDetailItem.cabangId}", // (perlu diganti namanya)
                     style: poppins.copyWith(
                       fontWeight: bold,
                     ),
