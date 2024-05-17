@@ -173,10 +173,28 @@ class _CategoryPageState extends State<CategoryPage> {
                                   ),
                                   header: Padding(
                                       padding: const EdgeInsets.all(10),
-                                      child: Text(
-                                        "${categoryModel.data?[i].kat1}",
-                                        style: poppins.copyWith(
-                                          fontWeight: bold,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              PageTransition(
+                                                  child:
+                                                      ProductListSearchResult(
+                                                    searchKeyword: "",
+                                                    sort: "",
+                                                    category:
+                                                        "${categoryModel.data?[i].kat1Slug}",
+                                                    categoryToShow:
+                                                        "${categoryModel.data?[i].kat1}",
+                                                  ),
+                                                  type: PageTransitionType
+                                                      .bottomToTop));
+                                        },
+                                        child: Text(
+                                          "${categoryModel.data?[i].kat1}",
+                                          style: poppins.copyWith(
+                                            fontWeight: bold,
+                                          ),
                                         ),
                                       )),
                                   collapsed: const SizedBox(),
@@ -199,10 +217,28 @@ class _CategoryPageState extends State<CategoryPage> {
                                             header: Padding(
                                                 padding:
                                                     const EdgeInsets.all(10),
-                                                child: Text(
-                                                  "${categoryModel.data?[i].child?[j].kat2}",
-                                                  style: poppins.copyWith(
-                                                    fontWeight: bold,
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    Navigator.push(
+                                                        context,
+                                                        PageTransition(
+                                                            child:
+                                                                ProductListSearchResult(
+                                                              searchKeyword: "",
+                                                              sort: "",
+                                                              category:
+                                                                  "${categoryModel.data?[i].kat1Slug},${categoryModel.data?[i].child?[j].kat2Slug}",
+                                                              categoryToShow:
+                                                                  "${categoryModel.data?[i].child?[j].kat2}",
+                                                            ),
+                                                            type: PageTransitionType
+                                                                .bottomToTop));
+                                                  },
+                                                  child: Text(
+                                                    "${categoryModel.data?[i].child?[j].kat2}",
+                                                    style: poppins.copyWith(
+                                                      fontWeight: bold,
+                                                    ),
                                                   ),
                                                 )),
                                             collapsed: const SizedBox(),

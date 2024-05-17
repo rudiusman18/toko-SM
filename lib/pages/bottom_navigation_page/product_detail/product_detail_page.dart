@@ -194,75 +194,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             ),
             const Spacer(),
             InkWell(
-              onTap: () async {
-                int? cabangId = detailProduct.data?.stok
-                    ?.where((element) =>
-                        element.cabang?.toLowerCase() ==
-                        widget.productLoct?.toLowerCase())
-                    .first
-                    .cabangId;
-                print("cabangId yang akan digunakan adalah: $cabangId");
-                // CartModel
-                if (detailProduct.data != null) {
-                  setState(() {
-                    isLoading = true;
-                  });
-                  if (await cartProvider.postCart(
-                      token: loginProvider.loginModel.token ?? "",
-                      cabangId: cabangId ?? 0,
-                      productId: detailProduct.data?.id ?? 0)) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      backgroundColor: backgroundColor1,
-                      content: Text(
-                        "produk ${detailProduct.data?.namaProduk} berhasil ditambahkan",
-                        style: poppins,
-                      ),
-                      duration: const Duration(seconds: 1),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      action: SnackBarAction(
-                        label: 'Lihat Keranjang',
-                        textColor: Colors.white,
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                              context,
-                              PageTransition(
-                                  child: const CartPage(),
-                                  type: PageTransitionType.bottomToTop));
-                        },
-                      ),
-                    ));
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      backgroundColor: Colors.red,
-                      content: Text(
-                        "Gagal memasukkan produk kedalam keranjang",
-                        style: poppins,
-                      ),
-                      duration: const Duration(seconds: 1),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ));
-                  }
-
-                  setState(() {
-                    isLoading = false;
-                  });
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    backgroundColor: Colors.red,
-                    content: Text(
-                      "Gagal memasukkan produk kedalam keranjang",
-                      style: poppins,
-                    ),
-                    duration: const Duration(seconds: 1),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ));
-                }
+              onTap: () {
+                Navigator.push(
+                    context,
+                    PageTransition(
+                        child: const CartPage(),
+                        type: PageTransitionType.rightToLeft));
               },
               child: Container(
                 padding: const EdgeInsets.all(10),
@@ -751,7 +688,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               : backgroundColor3,
                         ),
                         Text(
-                          "${detailProduct.data?.stok?[i].cabang}",
+                          "${detailProduct.data?.stok?[i].cabang} ${detailProduct.data?.stok?[i].cabang?.toLowerCase() == widget.productLoct?.toLowerCase() ? "(terpilih)" : ""}",
                           style: poppins,
                         ),
                         const Spacer(),
@@ -807,9 +744,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   productDetailsContent(
                       "Merk", "${detailProduct.data?.merkProduk}"),
                   productDetailsContent(
-                      "Satuan", "${detailProduct.data?.multisatuanUnit}"),
-                  productDetailsContent(
-                      "Stok", "${detailProduct.data?.multisatuanJumlah}"),
+                      "Satuan", "${detailProduct.data?.satuanProduk}"),
+                  productDetailsContent("Stok",
+                      "${detailProduct.data?.stok?.firstWhere((element) => element.cabang?.toLowerCase() == widget.productLoct?.toLowerCase()).stok}"),
                   productDetailsContent(
                       "Kategori", "${detailProduct.data?.kat3}"),
                   Text(
@@ -890,73 +827,83 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
         child: TextButton(
             onPressed: () async {
-              int? cabangId = detailProduct.data?.stok
-                  ?.where((element) =>
-                      element.cabang?.toLowerCase() ==
-                      widget.productLoct?.toLowerCase())
-                  .first
-                  .cabangId;
-              print("cabangId yang akan digunakan adalah: $cabangId");
-              // CartModel
-              if (detailProduct.data != null) {
-                setState(() {
-                  isLoading = true;
-                });
-                if (await cartProvider.postCart(
-                    token: loginProvider.loginModel.token ?? "",
-                    cabangId: cabangId ?? 0,
-                    productId: detailProduct.data?.id ?? 0)) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    backgroundColor: backgroundColor1,
-                    content: Text(
-                      "produk ${detailProduct.data?.namaProduk} berhasil ditambahkan",
-                      style: poppins,
-                    ),
-                    duration: const Duration(seconds: 1),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    action: SnackBarAction(
-                      label: 'Lihat Keranjang',
-                      textColor: Colors.white,
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                            context,
-                            PageTransition(
-                                child: const CartPage(),
-                                type: PageTransitionType.bottomToTop));
-                      },
-                    ),
-                  ));
-                  setState(() {
-                    isLoading = false;
+              // int? cabangId = detailProduct.data?.stok
+              //     ?.where((element) =>
+              //         element.cabang?.toLowerCase() ==
+              //         widget.productLoct?.toLowerCase())
+              //     .first
+              //     .cabangId;
+              // print("cabangId yang akan digunakan adalah: $cabangId");
+              // // CartModel
+              // if (detailProduct.data != null) {
+              //   setState(() {
+              //     isLoading = true;
+              //   });
+              //   if (await cartProvider.postCart(
+              //       token: loginProvider.loginModel.token ?? "",
+              //       cabangId: cabangId ?? 0,
+              //       productId: detailProduct.data?.id ?? 0)) {
+              //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              //       backgroundColor: backgroundColor1,
+              //       content: Text(
+              //         "produk ${detailProduct.data?.namaProduk} berhasil ditambahkan",
+              //         style: poppins,
+              //       ),
+              //       duration: const Duration(seconds: 1),
+              //       shape: RoundedRectangleBorder(
+              //         borderRadius: BorderRadius.circular(20),
+              //       ),
+              //       action: SnackBarAction(
+              //         label: 'Lihat Keranjang',
+              //         textColor: Colors.white,
+              //         onPressed: () {
+              //           Navigator.pushReplacement(
+              //               context,
+              //               PageTransition(
+              //                   child: const CartPage(),
+              //                   type: PageTransitionType.bottomToTop));
+              //         },
+              //       ),
+              //     ));
+              //     setState(() {
+              //       isLoading = false;
+              //     });
+              //   } else {
+              //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              //       backgroundColor: Colors.red,
+              //       content: Text(
+              //         "Gagal memasukkan produk kedalam keranjang",
+              //         style: poppins,
+              //       ),
+              //       duration: const Duration(seconds: 1),
+              //       shape: RoundedRectangleBorder(
+              //         borderRadius: BorderRadius.circular(20),
+              //       ),
+              //     ));
+              //   }
+              // } else {
+              //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              //     backgroundColor: Colors.red,
+              //     content: Text(
+              //       "Gagal memasukkan produk kedalam keranjang",
+              //       style: poppins,
+              //     ),
+              //     duration: const Duration(seconds: 1),
+              //     shape: RoundedRectangleBorder(
+              //       borderRadius: BorderRadius.circular(20),
+              //     ),
+              //   ));
+              // }
+              showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Container(
+                      margin: const EdgeInsets.all(
+                        20,
+                      ),
+                      child: Text("data"),
+                    );
                   });
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    backgroundColor: Colors.red,
-                    content: Text(
-                      "Gagal memasukkan produk kedalam keranjang",
-                      style: poppins,
-                    ),
-                    duration: const Duration(seconds: 1),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ));
-                }
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  backgroundColor: Colors.red,
-                  content: Text(
-                    "Gagal memasukkan produk kedalam keranjang",
-                    style: poppins,
-                  ),
-                  duration: const Duration(seconds: 1),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ));
-              }
             },
             style: TextButton.styleFrom(
               backgroundColor: backgroundColor3,
