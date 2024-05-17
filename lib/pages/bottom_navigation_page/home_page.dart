@@ -221,114 +221,143 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
-    Widget searchBar() {
+    Widget header() {
       return Container(
-        margin: const EdgeInsets.only(top: 30, bottom: 20, left: 20, right: 20),
+        margin: const EdgeInsets.only(
+          top: 20,
+          left: 20,
+          right: 20,
+        ),
         child: Row(
           children: [
             Expanded(
-              child: TextFormField(
-                onChanged: (value) {
-                  setState(() {
-                    print("search object: ${searchTextFieldController.text}");
-                    textSuggestion.clear();
-                    textSuggestion = textDatabase
-                        .where((element) =>
-                            element.toLowerCase().contains(value.toLowerCase()))
-                        .toList();
-                    print("isi listnya adalah $textSuggestion");
-                  });
-                },
-                textInputAction: TextInputAction.search,
-                controller: searchTextFieldController,
-                cursorColor: backgroundColor1,
-                focusNode: searchTextFieldFocusNode,
-                onFieldSubmitted: (_) {
-                  print(
-                      "object yang dicari adalah ${searchTextFieldController.text}");
-                  if (searchTextFieldController.text.isNotEmpty) {
-                    Navigator.push(
-                        context,
-                        PageTransition(
-                            child: ProductListSearchResult(
-                              searchKeyword: searchTextFieldController.text,
-                              sort: "",
-                              category: "",
-                              categoryToShow: "",
-                            ),
-                            type: PageTransitionType.fade));
-                    setState(() {
-                      searchTextFieldController.text = "";
-                      searchTextFieldFocusNode.canRequestFocus = false;
-                    });
-                  }
-                },
-                decoration: InputDecoration(
-                  hintText: "Cari Barang",
-                  hintStyle: poppins,
-                  prefixIcon: const Icon(Icons.search),
-                  prefixIconColor: searchTextFieldFocusNode.hasFocus
-                      ? backgroundColor1
-                      : Colors.grey,
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: backgroundColor1, width: 2.0),
-                    borderRadius: const BorderRadius.all(Radius.circular(7.0)),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.location_city,
+                    color: backgroundColor2,
                   ),
-                  border: const OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(7.0)),
+                  Text(
+                    "Cabang ${loginProvider.loginModel.data?.namaCabang ?? ""}",
+                    style: poppins.copyWith(
+                      color: backgroundColor2,
+                      fontSize: 16,
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
-            Container(
-              margin: const EdgeInsets.only(
-                left: 20,
-              ),
-              child: InkWell(
-                onTap: () {
-                  Navigator.push(
-                          context,
-                          PageTransition(
-                              child: const CartPage(),
-                              type: PageTransitionType.rightToLeft))
-                      .then((value) {
-                    _initBannerProduct();
-                    _initPalingLarisProduct();
-                    _initPromoProduct();
-                  });
-                },
-                child: Icon(
-                  Icons.shopping_cart,
-                  size: 30,
-                  color: backgroundColor3,
+            Row(
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(
+                    left: 20,
+                  ),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(
+                              context,
+                              PageTransition(
+                                  child: const CartPage(),
+                                  type: PageTransitionType.rightToLeft))
+                          .then((value) {
+                        _initBannerProduct();
+                        _initPalingLarisProduct();
+                        _initPromoProduct();
+                      });
+                    },
+                    child: Icon(
+                      Icons.shopping_cart,
+                      size: 30,
+                      color: backgroundColor3,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.only(
-                left: 20,
-              ),
-              child: InkWell(
-                onTap: () {
-                  Navigator.push(
-                          context,
-                          PageTransition(
-                              child: const ProfilePage(),
-                              type: PageTransitionType.rightToLeft))
-                      .then((value) {
-                    _initBannerProduct();
-                    _initPalingLarisProduct();
-                    _initPromoProduct();
-                  });
-                },
-                child: Icon(
-                  Icons.view_list,
-                  size: 30,
-                  color: backgroundColor3,
+                Container(
+                  margin: const EdgeInsets.only(
+                    left: 20,
+                  ),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(
+                              context,
+                              PageTransition(
+                                  child: const ProfilePage(),
+                                  type: PageTransitionType.rightToLeft))
+                          .then((value) {
+                        _initBannerProduct();
+                        _initPalingLarisProduct();
+                        _initPromoProduct();
+                      });
+                    },
+                    child: Icon(
+                      Icons.view_list,
+                      size: 30,
+                      color: backgroundColor3,
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
           ],
+        ),
+      );
+    }
+
+    Widget searchBar() {
+      return Container(
+        margin: const EdgeInsets.only(top: 20, bottom: 20, left: 20, right: 20),
+        child: TextFormField(
+          onChanged: (value) {
+            setState(() {
+              print("search object: ${searchTextFieldController.text}");
+              textSuggestion.clear();
+              textSuggestion = textDatabase
+                  .where((element) =>
+                      element.toLowerCase().contains(value.toLowerCase()))
+                  .toList();
+              print("isi listnya adalah $textSuggestion");
+            });
+          },
+          textInputAction: TextInputAction.search,
+          controller: searchTextFieldController,
+          cursorColor: backgroundColor1,
+          focusNode: searchTextFieldFocusNode,
+          onFieldSubmitted: (_) {
+            print(
+                "object yang dicari adalah ${searchTextFieldController.text}");
+            if (searchTextFieldController.text.isNotEmpty) {
+              Navigator.push(
+                  context,
+                  PageTransition(
+                      child: ProductListSearchResult(
+                        searchKeyword: searchTextFieldController.text,
+                        sort: "",
+                        category: "",
+                        categoryToShow: "",
+                      ),
+                      type: PageTransitionType.fade));
+              setState(() {
+                searchTextFieldController.text = "";
+                searchTextFieldFocusNode.canRequestFocus = false;
+              });
+            }
+          },
+          decoration: InputDecoration(
+            hintText: "Cari Barang",
+            hintStyle: poppins,
+            prefixIcon: const Icon(Icons.search),
+            prefixIconColor: searchTextFieldFocusNode.hasFocus
+                ? backgroundColor1
+                : Colors.grey,
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: backgroundColor1, width: 2.0),
+              borderRadius: const BorderRadius.all(Radius.circular(7.0)),
+            ),
+            border: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(7.0)),
+            ),
+          ),
         ),
       );
     }
@@ -507,7 +536,7 @@ class _HomePageState extends State<HomePage> {
                   },
                   child: Container(
                     width: 150,
-                    height: 300,
+                    height: 280,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(8),
@@ -615,28 +644,28 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ],
                               ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Icon(
-                                    Icons.location_city,
-                                    color: backgroundColor2,
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      "Cabang ${loginProvider.loginModel.data?.namaCabang ?? ""}",
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                      style: poppins.copyWith(
-                                        color: backgroundColor2,
-                                        fontWeight: medium,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              )
+                              // Row(
+                              //   mainAxisAlignment: MainAxisAlignment.start,
+                              //   crossAxisAlignment: CrossAxisAlignment.end,
+                              //   children: [
+                              //     Icon(
+                              //       Icons.location_city,
+                              //       color: backgroundColor2,
+                              //     ),
+                              //     Expanded(
+                              //       child: Text(
+                              //         "Cabang ${loginProvider.loginModel.data?.namaCabang ?? ""}",
+                              //         overflow: TextOverflow.ellipsis,
+                              //         maxLines: 1,
+                              //         style: poppins.copyWith(
+                              //           color: backgroundColor2,
+                              //           fontWeight: medium,
+                              //           fontSize: 12,
+                              //         ),
+                              //       ),
+                              //     ),
+                              //   ],
+                              // )
                             ],
                           ),
                         ),
@@ -725,8 +754,8 @@ class _HomePageState extends State<HomePage> {
                 borderRadius: BorderRadius.circular(10),
                 child: Image.network(
                   "${palingLarisProduct.data?[i].gambar?.first}",
-                  width: 140,
-                  height: 140,
+                  width: 120,
+                  height: 120,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -815,31 +844,31 @@ class _HomePageState extends State<HomePage> {
                           ],
                         ),
                       ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Icon(
-                            Icons.location_city,
-                            color: backgroundColor2,
-                          ),
-                          Expanded(
-                            child: Text(
-                              "Cabang ${loginProvider.loginModel.data?.namaCabang ?? ""}",
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              style: poppins.copyWith(
-                                color: backgroundColor2,
-                                fontWeight: medium,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(horizontal: 5),
+                    //   child: Row(
+                    //     mainAxisAlignment: MainAxisAlignment.start,
+                    //     crossAxisAlignment: CrossAxisAlignment.end,
+                    //     children: [
+                    //       Icon(
+                    //         Icons.location_city,
+                    //         color: backgroundColor2,
+                    //       ),
+                    //       Expanded(
+                    //         child: Text(
+                    //           "Cabang ${loginProvider.loginModel.data?.namaCabang ?? ""}",
+                    //           overflow: TextOverflow.ellipsis,
+                    //           maxLines: 1,
+                    //           style: poppins.copyWith(
+                    //             color: backgroundColor2,
+                    //             fontWeight: medium,
+                    //             fontSize: 12,
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // )
                   ],
                 ),
               ),
@@ -903,6 +932,7 @@ class _HomePageState extends State<HomePage> {
               width: MediaQuery.sizeOf(context).width,
               child: Column(
                 children: [
+                  header(),
                   searchBar(),
                   Expanded(
                     child: isKeyboardVisible

@@ -142,8 +142,8 @@ class _WishlistPageState extends State<WishlistPage> {
                   borderRadius: BorderRadius.circular(10),
                   child: Image.network(
                     "${favoriteProduct.data?[i].imageUrl}",
-                    width: 140,
-                    height: 140,
+                    width: 120,
+                    height: 120,
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -232,31 +232,31 @@ class _WishlistPageState extends State<WishlistPage> {
                             ],
                           ),
                         ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 5),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Icon(
-                              Icons.location_city,
-                              color: backgroundColor2,
-                            ),
-                            Expanded(
-                              child: Text(
-                                "Cabang ${loginModel.data?.namaCabang ?? ""}",
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                                style: poppins.copyWith(
-                                  color: backgroundColor2,
-                                  fontWeight: medium,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
+                      // Padding(
+                      //   padding: const EdgeInsets.symmetric(horizontal: 5),
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.start,
+                      //     crossAxisAlignment: CrossAxisAlignment.end,
+                      //     children: [
+                      //       Icon(
+                      //         Icons.location_city,
+                      //         color: backgroundColor2,
+                      //       ),
+                      //       Expanded(
+                      //         child: Text(
+                      //           "Cabang ${loginModel.data?.namaCabang ?? ""}",
+                      //           overflow: TextOverflow.ellipsis,
+                      //           maxLines: 1,
+                      //           style: poppins.copyWith(
+                      //             color: backgroundColor2,
+                      //             fontWeight: medium,
+                      //             fontSize: 12,
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // )
                     ],
                   ),
                 ),

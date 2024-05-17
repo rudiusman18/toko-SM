@@ -6,12 +6,12 @@ class DetailProductModel {
 
   DetailProductModel.fromJson(Map<String, dynamic> json) {
     message = json['message'];
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? Data.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['message'] = this.message;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['message'] = message;
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
@@ -39,6 +39,12 @@ class Data {
   dynamic gambar4;
   dynamic gambar5;
   dynamic isAktiva;
+  String? kat1;
+  String? kat1Slug;
+  String? kat2;
+  String? kat2Slug;
+  String? kat3;
+  String? kat3Slug;
   dynamic createdAt;
   dynamic updatedAt;
   dynamic deletedAt;
@@ -49,31 +55,37 @@ class Data {
 
   Data(
       {this.id,
-        this.produkKategoriId,
-        this.kodeProduk,
-        this.barcodeProduk,
-        this.namaProduk,
-        this.satuanProduk,
-        this.golonganProduk,
-        this.merkProduk,
-        this.deskripsiProduk,
-        this.beratProduk,
-        this.hargaPokok,
-        this.multisatuanJumlah,
-        this.multisatuanUnit,
-        this.gambar1,
-        this.gambar2,
-        this.gambar3,
-        this.gambar4,
-        this.gambar5,
-        this.isAktiva,
-        this.createdAt,
-        this.updatedAt,
-        this.deletedAt,
-        this.gambar,
-        this.stok,
-        this.harga,
-        this.rating});
+      this.produkKategoriId,
+      this.kodeProduk,
+      this.barcodeProduk,
+      this.namaProduk,
+      this.satuanProduk,
+      this.golonganProduk,
+      this.merkProduk,
+      this.deskripsiProduk,
+      this.beratProduk,
+      this.hargaPokok,
+      this.multisatuanJumlah,
+      this.multisatuanUnit,
+      this.gambar1,
+      this.gambar2,
+      this.gambar3,
+      this.gambar4,
+      this.gambar5,
+      this.isAktiva,
+      this.kat1,
+      this.kat1Slug,
+      this.kat2,
+      this.kat2Slug,
+      this.kat3,
+      this.kat3Slug,
+      this.createdAt,
+      this.updatedAt,
+      this.deletedAt,
+      this.gambar,
+      this.stok,
+      this.harga,
+      this.rating});
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -95,6 +107,12 @@ class Data {
     gambar4 = json['gambar4'];
     gambar5 = json['gambar5'];
     isAktiva = json['is_aktiva'];
+    kat1 = json['kat1'];
+    kat1Slug = json['kat1_slug'];
+    kat2 = json['kat2'];
+    kat2Slug = json['kat2_slug'];
+    kat3 = json['kat3'];
+    kat3Slug = json['kat3_slug'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
@@ -102,50 +120,56 @@ class Data {
     if (json['stok'] != null) {
       stok = <Stok>[];
       json['stok'].forEach((v) {
-        stok!.add(new Stok.fromJson(v));
+        stok!.add(Stok.fromJson(v));
       });
     }
     if (json['harga'] != null) {
       harga = <Harga>[];
       json['harga'].forEach((v) {
-        harga!.add(new Harga.fromJson(v));
+        harga!.add(Harga.fromJson(v));
       });
     }
     rating = json['rating'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['produk_kategori_id'] = this.produkKategoriId;
-    data['kode_produk'] = this.kodeProduk;
-    data['barcode_produk'] = this.barcodeProduk;
-    data['nama_produk'] = this.namaProduk;
-    data['satuan_produk'] = this.satuanProduk;
-    data['golongan_produk'] = this.golonganProduk;
-    data['merk_produk'] = this.merkProduk;
-    data['deskripsi_produk'] = this.deskripsiProduk;
-    data['berat_produk'] = this.beratProduk;
-    data['harga_pokok'] = this.hargaPokok;
-    data['multisatuan_jumlah'] = this.multisatuanJumlah;
-    data['multisatuan_unit'] = this.multisatuanUnit;
-    data['gambar1'] = this.gambar1;
-    data['gambar2'] = this.gambar2;
-    data['gambar3'] = this.gambar3;
-    data['gambar4'] = this.gambar4;
-    data['gambar5'] = this.gambar5;
-    data['is_aktiva'] = this.isAktiva;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
-    data['deleted_at'] = this.deletedAt;
-    data['gambar'] = this.gambar;
-    if (this.stok != null) {
-      data['stok'] = this.stok!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['produk_kategori_id'] = produkKategoriId;
+    data['kode_produk'] = kodeProduk;
+    data['barcode_produk'] = barcodeProduk;
+    data['nama_produk'] = namaProduk;
+    data['satuan_produk'] = satuanProduk;
+    data['golongan_produk'] = golonganProduk;
+    data['merk_produk'] = merkProduk;
+    data['deskripsi_produk'] = deskripsiProduk;
+    data['berat_produk'] = beratProduk;
+    data['harga_pokok'] = hargaPokok;
+    data['multisatuan_jumlah'] = multisatuanJumlah;
+    data['multisatuan_unit'] = multisatuanUnit;
+    data['gambar1'] = gambar1;
+    data['gambar2'] = gambar2;
+    data['gambar3'] = gambar3;
+    data['gambar4'] = gambar4;
+    data['gambar5'] = gambar5;
+    data['is_aktiva'] = isAktiva;
+    data['kat1'] = kat1;
+    data['kat1_slug'] = kat1Slug;
+    data['kat2'] = kat2;
+    data['kat2_slug'] = kat2Slug;
+    data['kat3'] = kat3;
+    data['kat3_slug'] = kat3Slug;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
+    data['deleted_at'] = deletedAt;
+    data['gambar'] = gambar;
+    if (stok != null) {
+      data['stok'] = stok!.map((v) => v.toJson()).toList();
     }
-    if (this.harga != null) {
-      data['harga'] = this.harga!.map((v) => v.toJson()).toList();
+    if (harga != null) {
+      data['harga'] = harga!.map((v) => v.toJson()).toList();
     }
-    data['rating'] = this.rating;
+    data['rating'] = rating;
     return data;
   }
 }
@@ -164,10 +188,10 @@ class Stok {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['cabang_id'] = this.cabangId;
-    data['cabang'] = this.cabang;
-    data['stok'] = this.stok;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['cabang_id'] = cabangId;
+    data['cabang'] = cabang;
+    data['stok'] = stok;
     return data;
   }
 }
@@ -191,12 +215,12 @@ class Harga {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['cabang_id'] = this.cabangId;
-    data['cabang'] = this.cabang;
-    data['harga'] = this.harga;
-    data['harga_diskon'] = this.hargaDiskon;
-    data['diskon'] = this.diskon;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['cabang_id'] = cabangId;
+    data['cabang'] = cabang;
+    data['harga'] = harga;
+    data['harga_diskon'] = hargaDiskon;
+    data['diskon'] = diskon;
     return data;
   }
 }
