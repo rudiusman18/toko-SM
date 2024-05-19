@@ -69,7 +69,8 @@ class TransaksiService {
     }
   }
 
-  List<Map<String, dynamic>> generateProducts({required List<DataKeranjang> initProducts}) {
+  List<Map<String, dynamic>> generateProducts(
+      {required List<DataKeranjang> initProducts}) {
     // Create a list to hold the dynamic products
     List<Map<String, dynamic>> products = [];
 
@@ -88,8 +89,19 @@ class TransaksiService {
     return products;
   }
 
-  Future<TransactionModel> retrieveTransaction({required String token, required int customerId,})async{
-    var url = Uri.parse("${baseURL}transaksi?customer_id=$customerId"); // Ini masih bisa ditambahkan banyak hal
+  Future<TransactionModel> retrieveTransaction({
+    required String token,
+    required int customerId,
+    String status = "",
+    String tanggalAwal = "",
+    String tanggalAkhir = "",
+  }) async {
+    var url = Uri.parse(
+        "${baseURL}transaksi?customer_id=$customerId&status=$status&tanggal_awal=$tanggalAwal&tanggal_akhir=$tanggalAkhir"); // Ini masih bisa ditambahkan banyak hal
+
+    print(
+        "url yang diakses adalah:${baseURL}transaksi?customer_id=$customerId&status=$status&tanggal_awal=$tanggalAwal&tanggal_akhir=$tanggalAkhir");
+
     var header = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $token'
@@ -109,5 +121,4 @@ class TransaksiService {
       throw Exception("${jsonDecode(response.body)['message']}");
     }
   }
-
 }

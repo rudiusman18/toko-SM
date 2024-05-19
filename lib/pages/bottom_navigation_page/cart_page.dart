@@ -45,14 +45,18 @@ class _CartPageState extends State<CartPage> {
     _initCartProduct();
   }
 
-  _initCartProduct() async {
+  _initCartProduct({bool isChangeAmount = false}) async {
     LoginProvider loginProvider =
         Provider.of<LoginProvider>(context, listen: false);
     CartProvider cartProvider =
         Provider.of<CartProvider>(context, listen: false);
-    setState(() {
-      isLoading = true;
-    });
+
+    if (isChangeAmount == false) {
+      setState(() {
+        isLoading = true;
+      });
+    }
+
     if (await cartProvider.getCart(
         token: loginProvider.loginModel.token ?? "")) {
       setState(() {
@@ -97,9 +101,16 @@ class _CartPageState extends State<CartPage> {
               i++) {
             if (isChecked.length <
                 (cartModel.data?[indexCabang].data?.length ?? 0)) {
-              isChecked.add(true); // menambahkan data true untuk list checkbox
+              isChecked.add(
+                  (cartModel.data?[indexCabang].data?[i].stok ?? 0) < 1
+                      ? false
+                      : true); // menambahkan data true untuk list checkbox
             }
-            isChecked[i] = true;
+            isChecked[i] = (cartModel.data?[indexCabang].data?[i].stok ?? 0) < 1
+                ? false
+                : true;
+
+            print("isi data didalam ischecked adalah ${isChecked[i]}");
 
             if (isChecked[i] == true) {
               var product = cartModel.data?[indexCabang].data?[i];
@@ -117,9 +128,12 @@ class _CartPageState extends State<CartPage> {
             "isi loginModel adalah: ${loginmodel.data?.namaCabang} dengan index: $indexCabang dengan ${(cartModel.data?.length)}");
       });
     }
-    setState(() {
-      isLoading = false;
-    });
+
+    if (isChangeAmount == false) {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   _updateCartProduct({
@@ -136,7 +150,7 @@ class _CartPageState extends State<CartPage> {
       jumlah: jumlah,
     )) {
       setState(() {
-        _initCartProduct();
+        _initCartProduct(isChangeAmount: true);
       });
     }
   }
@@ -421,22 +435,33 @@ class _CartPageState extends State<CartPage> {
                 value: isChecked[index],
                 onChanged: (value) {
                   print("isi value adalah: $value");
-                  setState(() {
-                    isChecked[index] = value ?? true;
-                  });
-                  if (isChecked[index] == false) {
+                  if (((product?.stok ?? 0) >= 1)) {
                     setState(() {
-                      subTotalHarga -= numericValue * (product?.jumlah ?? 0);
-                      deliveryProduct.data?[indexCabang].data?.removeWhere(
-                          (element) =>
-                              element.namaProduk?.toLowerCase() ==
-                              product?.namaProduk?.toLowerCase());
+                      isChecked[index] = value ?? true;
                     });
+                    if (isChecked[index] == false) {
+                      setState(() {
+                        subTotalHarga -= numericValue * (product?.jumlah ?? 0);
+                        deliveryProduct.data?[indexCabang].data?.removeWhere(
+                            (element) =>
+                                element.namaProduk?.toLowerCase() ==
+                                product?.namaProduk?.toLowerCase());
+                      });
+                    } else {
+                      setState(() {
+                        subTotalHarga += numericValue * (product?.jumlah ?? 0);
+                        deliveryProduct.data?[indexCabang].data?.add(product!);
+                      });
+                    }
                   } else {
-                    setState(() {
-                      subTotalHarga += numericValue * (product?.jumlah ?? 0);
-                      deliveryProduct.data?[indexCabang].data?.add(product!);
-                    });
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          "Barang ini habis",
+                        ),
+                        duration: Duration(seconds: 1),
+                      ),
+                    );
                   }
                 },
               ),
@@ -445,7 +470,7 @@ class _CartPageState extends State<CartPage> {
                 child: Image.network(
                   "https://tokosm.online/uploads/images/${product?.imageUrl}",
                   width: 100,
-                  height: 130,
+                  height: 100,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -521,6 +546,7 @@ class _CartPageState extends State<CartPage> {
                               ),
                               child: const Icon(
                                 Icons.delete,
+                                size: 15,
                                 color: Colors.white,
                               ),
                             ),
@@ -560,6 +586,7 @@ class _CartPageState extends State<CartPage> {
                               ),
                               child: const Icon(
                                 Icons.article,
+                                size: 15,
                                 color: Colors.white,
                               ),
                             ),
@@ -588,6 +615,7 @@ class _CartPageState extends State<CartPage> {
                                   ),
                                   child: const Icon(
                                     Icons.remove,
+                                    size: 15,
                                     color: Colors.white,
                                   ),
                                 ),
@@ -604,10 +632,21 @@ class _CartPageState extends State<CartPage> {
                               ),
                               InkWell(
                                 onTap: () {
-                                  _updateCartProduct(
-                                    cuid: "${product?.sId}",
-                                    jumlah: "${(product?.jumlah ?? 0) + 1}",
-                                  );
+                                  if (((product?.jumlah ?? 0) + 1) <=
+                                      (product?.stok ?? 0)) {
+                                    _updateCartProduct(
+                                      cuid: "${product?.sId}",
+                                      jumlah: "${(product?.jumlah ?? 0) + 1}",
+                                    );
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                          "Semua stok barang sudah berada di keranjang anda",
+                                        ),
+                                      ),
+                                    );
+                                  }
                                 },
                                 child: Container(
                                   padding: const EdgeInsets.all(5),
@@ -618,6 +657,7 @@ class _CartPageState extends State<CartPage> {
                                   child: const Icon(
                                     Icons.add,
                                     color: Colors.white,
+                                    size: 15,
                                   ),
                                 ),
                               ),
@@ -754,17 +794,28 @@ class _CartPageState extends State<CartPage> {
                 backgroundColor: backgroundColor1,
               ),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  PageTransition(
-                    child: Deliverypage(
-                      namaCabang: cartModel.data?[indexCabang].namaCabang ?? "",
-                      indexCabang: indexCabang,
-                      product: deliveryProduct,
+                if (subTotalHarga != 0) {
+                  Navigator.push(
+                    context,
+                    PageTransition(
+                      child: Deliverypage(
+                        namaCabang:
+                            cartModel.data?[indexCabang].namaCabang ?? "",
+                        indexCabang: indexCabang,
+                        product: deliveryProduct,
+                      ),
+                      type: PageTransitionType.rightToLeft,
                     ),
-                    type: PageTransitionType.rightToLeft,
-                  ),
-                );
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        "Tidak ada barang yang dipilih",
+                      ),
+                    ),
+                  );
+                }
               },
               child: Text(
                 "Lanjutkan",

@@ -22,13 +22,30 @@ class _TransactionPageState extends State<TransactionPage> {
   final currencyFormatter = NumberFormat('#,##0.00', 'ID');
   bool isLoading = false;
 
+  // Initial Selected Value
+  String dropdownvalue = 'Semua Status';
+
+  // List of items in our dropdown menu
+  var items = [
+    'Semua Status',
+    'Belum Dibayar',
+    'Diproses',
+    'Dikirim',
+    'Selesai',
+    'Dibatalkan',
+  ];
+
   @override
   void initState() {
     _initTransaction();
     super.initState();
   }
 
-  _initTransaction() async {
+  _initTransaction({
+    String status = "",
+    String tanggalAwal = "",
+    String tanggalAkhir = "",
+  }) async {
     LoginProvider loginProvider =
         Provider.of<LoginProvider>(context, listen: false);
     TransaksiProvider transactionProvider =
@@ -37,8 +54,12 @@ class _TransactionPageState extends State<TransactionPage> {
       isLoading = true;
     });
     if (await transactionProvider.getTransaction(
-        token: loginProvider.loginModel.token ?? "",
-        customerId: loginProvider.loginModel.data?.id ?? 0)) {
+      token: loginProvider.loginModel.token ?? "",
+      customerId: loginProvider.loginModel.data?.id ?? 0,
+      status: status,
+      tanggalAwal: tanggalAwal,
+      tanggalAkhir: tanggalAkhir,
+    )) {
       setState(() {
         transactionModel = transactionProvider.transactionModel;
       });
@@ -128,7 +149,10 @@ class _TransactionPageState extends State<TransactionPage> {
                     color: "${transaction?.keteranganStatus}".toLowerCase() ==
                             "belum dibayar"
                         ? Colors.orange.withOpacity(0.2)
-                        : Colors.green.withOpacity(0.2),
+                        : "${transaction?.keteranganStatus}".toLowerCase() ==
+                                "dibatalkan"
+                            ? Colors.red.withOpacity(0.2)
+                            : Colors.green.withOpacity(0.2),
                     padding: const EdgeInsets.all(5),
                     child: Text(
                       "${transaction?.keteranganStatus}",
@@ -138,7 +162,11 @@ class _TransactionPageState extends State<TransactionPage> {
                             "${transaction?.keteranganStatus}".toLowerCase() ==
                                     "belum dibayar"
                                 ? Colors.orange
-                                : Colors.green,
+                                : "${transaction?.keteranganStatus}"
+                                            .toLowerCase() ==
+                                        "dibatalkan"
+                                    ? Colors.red
+                                    : Colors.green,
                         fontSize: 10,
                       ),
                     ),
@@ -264,6 +292,53 @@ class _TransactionPageState extends State<TransactionPage> {
       );
     }
 
+    Widget filter() {
+      return Container(
+        margin: const EdgeInsets.symmetric(
+          horizontal: 20,
+        ),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              DropdownButton(
+                // Initial Value
+                value: dropdownvalue,
+
+                // Down Arrow Icon
+                icon: const Icon(Icons.keyboard_arrow_down),
+
+                // Array list of items
+                items: items.map((String items) {
+                  return DropdownMenuItem(
+                    value: items,
+                    child: Text(items),
+                  );
+                }).toList(),
+                // After selecting the desired option,it will
+                // change button value to selected value
+                onChanged: (String? newValue) {
+                  setState(() {
+                    dropdownvalue = newValue!;
+                    int index = items.indexOf(newValue);
+                    print("indexnya adalah ${index - 1}");
+                    _initTransaction(
+                        status: "${index - 1 < 0 ? "" : index - 1}");
+                  });
+                },
+              ),
+              // Text(
+              //   "Status",
+              // ),
+              // Text(
+              //   "Status",
+              // ),
+            ],
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -291,19 +366,24 @@ class _TransactionPageState extends State<TransactionPage> {
             : Container(
                 color: Colors.white,
                 width: MediaQuery.sizeOf(context).width,
-                child: (transactionModel.data?.length ?? 0) == 0
-                    ? emptyTransaction()
-                    : ListView(
-                        children: [
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          for (var i = 0;
-                              i < (transactionModel.data?.length ?? 0);
-                              i++)
-                            transactionItem(index: i)
-                        ],
-                      ),
+                child: ListView(
+                  children: [
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    filter(),
+                    (transactionModel.data?.length ?? 0) == 0
+                        ? emptyTransaction()
+                        : const SizedBox(),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    for (var i = 0;
+                        i < (transactionModel.data?.length ?? 0);
+                        i++)
+                      transactionItem(index: i)
+                  ],
+                ),
               ),
       ),
     );

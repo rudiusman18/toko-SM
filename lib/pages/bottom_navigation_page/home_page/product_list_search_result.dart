@@ -361,7 +361,7 @@ class _ProductListSearchResultState extends State<ProductListSearchResult> {
                             },
                             child: Container(
                               width: 150,
-                              height: 300,
+                              height: 280,
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(8),
@@ -478,30 +478,30 @@ class _ProductListSearchResultState extends State<ProductListSearchResult> {
                                             ),
                                           ],
                                         ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          children: [
-                                            Icon(
-                                              Icons.location_city,
-                                              color: backgroundColor2,
-                                            ),
-                                            Expanded(
-                                              child: Text(
-                                                "Cabang ${loginModel.data?.namaCabang ?? ""}",
-                                                overflow: TextOverflow.ellipsis,
-                                                maxLines: 1,
-                                                style: poppins.copyWith(
-                                                  color: backgroundColor2,
-                                                  fontWeight: medium,
-                                                  fontSize: 12,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        )
+                                        // Row(
+                                        //   mainAxisAlignment:
+                                        //       MainAxisAlignment.start,
+                                        //   crossAxisAlignment:
+                                        //       CrossAxisAlignment.end,
+                                        //   children: [
+                                        //     Icon(
+                                        //       Icons.location_city,
+                                        //       color: backgroundColor2,
+                                        //     ),
+                                        //     Expanded(
+                                        //       child: Text(
+                                        //         "Cabang ${loginModel.data?.namaCabang ?? ""}",
+                                        //         overflow: TextOverflow.ellipsis,
+                                        //         maxLines: 1,
+                                        //         style: poppins.copyWith(
+                                        //           color: backgroundColor2,
+                                        //           fontWeight: medium,
+                                        //           fontSize: 12,
+                                        //         ),
+                                        //       ),
+                                        //     ),
+                                        //   ],
+                                        // )
                                       ],
                                     ),
                                   ),

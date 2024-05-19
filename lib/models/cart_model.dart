@@ -65,6 +65,7 @@ class DataKeranjang {
   int? harga;
   int? hargaDiskon;
   int? diskon;
+  int? stok;
   String? updatedAt;
 
   DataKeranjang(
@@ -79,6 +80,7 @@ class DataKeranjang {
       this.harga,
       this.hargaDiskon,
       this.diskon,
+      this.stok,
       this.updatedAt});
 
   DataKeranjang.fromJson(Map<String, dynamic> json) {
@@ -93,6 +95,7 @@ class DataKeranjang {
     harga = json['harga'];
     hargaDiskon = json['harga_diskon'];
     diskon = json['diskon'];
+    stok = json['stok'];
     updatedAt = json['updated_at'];
   }
 
@@ -109,6 +112,7 @@ class DataKeranjang {
     data['harga'] = harga;
     data['harga_diskon'] = hargaDiskon;
     data['diskon'] = diskon;
+    data['stok'] = stok;
     data['updated_at'] = updatedAt;
     return data;
   }

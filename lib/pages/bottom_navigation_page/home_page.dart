@@ -405,10 +405,13 @@ class _HomePageState extends State<HomePage> {
                                 const SizedBox(
                                   width: 20,
                                 ),
-                                Text(
-                                  text[index],
-                                  style: poppins.copyWith(
-                                    color: backgroundColor1,
+                                Expanded(
+                                  flex: 5,
+                                  child: Text(
+                                    text[index],
+                                    style: poppins.copyWith(
+                                      color: backgroundColor1,
+                                    ),
                                   ),
                                 ),
                                 const Spacer(),
@@ -709,171 +712,342 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
-    Widget verticalListItem(int i) {
-      return InkWell(
-        onTap: () {
-          Navigator.push(
-            context,
-            PageTransition(
-              child: ProductDetailPage(
-                imageURL: "${palingLarisProduct.data?[i].gambar?.first}",
-                productId: "${palingLarisProduct.data?[i].id}",
-                productLoct: loginProvider.loginModel.data?.namaCabang ?? "",
-                productName: "${palingLarisProduct.data?[i].namaProduk}",
-                productPrice: "${palingLarisProduct.data?[i].hargaDiskon}",
-                productStar: "${palingLarisProduct.data?[i].rating}",
-                beforeDiscountPrice: palingLarisProduct.data?[i].diskon == null
-                    ? ""
-                    : "${palingLarisProduct.data?[i].harga}",
-                discountPercentage: palingLarisProduct.data?[i].diskon == null
-                    ? ""
-                    : "${palingLarisProduct.data?[i].diskon}%",
-                isDiscount:
-                    palingLarisProduct.data?[i].diskon == null ? false : true,
-              ),
-              type: PageTransitionType.bottomToTop,
-            ),
-          );
-        },
-        child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                blurRadius: 4,
-                offset: const Offset(0, 8), // Shadow position
-              ),
-            ],
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Row(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.network(
-                  "${palingLarisProduct.data?[i].gambar?.first}",
-                  width: 120,
-                  height: 120,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Text(
-                        "${palingLarisProduct.data?[i].namaProduk}",
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
-                        style: poppins.copyWith(
-                          color: backgroundColor1,
-                          fontWeight: medium,
+    // Widget verticalListItem(int i) {
+    //   return InkWell(
+    //     onTap: () {
+    //       Navigator.push(
+    //         context,
+    //         PageTransition(
+    //           child: ProductDetailPage(
+    //             imageURL: "${palingLarisProduct.data?[i].gambar?.first}",
+    //             productId: "${palingLarisProduct.data?[i].id}",
+    //             productLoct: loginProvider.loginModel.data?.namaCabang ?? "",
+    //             productName: "${palingLarisProduct.data?[i].namaProduk}",
+    //             productPrice: "${palingLarisProduct.data?[i].hargaDiskon}",
+    //             productStar: "${palingLarisProduct.data?[i].rating}",
+    //             beforeDiscountPrice: palingLarisProduct.data?[i].diskon == null
+    //                 ? ""
+    //                 : "${palingLarisProduct.data?[i].harga}",
+    //             discountPercentage: palingLarisProduct.data?[i].diskon == null
+    //                 ? ""
+    //                 : "${palingLarisProduct.data?[i].diskon}%",
+    //             isDiscount:
+    //                 palingLarisProduct.data?[i].diskon == null ? false : true,
+    //           ),
+    //           type: PageTransitionType.bottomToTop,
+    //         ),
+    //       );
+    //     },
+    //     child: Container(
+    //       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+    //       decoration: BoxDecoration(
+    //         color: Colors.white,
+    //         boxShadow: [
+    //           BoxShadow(
+    //             color: Colors.grey.withOpacity(0.5),
+    //             blurRadius: 4,
+    //             offset: const Offset(0, 8), // Shadow position
+    //           ),
+    //         ],
+    //         borderRadius: BorderRadius.circular(10),
+    //       ),
+    //       child: Row(
+    //         children: [
+    //           ClipRRect(
+    //             borderRadius: BorderRadius.circular(10),
+    //             child: Image.network(
+    //               "${palingLarisProduct.data?[i].gambar?.first}",
+    //               width: 120,
+    //               height: 120,
+    //               fit: BoxFit.cover,
+    //             ),
+    //           ),
+    //           Expanded(
+    //             child: Column(
+    //               crossAxisAlignment: CrossAxisAlignment.start,
+    //               mainAxisAlignment: MainAxisAlignment.center,
+    //               children: [
+    //                 Padding(
+    //                   padding: const EdgeInsets.symmetric(horizontal: 10),
+    //                   child: Text(
+    //                     "${palingLarisProduct.data?[i].namaProduk}",
+    //                     overflow: TextOverflow.ellipsis,
+    //                     maxLines: 2,
+    //                     style: poppins.copyWith(
+    //                       color: backgroundColor1,
+    //                       fontWeight: medium,
+    //                     ),
+    //                   ),
+    //                 ),
+    //                 Padding(
+    //                   padding: const EdgeInsets.symmetric(horizontal: 10),
+    //                   child: Text(
+    //                     palingLarisProduct.data?[i].diskon == null
+    //                         ? "Rp ${currencyFormatter.format(palingLarisProduct.data?[i].harga)}"
+    //                         : "Rp ${currencyFormatter.format(palingLarisProduct.data?[i].hargaDiskon)}",
+    //                     overflow: TextOverflow.ellipsis,
+    //                     maxLines: 1,
+    //                     style: poppins.copyWith(
+    //                       color: backgroundColor1,
+    //                       fontWeight: semiBold,
+    //                     ),
+    //                   ),
+    //                 ),
+    //                 Padding(
+    //                   padding: const EdgeInsets.symmetric(horizontal: 5),
+    //                   child: Row(
+    //                     mainAxisSize: MainAxisSize.min,
+    //                     mainAxisAlignment: MainAxisAlignment.start,
+    //                     children: [
+    //                       Icon(
+    //                         Icons.star,
+    //                         color: backgroundColor2,
+    //                       ),
+    //                       Text(
+    //                         "${palingLarisProduct.data?[i].rating}",
+    //                         style: poppins.copyWith(
+    //                           fontWeight: semiBold,
+    //                         ),
+    //                       ),
+    //                     ],
+    //                   ),
+    //                 ),
+    //                 if (palingLarisProduct.data?[i].diskon == null
+    //                     ? false
+    //                     : true)
+    //                   Padding(
+    //                     padding: const EdgeInsets.symmetric(horizontal: 10),
+    //                     child: Row(
+    //                       mainAxisSize: MainAxisSize.min,
+    //                       children: [
+    //                         Flexible(
+    //                           child: Text(
+    //                             "Rp ${currencyFormatter.format(palingLarisProduct.data?[i].harga)}",
+    //                             overflow: TextOverflow.ellipsis,
+    //                             maxLines: 1,
+    //                             style: poppins.copyWith(
+    //                                 decoration: TextDecoration.lineThrough,
+    //                                 color: Colors.grey,
+    //                                 fontSize: 10),
+    //                           ),
+    //                         ),
+    //                         Container(
+    //                           margin: const EdgeInsets.only(left: 5),
+    //                           child: Text(
+    //                             "${palingLarisProduct.data?[i].diskon}%",
+    //                             overflow: TextOverflow.ellipsis,
+    //                             maxLines: 1,
+    //                             style: poppins.copyWith(
+    //                               color: Colors.red,
+    //                               fontSize: 10,
+    //                               fontWeight: bold,
+    //                             ),
+    //                           ),
+    //                         ),
+    //                       ],
+    //                     ),
+    //                   ),
+    //                 // Padding(
+    //                 //   padding: const EdgeInsets.symmetric(horizontal: 5),
+    //                 //   child: Row(
+    //                 //     mainAxisAlignment: MainAxisAlignment.start,
+    //                 //     crossAxisAlignment: CrossAxisAlignment.end,
+    //                 //     children: [
+    //                 //       Icon(
+    //                 //         Icons.location_city,
+    //                 //         color: backgroundColor2,
+    //                 //       ),
+    //                 //       Expanded(
+    //                 //         child: Text(
+    //                 //           "Cabang ${loginProvider.loginModel.data?.namaCabang ?? ""}",
+    //                 //           overflow: TextOverflow.ellipsis,
+    //                 //           maxLines: 1,
+    //                 //           style: poppins.copyWith(
+    //                 //             color: backgroundColor2,
+    //                 //             fontWeight: medium,
+    //                 //             fontSize: 12,
+    //                 //           ),
+    //                 //         ),
+    //                 //       ),
+    //                 //     ],
+    //                 //   ),
+    //                 // )
+    //               ],
+    //             ),
+    //           ),
+    //         ],
+    //       ),
+    //     ),
+    //   );
+    // }
+
+    Widget palingLarisItem() {
+      return Container(
+        alignment: (palingLarisProduct.data?.length ?? 0) > 1
+            ? Alignment.center
+            : Alignment.topLeft,
+        margin: const EdgeInsets.only(
+          top: 0,
+          bottom: 30,
+          left: 20,
+          right: 10,
+        ),
+        child: Wrap(
+          crossAxisAlignment: WrapCrossAlignment.center,
+          runSpacing: 20,
+          spacing: 10,
+          children: [
+            for (var i = 0; i < (palingLarisProduct.data?.length ?? 0); i++)
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    PageTransition(
+                      child: ProductDetailPage(
+                        imageURL:
+                            "${palingLarisProduct.data?[i].gambar?.first}",
+                        productId: "${palingLarisProduct.data?[i].id}",
+                        productLoct:
+                            loginProvider.loginModel.data?.namaCabang ?? "",
+                        productName:
+                            "${palingLarisProduct.data?[i].namaProduk}",
+                        productPrice:
+                            "${palingLarisProduct.data?[i].hargaDiskon}",
+                        productStar: "${palingLarisProduct.data?[i].rating}",
+                        beforeDiscountPrice:
+                            palingLarisProduct.data?[i].diskon == null
+                                ? ""
+                                : "${palingLarisProduct.data?[i].harga}",
+                        discountPercentage:
+                            palingLarisProduct.data?[i].diskon == null
+                                ? ""
+                                : "${palingLarisProduct.data?[i].diskon}%",
+                        isDiscount: palingLarisProduct.data?[i].diskon == null
+                            ? false
+                            : true,
+                      ),
+                      type: PageTransitionType.bottomToTop,
+                    ),
+                  );
+                },
+                child: Container(
+                  width: 150,
+                  height: 280,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        blurRadius: 4,
+                        offset: const Offset(0, 8), // Shadow position
+                      ),
+                    ],
+                  ),
+                  margin: EdgeInsets.only(right: i < 19 ? 10 : 0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ClipRRect(
+                        borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(8)),
+                        child: Image.network(
+                          ('${palingLarisProduct.data?[i].gambar?.first}'),
+                          width: 150,
+                          height: 150,
+                          fit: BoxFit.cover,
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Text(
-                        palingLarisProduct.data?[i].diskon == null
-                            ? "Rp ${currencyFormatter.format(palingLarisProduct.data?[i].harga)}"
-                            : "Rp ${currencyFormatter.format(palingLarisProduct.data?[i].hargaDiskon)}",
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: poppins.copyWith(
-                          color: backgroundColor1,
-                          fontWeight: semiBold,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Icon(
-                            Icons.star,
-                            color: backgroundColor2,
-                          ),
-                          Text(
-                            "${palingLarisProduct.data?[i].rating}",
-                            style: poppins.copyWith(
-                              fontWeight: semiBold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    if (palingLarisProduct.data?[i].diskon == null
-                        ? false
-                        : true)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Flexible(
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 5),
                               child: Text(
-                                "Rp ${currencyFormatter.format(palingLarisProduct.data?[i].harga)}",
+                                "${palingLarisProduct.data?[i].namaProduk}",
                                 overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
+                                maxLines: 2,
                                 style: poppins.copyWith(
-                                    decoration: TextDecoration.lineThrough,
-                                    color: Colors.grey,
-                                    fontSize: 10),
-                              ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(left: 5),
-                              child: Text(
-                                "${palingLarisProduct.data?[i].diskon}%",
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                                style: poppins.copyWith(
-                                  color: Colors.red,
-                                  fontSize: 10,
-                                  fontWeight: bold,
+                                  color: backgroundColor1,
+                                  fontWeight: medium,
                                 ),
                               ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 5),
+                              child: Text(
+                                "Rp ${currencyFormatter.format(palingLarisProduct.data?[i].hargaDiskon)}",
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: poppins.copyWith(
+                                  color: backgroundColor1,
+                                  fontWeight: semiBold,
+                                ),
+                              ),
+                            ),
+                            if (palingLarisProduct.data?[i].diskon != null)
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 5),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Flexible(
+                                      child: Text(
+                                        "Rp ${currencyFormatter.format(palingLarisProduct.data?[i].harga)}",
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                        style: poppins.copyWith(
+                                            decoration:
+                                                TextDecoration.lineThrough,
+                                            color: Colors.grey,
+                                            fontSize: 10),
+                                      ),
+                                    ),
+                                    Container(
+                                      margin: const EdgeInsets.only(left: 5),
+                                      child: Text(
+                                        "${palingLarisProduct.data?[i].diskon}%",
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                        style: poppins.copyWith(
+                                          color: Colors.red,
+                                          fontSize: 10,
+                                          fontWeight: bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Icon(
+                                  Icons.star,
+                                  color: backgroundColor2,
+                                ),
+                                Text(
+                                  "${palingLarisProduct.data?[i].rating}",
+                                  style: poppins.copyWith(
+                                    fontWeight: semiBold,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
                       ),
-                    // Padding(
-                    //   padding: const EdgeInsets.symmetric(horizontal: 5),
-                    //   child: Row(
-                    //     mainAxisAlignment: MainAxisAlignment.start,
-                    //     crossAxisAlignment: CrossAxisAlignment.end,
-                    //     children: [
-                    //       Icon(
-                    //         Icons.location_city,
-                    //         color: backgroundColor2,
-                    //       ),
-                    //       Expanded(
-                    //         child: Text(
-                    //           "Cabang ${loginProvider.loginModel.data?.namaCabang ?? ""}",
-                    //           overflow: TextOverflow.ellipsis,
-                    //           maxLines: 1,
-                    //           style: poppins.copyWith(
-                    //             color: backgroundColor2,
-                    //             fontWeight: medium,
-                    //             fontSize: 12,
-                    //           ),
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // )
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ],
-          ),
+          ],
         ),
       );
     }
@@ -897,8 +1071,8 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(
               height: 5,
             ),
-            for (int i = 0; i < (palingLarisProduct.data?.length ?? 0); i++)
-              verticalListItem(i),
+            // for (int i = 0; i < (palingLarisProduct.data?.length ?? 0); i++)
+            palingLarisItem(),
             scrollIsAtEnd == true && palingLarisProductisReachEnd == false
                 ? Center(
                     child: Container(

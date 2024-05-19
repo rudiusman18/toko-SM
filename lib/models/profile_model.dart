@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_question_mark, prefer_collection_literals
+
 class ProfileModel {
   String? message;
   Data? data;
@@ -10,7 +12,7 @@ class ProfileModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['message'] = message;
     if (this.data != null) {
       data['data'] = this.data!.toJson();
@@ -22,7 +24,8 @@ class ProfileModel {
 class Data {
   int? id;
   int? cabangId;
-  int? salesId;
+  int? cabangAktif;
+  dynamic salesId;
   int? kategoriPelangganId;
   String? username;
   String? password;
@@ -36,34 +39,36 @@ class Data {
   String? kabkota;
   String? kecamatan;
   String? kelurahan;
-  String? lat;
-  String? lon;
+  dynamic lat;
+  dynamic lon;
   String? namaCabang;
 
   Data(
       {this.id,
-        this.cabangId,
-        this.salesId,
-        this.kategoriPelangganId,
-        this.username,
-        this.password,
-        this.namaPelanggan,
-        this.tglLahirPelanggan,
-        this.jenisKelaminPelanggan,
-        this.telpPelanggan,
-        this.emailPelanggan,
-        this.alamatPelanggan,
-        this.provinsi,
-        this.kabkota,
-        this.kecamatan,
-        this.kelurahan,
-        this.lat,
-        this.lon,
-        this.namaCabang});
+      this.cabangId,
+      this.cabangAktif,
+      this.salesId,
+      this.kategoriPelangganId,
+      this.username,
+      this.password,
+      this.namaPelanggan,
+      this.tglLahirPelanggan,
+      this.jenisKelaminPelanggan,
+      this.telpPelanggan,
+      this.emailPelanggan,
+      this.alamatPelanggan,
+      this.provinsi,
+      this.kabkota,
+      this.kecamatan,
+      this.kelurahan,
+      this.lat,
+      this.lon,
+      this.namaCabang});
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     cabangId = json['cabang_id'];
+    cabangAktif = json['cabang_aktif'];
     salesId = json['sales_id'];
     kategoriPelangganId = json['kategori_pelanggan_id'];
     username = json['username'];
@@ -84,9 +89,10 @@ class Data {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['id'] = id;
     data['cabang_id'] = cabangId;
+    data['cabang_aktif'] = cabangAktif;
     data['sales_id'] = salesId;
     data['kategori_pelanggan_id'] = kategoriPelangganId;
     data['username'] = username;

@@ -34,7 +34,7 @@ class Data {
   String? emailPelanggan;
   String? lat;
   String? lon;
- String? namaCabang;
+  String? namaCabang;
 
   Data(
       {this.id,
@@ -69,7 +69,6 @@ class Data {
     lat = json['lat'];
     lon = json['lon'];
     namaCabang = json['nama_cabang'];
-
   }
 
   Map<String, dynamic> toJson() {
