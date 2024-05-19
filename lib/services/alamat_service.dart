@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 
 class AlamatService {
   var client = HttpClient();
-  var baseURL = " http://103.127.132.116/api/v1/";
+  var baseURL = "http://103.127.132.116/api/v1/";
 
   Future<AlamatModel> retrieveAlamat({required String token}) async {
     var url = Uri.parse("${baseURL}akun/alamat");

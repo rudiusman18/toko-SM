@@ -24,6 +24,7 @@ class AlamatProvider with ChangeNotifier {
       _alamatModel = alamatModel;
       return true;
     } catch (e) {
+      print("Alamat: $e");
       return false;
     }
   }
