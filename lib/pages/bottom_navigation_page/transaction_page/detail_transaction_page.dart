@@ -136,7 +136,7 @@ class DetailTransactionPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Image.network(
-                  "https://tokosm.online/uploads/images/${produk?.imageUrl}",
+                  "http://103.127.132.116/uploads/images/${produk?.imageUrl}",
                   width: 50,
                   height: 50,
                 ),

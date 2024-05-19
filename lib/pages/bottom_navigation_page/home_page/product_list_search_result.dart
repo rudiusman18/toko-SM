@@ -271,10 +271,13 @@ class _ProductListSearchResultState extends State<ProductListSearchResult> {
                                 const SizedBox(
                                   width: 20,
                                 ),
-                                Text(
-                                  text[index],
-                                  style: poppins.copyWith(
-                                    color: backgroundColor1,
+                                Expanded(
+                                  flex: 5,
+                                  child: Text(
+                                    text[index],
+                                    style: poppins.copyWith(
+                                      color: backgroundColor1,
+                                    ),
                                   ),
                                 ),
                                 const Spacer(),
@@ -542,11 +545,15 @@ class _ProductListSearchResultState extends State<ProductListSearchResult> {
           color: backgroundColor3,
           borderRadius: BorderRadius.circular(20),
         ),
-        child: Text(
-          text,
-          style: poppins.copyWith(
-            color: Colors.white,
-          ),
+        child: Row(
+          children: [
+            Text(
+              text,
+              style: poppins.copyWith(
+                color: Colors.white,
+              ),
+            ),
+          ],
         ),
       );
     }

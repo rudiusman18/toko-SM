@@ -202,7 +202,7 @@ class _DeliverypageState extends State<Deliverypage> {
             Container(
               color: Colors.red,
               child: Image.network(
-                "https://tokosm.online/uploads/images/${product?.imageUrl}",
+                "http://103.127.132.116/uploads/images/${product?.imageUrl}",
                 width: 80,
                 height: 80,
               ),

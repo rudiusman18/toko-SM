@@ -1,16 +1,14 @@
-
-
 import 'dart:convert';
 
 import '../models/profile_model.dart';
 import 'package:http/http.dart' as http;
 
-class ProfileService{
-  Future<ProfileModel>retrieveProfile({required String token, required String userId})async{
+class ProfileService {
+  Future<ProfileModel> retrieveProfile(
+      {required String token, required String userId}) async {
     var baseURL = "http://103.127.132.116/api/v1/";
 
-    var url = Uri.parse(
-        "${baseURL}akun/profil?id=$userId");
+    var url = Uri.parse("${baseURL}akun/profil?id=$userId");
     print("URL yang diakses adalah: ${url}");
     var header = {
       'Authorization': 'Bearer $token',
@@ -30,11 +28,21 @@ class ProfileService{
     }
   }
 
-  Future<Map<String, dynamic>>updateProfile({required String token, required int userId, required int cabangId, required String username, required String fullname, required String email, required String telp, required String alamat, required String wilayah, required String tglLahir, required String jenisKelamin})async{
+  Future<Map<String, dynamic>> updateProfile(
+      {required String token,
+      required int userId,
+      required int cabangId,
+      required String username,
+      required String fullname,
+      required String email,
+      required String telp,
+      required String alamat,
+      required String wilayah,
+      required String tglLahir,
+      required String jenisKelamin}) async {
     var baseURL = "http://103.127.132.116/api/v1/";
 
-    var url = Uri.parse(
-        "${baseURL}akun/profil?id=$userId");
+    var url = Uri.parse("${baseURL}akun/profil?id=$userId");
     print("URL yang diakses adalah: ${url}");
     var header = {
       'Authorization': 'Bearer $token',

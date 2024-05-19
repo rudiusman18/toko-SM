@@ -190,7 +190,7 @@ class _TransactionPageState extends State<TransactionPage> {
                       ),
                     ),
                     child: Image.network(
-                      "https://tokosm.online/uploads/images/${transaction?.produk?.first.imageUrl}",
+                      "http://103.127.132.116/uploads/images/${transaction?.produk?.first.imageUrl}",
                     ),
                   ),
                   const SizedBox(
@@ -327,6 +327,9 @@ class _TransactionPageState extends State<TransactionPage> {
                   });
                 },
               ),
+              Container(
+                decoration: BoxDecoration(boxShadow: []),
+              )
               // Text(
               //   "Status",
               // ),

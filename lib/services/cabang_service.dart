@@ -1,12 +1,10 @@
-
-
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../models/cabang_model.dart';
 
-class CabangService{
+class CabangService {
   var client = HttpClient();
   var baseURL = "http://103.127.132.116/api/v1/";
 

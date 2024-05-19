@@ -1,15 +1,14 @@
-
-
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:tokoSM/models/kurir_model.dart';
 
-class KurirService{
+class KurirService {
   var client = HttpClient();
   var baseURL = "http://103.127.132.116/api/v1/";
 
-  Future<KurirModel> retrieveKurir({required String token, required String cabangId}) async {
+  Future<KurirModel> retrieveKurir(
+      {required String token, required String cabangId}) async {
     var url = Uri.parse("${baseURL}pengaturan/kurir?cabang=$cabangId");
     var header = {
       'Content-Type': 'application/json',

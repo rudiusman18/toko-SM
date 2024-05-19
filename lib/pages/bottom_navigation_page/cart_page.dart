@@ -318,12 +318,15 @@ class _CartPageState extends State<CartPage> {
                         width: 60,
                         height: 60,
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(
-                              20,
+                          borderRadius: BorderRadius.circular(
+                            20,
+                          ),
+                          image: DecorationImage(
+                            image: NetworkImage(
+                              "http://103.127.132.116/uploads/images/${product.imageUrl}",
                             ),
-                            image: DecorationImage(
-                                image: NetworkImage(
-                                    "https://tokosm.online/uploads/images/${product.imageUrl}"))),
+                          ),
+                        ),
                       ),
                       Expanded(
                         child: Text(
@@ -398,7 +401,7 @@ class _CartPageState extends State<CartPage> {
             PageTransition(
               child: ProductDetailPage(
                 imageURL:
-                    "https://tokosm.online/uploads/images/${product?.imageUrl}",
+                    "http://103.127.132.116/uploads/images/${product?.imageUrl}",
                 productId: "${product?.produkId}",
                 productLoct: "${cartModel.data?[indexCabang].namaCabang}",
                 productName: "${product?.namaProduk}",
@@ -468,7 +471,7 @@ class _CartPageState extends State<CartPage> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: Image.network(
-                  "https://tokosm.online/uploads/images/${product?.imageUrl}",
+                  "http://103.127.132.116/uploads/images/${product?.imageUrl}",
                   width: 100,
                   height: 100,
                   fit: BoxFit.cover,

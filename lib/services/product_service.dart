@@ -15,7 +15,6 @@ class ProductService {
     required String limit,
     String sort = "",
     String search = "",
-
   }) async {
     var baseURL = "http://103.127.132.116/api/v1/";
 
@@ -169,7 +168,7 @@ class ProductService {
     }
   }
 
-  Future<SuggestionModel> suggestion({required String token})async{
+  Future<SuggestionModel> suggestion({required String token}) async {
     var baseURL = "http://103.127.132.116/api/v1/";
 
     var url = Uri.parse("${baseURL}produk/suggestion");
