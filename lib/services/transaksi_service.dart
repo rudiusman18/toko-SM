@@ -82,7 +82,10 @@ class TransaksiService {
         "image_url": product.imageUrl,
         "harga": product.harga,
         "jumlah": product.jumlah,
-        "total_harga": (product?.harga ?? 0) * (product?.jumlah ?? 0),
+        "jumlah_multisatuan": product.jumlahMultisatuan,
+        "multisatuan_jumlah": product.multisatuanJumlah,
+        "multisatuan_unit": product.multisatuanUnit,
+        "total_harga": (product.harga ?? 0) * (product.jumlah ?? 0),
       });
     }
 

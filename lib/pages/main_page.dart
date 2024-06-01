@@ -69,7 +69,7 @@ class _MainPageState extends State<MainPage> {
                         : Colors.black,
                   ),
                 ),
-                label: "",
+                label: "Home",
               ),
               BottomNavigationBarItem(
                 icon: Container(
@@ -82,7 +82,7 @@ class _MainPageState extends State<MainPage> {
                         : Colors.black,
                   ),
                 ),
-                label: "",
+                label: "Category",
               ),
               BottomNavigationBarItem(
                 icon: Container(
@@ -95,7 +95,7 @@ class _MainPageState extends State<MainPage> {
                         : Colors.black,
                   ),
                 ),
-                label: "",
+                label: "Favorite",
               ),
               BottomNavigationBarItem(
                 icon: Container(
@@ -108,7 +108,7 @@ class _MainPageState extends State<MainPage> {
                         : Colors.black,
                   ),
                 ),
-                label: "",
+                label: "Transaction",
               ),
             ],
           ),

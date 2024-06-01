@@ -60,6 +60,9 @@ class DataKeranjang {
   int? produkId;
   String? catatan;
   int? jumlah;
+  List? jumlahMultisatuan;
+  List? multisatuanJumlah;
+  List? multisatuanUnit;
   String? namaProduk;
   String? imageUrl;
   int? harga;
@@ -75,6 +78,9 @@ class DataKeranjang {
       this.produkId,
       this.catatan,
       this.jumlah,
+      this.jumlahMultisatuan,
+      this.multisatuanJumlah,
+      this.multisatuanUnit,
       this.namaProduk,
       this.imageUrl,
       this.harga,
@@ -90,6 +96,9 @@ class DataKeranjang {
     produkId = json['produk_id'];
     catatan = json['catatan'];
     jumlah = json['jumlah'];
+    jumlahMultisatuan = json['jumlah_multisatuan'];
+    multisatuanJumlah = json['multisatuan_jumlah'];
+    multisatuanUnit = json['multisatuan_unit'];
     namaProduk = json['nama_produk'];
     imageUrl = json['image_url'];
     harga = json['harga'];
@@ -107,6 +116,9 @@ class DataKeranjang {
     data['produk_id'] = produkId;
     data['catatan'] = catatan;
     data['jumlah'] = jumlah;
+    data['jumlah_multisatuan'] = jumlahMultisatuan;
+    data['multisatuan_jumlah'] = multisatuanJumlah;
+    data['multisatuan_unit'] = multisatuanUnit;
     data['nama_produk'] = namaProduk;
     data['image_url'] = imageUrl;
     data['harga'] = harga;

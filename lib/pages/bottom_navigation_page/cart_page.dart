@@ -178,6 +178,8 @@ class _CartPageState extends State<CartPage> {
 
     final currencyFormatter = NumberFormat('#,##0.00', 'ID');
 
+    LoginProvider loginProvider = Provider.of<LoginProvider>(context);
+
     void showAlertDialog(BuildContext context, DataKeranjang? product) {
       showDialog(
         context: context,
@@ -387,12 +389,251 @@ class _CartPageState extends State<CartPage> {
       );
     }
 
+    void sendProduct({
+      required int index,
+      required int cabangId,
+      List<int>? multiSatuanJumlah,
+      List<String>? multiSatuanunit,
+      List<int>? jumlahMultiSatuan,
+    }) async {
+      setState(() {
+        isLoading = true;
+      });
+      if (await cartProvider.postCart(
+        token: loginProvider.loginModel.token ?? "",
+        cabangId: cabangId,
+        productId: cartModel.data?[indexCabang].data?[index].produkId ?? 0,
+        multiSatuanJumlah: multiSatuanJumlah,
+        multiSatuanunit: multiSatuanunit,
+        jumlahMultiSatuan: jumlahMultiSatuan,
+      )) {
+        setState(() {
+          isLoading = false;
+        });
+
+        _initCartProduct();
+      } else {}
+    }
+
+    void bottomDialog({required int cabangId, required int index}) {
+      showModalBottomSheet<void>(
+        context: context,
+        backgroundColor: Colors.transparent,
+        builder: (BuildContext context) {
+          var product = cartModel.data?[indexCabang].data?[index];
+          var listMultisatuanUnit =
+              product?.multisatuanUnit?.map((e) => e.toString()).toList();
+          var listMultiSatuanJumlah =
+              product!.multisatuanJumlah?.map((e) => e.toString()).toList();
+          List<int> listJumlahMultiSatuan = [];
+          for (var i = 0; i < (listMultisatuanUnit?.length ?? 0); i++) {
+            listJumlahMultiSatuan.add(0);
+          }
+
+          // listJumlahMultiSatuan = product.jumlahMultisatuan
+          //         ?.map((e) => int.parse(e.toString()))
+          //         .toList() ??
+          //     [];
+
+          print("percobaan ${listMultisatuanUnit.runtimeType}");
+
+          var jumlahTotalBarang = 0;
+
+          return StatefulBuilder(builder: (BuildContext context,
+              StateSetter stateSetter /*You can rename this!*/) {
+            return Container(
+              padding: const EdgeInsets.all(20),
+              height: 300,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Container(
+                      color: Colors.black,
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      height: 2,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    "Satuan Produk",
+                    style: poppins.copyWith(
+                      fontSize: 18,
+                      fontWeight: semiBold,
+                      color: backgroundColor1,
+                    ),
+                  ),
+                  Expanded(
+                    child: ListView(
+                      children: <Widget>[
+                        for (var i = 0;
+                            i < ((listMultisatuanUnit?.length ?? 0));
+                            i++) ...{
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  "${listMultisatuanUnit?[i]} (isi ${listMultiSatuanJumlah?[i]} produk)",
+                                  style: poppins,
+                                ),
+                              ),
+                              Row(
+                                children: [
+                                  InkWell(
+                                    onTap: () {
+                                      if (listJumlahMultiSatuan[i] > 0) {
+                                        stateSetter(() {
+                                          listJumlahMultiSatuan[i] -= 1;
+                                          jumlahTotalBarang -= (int.parse(
+                                              listMultiSatuanJumlah?[i] ??
+                                                  "0"));
+                                        });
+                                      }
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.all(5),
+                                      decoration: BoxDecoration(
+                                        color: backgroundColor2,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: const Icon(
+                                        Icons.remove,
+                                        size: 15,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    child: Text(
+                                      // "${product?.jumlah}",
+                                      "${listJumlahMultiSatuan[i]}",
+                                      style: poppins.copyWith(
+                                        color: backgroundColor1,
+                                      ),
+                                    ),
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      var cek =
+                                          listJumlahMultiSatuan[i] + 1; // 1 2 3
+                                      print(
+                                          "jumlah stok: ${product.stok} == ${jumlahTotalBarang + int.parse(listMultiSatuanJumlah![i])}");
+                                      if (jumlahTotalBarang +
+                                              int.parse(listMultiSatuanJumlah[
+                                                  i]) <= // 1 12 34
+                                          (product.stok ?? 0)) {
+                                        stateSetter(() {
+                                          listJumlahMultiSatuan[i] += 1;
+                                          jumlahTotalBarang += (int.parse(
+                                              listMultiSatuanJumlah[i]));
+                                        });
+                                      }
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.all(5),
+                                      decoration: BoxDecoration(
+                                        color: backgroundColor3,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: const Icon(
+                                        Icons.add,
+                                        color: Colors.white,
+                                        size: 15,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          )
+                        }
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: TextButton(
+                      onPressed: () {
+                        if (listJumlahMultiSatuan
+                            .where((element) => element != 0)
+                            .isNotEmpty) {
+                          print(
+                              "yang akan dikirim adalah: $listJumlahMultiSatuan dengan $listMultiSatuanJumlah dan $listMultisatuanUnit");
+                          Navigator.pop(context);
+                          sendProduct(
+                            index: index,
+                            cabangId: cabangId,
+                            jumlahMultiSatuan: listJumlahMultiSatuan,
+                            multiSatuanJumlah: listMultiSatuanJumlah
+                                ?.map((e) => int.parse(e.toString()))
+                                .toList(),
+                            multiSatuanunit: listMultisatuanUnit
+                                ?.map((e) => e.toString())
+                                .toList(),
+                          );
+                          setState(() {});
+                        } else {
+                          Navigator.pop(context);
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            backgroundColor: Colors.red,
+                            content: Text(
+                              "Anda belum memilih jumlah produk",
+                              style: poppins,
+                            ),
+                            duration: const Duration(seconds: 1),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ));
+                        }
+                        // sendProduct(cabangId: cabangId, jumlahMultiSatuan: listJumlahMultiSatuan);
+                      },
+                      style: TextButton.styleFrom(
+                          backgroundColor: backgroundColor3,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          )),
+                      child: Text(
+                        "Konfirmasi",
+                        style: poppins.copyWith(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          });
+        },
+      );
+    }
+
     Widget cartItem({required int index}) {
       var product = cartModel.data?[indexCabang].data?[index];
       String? numericString =
           "${product?.diskon != null ? product?.hargaDiskon : product?.harga ?? 0}";
       int numericValue =
           int.parse(numericString); // Parses the string as an integer
+
+      String multiSatuanString = "";
+      for (var i = 0; i < (product?.jumlahMultisatuan?.length ?? 0); i++) {
+        if (product?.jumlahMultisatuan?[i] != 0) {
+          multiSatuanString +=
+              "(${product?.jumlahMultisatuan?[i]} ${product?.multisatuanUnit?[i]}) ";
+        }
+      }
 
       return InkWell(
         onTap: () {
@@ -412,6 +653,9 @@ class _CartPageState extends State<CartPage> {
                 discountPercentage:
                     product?.diskon == null ? "" : "${product?.diskon}%",
                 isDiscount: product?.diskon == null ? false : true,
+                jumlahMultiSatuan: product?.jumlahMultisatuan
+                    ?.map((e) => int.parse(e.toString()))
+                    .toList(),
               ),
               type: PageTransitionType.bottomToTop,
             ),
@@ -533,6 +777,16 @@ class _CartPageState extends State<CartPage> {
                             ),
                           ],
                         ),
+                      Text(
+                        multiSatuanString,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: poppins.copyWith(
+                          color: Colors.grey,
+                          fontSize: 10,
+                          fontWeight: bold,
+                        ),
+                      ),
                       const Spacer(),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
@@ -600,13 +854,20 @@ class _CartPageState extends State<CartPage> {
                               InkWell(
                                 onTap: () {
                                   setState(() {
-                                    if ((product?.jumlah ?? 0) == 1) {
-                                      showAlertDialog(context, product);
+                                    if (product?.jumlahMultisatuan == null) {
+                                      if ((product?.jumlah ?? 0) == 1) {
+                                        showAlertDialog(context, product);
+                                      } else {
+                                        _updateCartProduct(
+                                          cuid: "${product?.sId}",
+                                          jumlah:
+                                              "${(product?.jumlah ?? 0) - 1}",
+                                        );
+                                      }
                                     } else {
-                                      _updateCartProduct(
-                                        cuid: "${product?.sId}",
-                                        jumlah: "${(product?.jumlah ?? 0) - 1}",
-                                      );
+                                      bottomDialog(
+                                          cabangId: product?.cabangId ?? 0,
+                                          index: index);
                                     }
                                   });
                                 },
@@ -635,20 +896,27 @@ class _CartPageState extends State<CartPage> {
                               ),
                               InkWell(
                                 onTap: () {
-                                  if (((product?.jumlah ?? 0) + 1) <=
-                                      (product?.stok ?? 0)) {
-                                    _updateCartProduct(
-                                      cuid: "${product?.sId}",
-                                      jumlah: "${(product?.jumlah ?? 0) + 1}",
-                                    );
-                                  } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text(
-                                          "Semua stok barang sudah berada di keranjang anda",
+                                  if (product?.jumlahMultisatuan == null) {
+                                    if (((product?.jumlah ?? 0) + 1) <=
+                                        (product?.stok ?? 0)) {
+                                      _updateCartProduct(
+                                        cuid: "${product?.sId}",
+                                        jumlah: "${(product?.jumlah ?? 0) + 1}",
+                                      );
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            "Semua stok barang sudah berada di keranjang anda",
+                                          ),
                                         ),
-                                      ),
-                                    );
+                                      );
+                                    }
+                                  } else {
+                                    bottomDialog(
+                                        cabangId: product?.cabangId ?? 0,
+                                        index: index);
                                   }
                                 },
                                 child: Container(

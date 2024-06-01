@@ -30,10 +30,14 @@ class CartService {
     }
   }
 
-  Future<Map<String, dynamic>> sendCart(
-      {required String token,
-      required int cabangId,
-      required int productId}) async {
+  Future<Map<String, dynamic>> sendCart({
+    required String token,
+    required int cabangId,
+    required int productId,
+    List<int>? multiSatuanJumlah,
+    List<String>? multiSatuanunit,
+    List<int>? jumlahMultiSatuan,
+  }) async {
     var url = Uri.parse("${baseURL}keranjang");
     var header = {
       'Content-Type': 'application/json',
@@ -43,6 +47,9 @@ class CartService {
     Map data = {
       "cabang_id": cabangId,
       "produk_id": productId,
+      "multisatuan_jumlah": multiSatuanJumlah,
+      "multisatuan_unit": multiSatuanunit,
+      "jumlah_multisatuan": jumlahMultiSatuan,
     };
 
     var body = jsonEncode(data);
@@ -64,7 +71,10 @@ class CartService {
   Future<Map<String, dynamic>> updateCart({
     required String token,
     required String productId,
-    required String jumlah,
+    required String? jumlah,
+    List<int>? multiSatuanJumlah,
+    List<String>? multiSatuanUnit,
+    List<int>? jumlahMultiSatuan,
   }) async {
     var url = Uri.parse("${baseURL}keranjang/$productId");
     var header = {
@@ -73,7 +83,10 @@ class CartService {
     };
 
     Map data = {
-      "jumlah": int.parse(jumlah),
+      "jumlah": int.parse(jumlah ?? "0"),
+      "multisatuan_jumlah": multiSatuanJumlah,
+      "multisatuan_unit": multiSatuanUnit,
+      "jumlah_multisatuan": jumlahMultiSatuan,
     };
 
     var body = jsonEncode(data);

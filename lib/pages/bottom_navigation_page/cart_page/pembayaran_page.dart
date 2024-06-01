@@ -59,6 +59,7 @@ class _PembayaranPageState extends State<PembayaranPage> {
     PageProvider pageProvider =
         Provider.of<PageProvider>(context, listen: false);
     if (pembayaranTerpilih.data?.isEmpty ?? true) {
+      print("isi datany adalah ${widget.product}");
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         backgroundColor: Colors.red,
         content: Text(

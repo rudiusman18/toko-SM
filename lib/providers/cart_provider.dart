@@ -26,10 +26,19 @@ class CartProvider with ChangeNotifier {
     required String token,
     required int cabangId,
     required int productId,
+    List<int>? multiSatuanJumlah,
+    List<String>? multiSatuanunit,
+    List<int>? jumlahMultiSatuan,
   }) async {
     try {
-      await CartService()
-          .sendCart(token: token, cabangId: cabangId, productId: productId);
+      await CartService().sendCart(
+        token: token,
+        cabangId: cabangId,
+        productId: productId,
+        multiSatuanJumlah: multiSatuanJumlah,
+        multiSatuanunit: multiSatuanunit,
+        jumlahMultiSatuan: jumlahMultiSatuan,
+      );
       return true;
     } catch (e) {
       return false;
