@@ -430,14 +430,19 @@ class _CartPageState extends State<CartPage> {
             listJumlahMultiSatuan.add(0);
           }
 
-          // listJumlahMultiSatuan = product.jumlahMultisatuan
-          //         ?.map((e) => int.parse(e.toString()))
-          //         .toList() ??
-          //     [];
+          listJumlahMultiSatuan = product.jumlahMultisatuan
+                  ?.map((e) => int.parse(e.toString()))
+                  .toList() ??
+              [];
 
           print("percobaan ${listMultisatuanUnit.runtimeType}");
 
           var jumlahTotalBarang = 0;
+
+          for (var i = 0; i < (listJumlahMultiSatuan.length); i++) {
+            jumlahTotalBarang += listJumlahMultiSatuan[i] *
+                int.parse((listMultiSatuanJumlah?[i] ?? ""));
+          }
 
           return StatefulBuilder(builder: (BuildContext context,
               StateSetter stateSetter /*You can rename this!*/) {

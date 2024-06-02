@@ -895,11 +895,16 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           for (var i = 0; i < (listMultisatuanUnit.length); i++) {
             listJumlahMultiSatuan.add(0);
           }
-          // if ((widget.jumlahMultiSatuan ?? []).isNotEmpty) {
-          //   listJumlahMultiSatuan = widget.jumlahMultiSatuan ?? [];
-          // }
+          if ((widget.jumlahMultiSatuan ?? []).isNotEmpty) {
+            listJumlahMultiSatuan = widget.jumlahMultiSatuan ?? [];
+          }
 
           var jumlahTotalBarang = 0;
+
+          for (var i = 0; i < (listJumlahMultiSatuan.length); i++) {
+            jumlahTotalBarang += listJumlahMultiSatuan[i] *
+                int.parse((listMultiSatuanJumlah[i]));
+          }
 
           return StatefulBuilder(builder: (BuildContext context,
               StateSetter stateSetter /*You can rename this!*/) {

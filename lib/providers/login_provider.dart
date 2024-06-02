@@ -25,6 +25,7 @@ class LoginProvider with ChangeNotifier {
       await saveModelToPrefs(_loginModel);
       return true;
     } catch (e) {
+      print("postLogin gagal dengan pesan $e");
       return false;
     }
   }

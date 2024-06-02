@@ -1,4 +1,4 @@
-#Sun Jun 02 03:33:06 ICT 2024
+#Sun Jun 02 06:48:51 ICT 2024
 base.0=D\:\\My_Project\\Project with mas galang\\toko-SM\\build\\app\\intermediates\\dex\\release\\minifyReleaseWithR8\\classes.dex
 path.0=classes.dex
 renamed.0=classes.dex

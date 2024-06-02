@@ -32,8 +32,8 @@ class Data {
   String? alamatPelanggan;
   String? telpPelanggan;
   String? emailPelanggan;
-  String? lat;
-  String? lon;
+  double? lat;
+  double? lon;
   String? namaCabang;
 
   Data(
