@@ -19,6 +19,7 @@ class UlasanPage extends StatefulWidget {
 class _UlasanPageState extends State<UlasanPage> {
   UlasanModel ulasanModel = UlasanModel();
   TextEditingController searchTextFieldController = TextEditingController();
+  FocusNode searchTextFieldFocusNode = FocusNode();
 
   @override
   void initState() {
@@ -33,7 +34,8 @@ class _UlasanPageState extends State<UlasanPage> {
         Provider.of<UlasanProvider>(context, listen: false);
 
     if (await ulasanProvider.getRiwayatUlasan(
-        token: loginProvider.loginModel.token ?? "")) {
+        token: loginProvider.loginModel.token ?? "",
+        search: searchTextFieldController.text)) {
       setState(() {
         ulasanModel = ulasanProvider.ulasanModel;
       });
@@ -145,14 +147,15 @@ class _UlasanPageState extends State<UlasanPage> {
           onFieldSubmitted: (_) {
             print(
                 "object yang dicari adalah ${searchTextFieldController.text}");
+            _initUlasanData();
           },
           decoration: InputDecoration(
             hintText: "Cari Ulasan",
             hintStyle: poppins,
             prefixIcon: const Icon(Icons.search),
-            // prefixIconColor: searchTextFieldFocusNode.hasFocus
-            //     ? backgroundColor1
-            //     : Colors.grey,
+            prefixIconColor: searchTextFieldFocusNode.hasFocus
+                ? backgroundColor1
+                : Colors.grey,
             focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(color: backgroundColor1, width: 2.0),
               borderRadius: const BorderRadius.all(Radius.circular(7.0)),
@@ -180,10 +183,19 @@ class _UlasanPageState extends State<UlasanPage> {
             const SizedBox(
               height: 10,
             ),
-            for (var i = 0; i < ((ulasanModel.data?.length ?? 1)); i++) ...{
-              ulasanItem(
-                index: i,
+            if (ulasanModel.data?.isEmpty ?? true) ...{
+              Center(
+                child: Text(
+                  "Tidak ada data",
+                  style: poppins,
+                ),
               ),
+            } else ...{
+              for (var i = 0; i < ((ulasanModel.data?.length ?? 1)); i++) ...{
+                ulasanItem(
+                  index: i,
+                ),
+              }
             }
           ],
         ));

@@ -10,10 +10,11 @@ class UlasanProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> getRiwayatUlasan({required String token}) async {
+  Future<bool> getRiwayatUlasan(
+      {required String token, String search = ""}) async {
     try {
-      UlasanModel ulasanModel =
-          await UlasanService().retrieveRiwayatUlasan(token: token);
+      UlasanModel ulasanModel = await UlasanService()
+          .retrieveRiwayatUlasan(token: token, search: search);
       _ulasanModel = ulasanModel;
       return true;
     } catch (e) {

@@ -7,8 +7,9 @@ import "package:http/http.dart" as http;
 class UlasanService {
   var baseURL = "http://103.127.132.116/api/v1/";
 
-  Future<UlasanModel> retrieveRiwayatUlasan({required String token}) async {
-    var url = Uri.parse("${baseURL}ulasan");
+  Future<UlasanModel> retrieveRiwayatUlasan(
+      {required String token, String search = ""}) async {
+    var url = Uri.parse("${baseURL}ulasan?q=$search");
     print("URL yang diakses adalah: ${url}");
     var header = {
       'Authorization': 'Bearer $token',
