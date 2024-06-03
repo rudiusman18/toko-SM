@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 import 'package:tokoSM/providers/profile_provider.dart';
 import 'package:tokoSM/providers/register_provider.dart';
 import 'package:tokoSM/providers/transaksi_provider.dart';
+import 'package:tokoSM/providers/ulasan_provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => AlamatProvider()),
         ChangeNotifierProvider(create: (context) => MetodePembayaranProvider()),
         ChangeNotifierProvider(create: (context) => TransaksiProvider()),
+        ChangeNotifierProvider(create: (context) => UlasanProvider()),
       ],
       child: MaterialApp(
         builder: (context, child) {

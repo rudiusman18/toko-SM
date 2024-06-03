@@ -1,9 +1,13 @@
 // ignore_for_file: use_build_context_synchronously, no_leading_underscores_for_local_identifiers
 
+import 'package:tokoSM/pages/bottom_navigation_page/cart_page/alamat_page.dart';
 import 'package:tokoSM/pages/login_page.dart';
+import 'package:tokoSM/pages/main_page.dart';
 import 'package:tokoSM/pages/profile_page/edit_profile_page.dart';
+import 'package:tokoSM/pages/profile_page/ulasan_page.dart';
 import 'package:tokoSM/providers/cabang_provider.dart';
 import 'package:tokoSM/providers/login_provider.dart';
+import 'package:tokoSM/providers/page_provider.dart';
 import 'package:tokoSM/providers/profile_provider.dart';
 import 'package:tokoSM/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +30,7 @@ class _ProfilePageState extends State<ProfilePage> {
     LoginProvider loginProvider = Provider.of<LoginProvider>(context);
     ProfileProvider profileProvider = Provider.of<ProfileProvider>(context);
     CabangProvider cabangProvider = Provider.of<CabangProvider>(context);
+    PageProvider pageProvider = Provider.of<PageProvider>(context);
 
     _loading() {
       showDialog(
@@ -349,22 +354,52 @@ class _ProfilePageState extends State<ProfilePage> {
                   actionWidget(
                     icon: Icons.house,
                     title: "Daftar Alamat",
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          PageTransition(
+                            child: const AlamatPage(),
+                            type: PageTransitionType.rightToLeft,
+                          ));
+                    },
                   ),
                   actionWidget(
                     icon: Icons.receipt,
                     title: "daftar transaksi",
-                    onTap: () {},
+                    onTap: () {
+                      pageProvider.currentIndex = 3;
+                      Navigator.push(
+                          context,
+                          PageTransition(
+                            child: const MainPage(),
+                            type: PageTransitionType.rightToLeft,
+                          ));
+                    },
                   ),
                   actionWidget(
                     icon: Icons.star,
                     title: "Ulasan",
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          PageTransition(
+                            child: const UlasanPage(),
+                            type: PageTransitionType.rightToLeft,
+                          ));
+                    },
                   ),
                   actionWidget(
                     icon: Icons.favorite,
-                    title: "Favorit",
-                    onTap: () {},
+                    title: "Wishlist",
+                    onTap: () {
+                      pageProvider.currentIndex = 2;
+                      Navigator.push(
+                          context,
+                          PageTransition(
+                            child: const MainPage(),
+                            type: PageTransitionType.rightToLeft,
+                          ));
+                    },
                   ),
                   const SizedBox(
                     height: 40,

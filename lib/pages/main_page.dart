@@ -25,7 +25,7 @@ class _MainPageState extends State<MainPage> {
     Widget body() {
       switch (pageProvider.currentIndex) {
         case 0:
-          return HomePage();
+          return const HomePage();
         case 1:
           return const CategoryPage();
         case 2:
@@ -33,14 +33,14 @@ class _MainPageState extends State<MainPage> {
         case 3:
           return const TransactionPage();
         default:
-          return HomePage();
+          return const HomePage();
       }
     }
 
     Widget customBottomNav() {
       return ClipRRect(
         borderRadius: const BorderRadius.vertical(
-          top: Radius.circular(30),
+          top: Radius.circular(15),
         ),
         child: BottomAppBar(
           shape: const CircularNotchedRectangle(),
@@ -54,16 +54,21 @@ class _MainPageState extends State<MainPage> {
               });
             },
             backgroundColor: backgroundColor3,
-            showSelectedLabels: false,
-            showUnselectedLabels: false,
+            selectedLabelStyle: poppins.copyWith(
+              fontSize: 10,
+            ),
+            selectedItemColor: Colors.white,
+            unselectedLabelStyle: poppins,
+            showSelectedLabels: true,
+            showUnselectedLabels: true,
             type: BottomNavigationBarType.fixed,
             items: [
               BottomNavigationBarItem(
                 icon: Container(
-                  margin: const EdgeInsets.symmetric(vertical: 15),
+                  margin: const EdgeInsets.symmetric(vertical: 0),
                   child: Icon(
                     Icons.home_filled,
-                    size: 30,
+                    size: 25,
                     color: pageProvider.currentIndex == 0
                         ? Colors.white
                         : Colors.black,
@@ -73,42 +78,42 @@ class _MainPageState extends State<MainPage> {
               ),
               BottomNavigationBarItem(
                 icon: Container(
-                  margin: const EdgeInsets.symmetric(vertical: 15),
+                  margin: const EdgeInsets.symmetric(vertical: 0),
                   child: Icon(
                     Icons.view_cozy_rounded,
-                    size: 30,
+                    size: 25,
                     color: pageProvider.currentIndex == 1
                         ? Colors.white
                         : Colors.black,
                   ),
                 ),
-                label: "Category",
+                label: "Kategori",
               ),
               BottomNavigationBarItem(
                 icon: Container(
-                  margin: const EdgeInsets.symmetric(vertical: 15),
+                  margin: const EdgeInsets.symmetric(vertical: 0),
                   child: Icon(
                     Icons.favorite,
-                    size: 30,
+                    size: 25,
                     color: pageProvider.currentIndex == 2
                         ? Colors.white
                         : Colors.black,
                   ),
                 ),
-                label: "Favorite",
+                label: "Wishlist",
               ),
               BottomNavigationBarItem(
                 icon: Container(
-                  margin: const EdgeInsets.symmetric(vertical: 15),
+                  margin: const EdgeInsets.symmetric(vertical: 0),
                   child: Icon(
                     Icons.paid,
-                    size: 30,
+                    size: 25,
                     color: pageProvider.currentIndex == 3
                         ? Colors.white
                         : Colors.black,
                   ),
                 ),
-                label: "Transaction",
+                label: "Transaksi",
               ),
             ],
           ),

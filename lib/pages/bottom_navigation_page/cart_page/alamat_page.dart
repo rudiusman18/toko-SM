@@ -207,7 +207,10 @@ class _AlamatPageState extends State<AlamatPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Daftar Alamat"),
+        title: Text(
+          "Daftar Alamat",
+          style: poppins,
+        ),
         backgroundColor: backgroundColor3,
         actions: [
           Container(
@@ -217,6 +220,7 @@ class _AlamatPageState extends State<AlamatPage> {
               child: Center(
                   child: Text(
                 "Tambah Alamat",
+                style: poppins,
               ))),
         ],
       ),

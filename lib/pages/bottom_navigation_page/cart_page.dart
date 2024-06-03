@@ -636,7 +636,7 @@ class _CartPageState extends State<CartPage> {
       for (var i = 0; i < (product?.jumlahMultisatuan?.length ?? 0); i++) {
         if (product?.jumlahMultisatuan?[i] != 0) {
           multiSatuanString +=
-              "(${product?.jumlahMultisatuan?[i]} ${product?.multisatuanUnit?[i]}) ";
+              "${product?.jumlahMultisatuan?[i]} ${product?.multisatuanUnit?[i]} ${product?.multisatuanJumlah?[i] == 1 ? "" : "(isi ${product?.multisatuanJumlah?[i]} produk)"} ";
         }
       }
 
