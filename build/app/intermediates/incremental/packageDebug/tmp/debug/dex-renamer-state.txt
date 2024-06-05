@@ -1,4 +1,4 @@
-#Wed Jun 05 11:38:55 WIB 2024
+#Wed Jun 05 16:55:29 WIB 2024
 base.0=/Users/enygma/Documents/github/toko-SM/build/app/intermediates/dex/debug/mergeDexDebug/classes.dex
 path.0=classes.dex
 renamed.0=classes.dex

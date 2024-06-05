@@ -33,7 +33,7 @@ class UlasanService {
       {required String token,
       required int productId,
       String rating = ""}) async {
-    var url = Uri.parse("${baseURL}ulasan/$productId?rating=$rating");
+    var url = Uri.parse("${baseURL}produk/ulasan/$productId?rating=$rating");
     print("URL yang diakses adalah: ${url}");
     var header = {
       'Authorization': 'Bearer $token',

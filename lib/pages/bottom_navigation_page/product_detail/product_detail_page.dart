@@ -6,6 +6,7 @@ import 'package:tokoSM/models/detail_product_model.dart';
 import 'package:tokoSM/models/favorite_model.dart';
 import 'package:tokoSM/models/ulasan_model.dart';
 import 'package:tokoSM/pages/bottom_navigation_page/cart_page.dart';
+import 'package:tokoSM/pages/bottom_navigation_page/product_detail/ulasan_product.dart';
 import 'package:tokoSM/pages/main_page.dart';
 import 'package:tokoSM/providers/cart_provider.dart';
 import 'package:tokoSM/providers/login_provider.dart';
@@ -778,12 +779,24 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           color: backgroundColor1,
                         ),
                       ),
-                      // Text(
-                      //   "LIhat Semua",
-                      //   style: poppins.copyWith(
-                      //     color: backgroundColor3,
-                      //   ),
-                      // ),
+                      (ulasanProduct.data?.length ?? 0) > 0
+                          ? GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    PageTransition(
+                                      child: const UlasanProduct(),
+                                      type: PageTransitionType.rightToLeft,
+                                    ));
+                              },
+                              child: Text(
+                                "LIhat Semua",
+                                style: poppins.copyWith(
+                                  color: backgroundColor3,
+                                ),
+                              ),
+                            )
+                          : const SizedBox(),
                     ],
                   ),
                 ],
@@ -811,7 +824,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   ),
                 )
               } else ...{
-                for (var i = 0; i < (ulasanProduct.data?.length ?? 0); i++) ...{
+                for (var i = 0;
+                    i <
+                        ((ulasanProduct.data?.length ?? 0) > 1
+                            ? 1
+                            : (ulasanProduct.data?.length ?? 0));
+                    i++) ...{
                   productReviewContent(
                     namaPengguna: "${ulasanProduct.data?[i].namaPelanggan}",
                     rating: ulasanProduct.data?[i].rating ?? 0,
