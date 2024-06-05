@@ -1,4 +1,11 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
+import 'package:tokoSM/pages/login_page.dart';
+import 'package:tokoSM/providers/login_provider.dart';
+import 'package:tokoSM/providers/profile_provider.dart';
 import 'package:tokoSM/theme/theme.dart';
 
 class UbahKataSandiPage extends StatefulWidget {
@@ -11,15 +18,22 @@ class UbahKataSandiPage extends StatefulWidget {
 class _UbahKataSandiPageState extends State<UbahKataSandiPage> {
   TextEditingController passwordLamaTextField = TextEditingController();
   TextEditingController passwordbaruTextField = TextEditingController();
+  bool passwordLamaIsVisible = false;
+  bool passwordBaruIsVisible = false;
+  var isLoading = false;
 
   @override
   Widget build(BuildContext context) {
+    ProfileProvider profileProvider = Provider.of<ProfileProvider>(context);
+    LoginProvider loginProvider = Provider.of<LoginProvider>(context);
+
     Widget customtextFormField({
       required IconData icon,
       required String title,
       required TextInputType keyboardType,
       required TextEditingController controller,
       bool readOnly = false,
+      required int index,
     }) {
       return Container(
         margin: const EdgeInsets.only(
@@ -50,7 +64,8 @@ class _UbahKataSandiPageState extends State<UbahKataSandiPage> {
               keyboardType: keyboardType,
               cursorColor: backgroundColor1,
               controller: controller,
-              obscureText: true,
+              obscureText:
+                  index == 0 ? !passwordLamaIsVisible : !passwordBaruIsVisible,
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.all(0),
                 hintText: "...",
@@ -58,6 +73,21 @@ class _UbahKataSandiPageState extends State<UbahKataSandiPage> {
                   color: backgroundColor1,
                 ),
                 prefixIcon: Icon(icon),
+                suffixIcon: IconButton(
+                  icon: (index == 0
+                          ? passwordLamaIsVisible
+                          : passwordBaruIsVisible)
+                      ? const Icon(Icons.visibility_off)
+                      : const Icon(Icons.visibility),
+                  onPressed: () {
+                    setState(() {
+                      index == 0
+                          ? (passwordLamaIsVisible = !passwordLamaIsVisible)
+                          : (passwordBaruIsVisible = !passwordBaruIsVisible);
+                    });
+                  },
+                ),
+                suffixIconColor: backgroundColor1,
                 prefixIconColor: backgroundColor1,
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
@@ -97,20 +127,64 @@ class _UbahKataSandiPageState extends State<UbahKataSandiPage> {
               title: "Password Lama",
               keyboardType: TextInputType.visiblePassword,
               controller: passwordLamaTextField,
+              index: 0,
             ),
             customtextFormField(
               icon: Icons.lock,
               title: "Password baru",
               keyboardType: TextInputType.visiblePassword,
               controller: passwordbaruTextField,
+              index: 1,
             ),
             Container(
               margin: const EdgeInsets.symmetric(
                 horizontal: 20,
               ),
               child: TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
+                onPressed: () async {
+                  print("Handle tap dijalankan");
+                  setState(() {
+                    isLoading = true;
+                  });
+                  if (await profileProvider.updatePassword(
+                    token: loginProvider.loginModel.token ?? "",
+                    passwordLama: passwordLamaTextField.text,
+                    passwordBaru: passwordbaruTextField.text,
+                  )) {
+                    setState(() {
+                      isLoading = false;
+                    });
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          "${profileProvider.changePasswordMessage}",
+                        ),
+                      ),
+                    );
+
+                    if ("${profileProvider.changePasswordMessage}"
+                        .contains("success")) {
+                      Future.delayed(const Duration(seconds: 2), () {
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            PageTransition(
+                                child: const LoginPage(),
+                                type: PageTransitionType.bottomToTop),
+                            (route) => false);
+                      });
+                    }
+                  } else {
+                    setState(() {
+                      isLoading = false;
+                    });
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          "Gagal Mengubah Password",
+                        ),
+                      ),
+                    );
+                  }
                 },
                 style: TextButton.styleFrom(
                   backgroundColor: backgroundColor3,

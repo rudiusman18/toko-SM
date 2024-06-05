@@ -4,10 +4,10 @@ import '../models/profile_model.dart';
 import 'package:http/http.dart' as http;
 
 class ProfileService {
+  var baseURL = "http://103.127.132.116/api/v1/";
+
   Future<ProfileModel> retrieveProfile(
       {required String token, required String userId}) async {
-    var baseURL = "http://103.127.132.116/api/v1/";
-
     var url = Uri.parse("${baseURL}akun/profil?id=$userId");
     print("URL yang diakses adalah: ${url}");
     var header = {
@@ -40,8 +40,6 @@ class ProfileService {
       required String wilayah,
       required String tglLahir,
       required String jenisKelamin}) async {
-    var baseURL = "http://103.127.132.116/api/v1/";
-
     var url = Uri.parse("${baseURL}akun/profil?id=$userId");
     print("URL yang diakses adalah: ${url}");
     var header = {
@@ -74,5 +72,35 @@ class ProfileService {
     } else {
       throw Exception("Gagal mengupdate data profile");
     }
+  }
+
+  Future<Map<String, dynamic>> changePassword({
+    required String token,
+    required String passwordLama,
+    required String passwordBaru,
+  }) async {
+    var url = Uri.parse("${baseURL}akun/password");
+    print("URL yang diakses adalah: ${url}");
+    var header = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    };
+
+    Map data = {
+      "oldpassword": passwordLama,
+      "newpassword": passwordBaru,
+    };
+    var body = jsonEncode(data);
+    var response = await http.post(
+      url,
+      headers: header,
+      body: body,
+    );
+
+    // ignore: avoid_print
+    print(
+        "Change password: ${response.body} with $passwordLama dengan $passwordBaru");
+    // ignore: prefer_collection_literals
+    return jsonDecode(response.body);
   }
 }

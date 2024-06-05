@@ -1,38 +1,82 @@
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:tokoSM/models/profile_model.dart';
 import 'package:tokoSM/services/profile_service.dart';
 
-class ProfileProvider with ChangeNotifier{
-
+class ProfileProvider with ChangeNotifier {
   ProfileModel _profileModel = ProfileModel();
   ProfileModel get profileModel => _profileModel;
-  set profileModel(ProfileModel profileModel){
+  set profileModel(ProfileModel profileModel) {
     _profileModel = profileModel;
     notifyListeners();
   }
 
-  Future<bool>getProfile({required String token, required String userId,})async{
-    try{
-      ProfileModel profileModel = await ProfileService().retrieveProfile(token: token, userId: userId);
+  Future<bool> getProfile({
+    required String token,
+    required String userId,
+  }) async {
+    try {
+      ProfileModel profileModel =
+          await ProfileService().retrieveProfile(token: token, userId: userId);
       _profileModel = profileModel;
       return true;
-    }catch(e){
+    } catch (e) {
       print("ada error ketika mendapatkan profile $e");
       return false;
     }
   }
 
-  Future<bool>updateProfile({required String token, required int userId, required int cabangId, required String username, required String fullname, required String email, required String telp, required String alamat, required String wilayah, required String tglLahir, required String jenisKelamin,})async{
-    try{
-      await ProfileService().updateProfile(token: token, userId: userId, cabangId: cabangId, username: username, email: email, telp: telp, alamat: alamat, wilayah: wilayah, tglLahir: tglLahir, jenisKelamin: jenisKelamin, fullname: fullname);
+  Future<bool> updateProfile({
+    required String token,
+    required int userId,
+    required int cabangId,
+    required String username,
+    required String fullname,
+    required String email,
+    required String telp,
+    required String alamat,
+    required String wilayah,
+    required String tglLahir,
+    required String jenisKelamin,
+  }) async {
+    try {
+      await ProfileService().updateProfile(
+          token: token,
+          userId: userId,
+          cabangId: cabangId,
+          username: username,
+          email: email,
+          telp: telp,
+          alamat: alamat,
+          wilayah: wilayah,
+          tglLahir: tglLahir,
+          jenisKelamin: jenisKelamin,
+          fullname: fullname);
       return true;
-    }
-    catch(e){
+    } catch (e) {
       print("update profile mengalami kegagalan: $e");
       return false;
     }
-}
+  }
 
+  var _changePasswordMessage = Map<String, dynamic>();
+  Map<String, dynamic> get changePasswordMessage => _changePasswordMessage;
+  set changePasswordMessage(Map<String, dynamic> newChangePasswordMessage) {
+    _changePasswordMessage = changePasswordMessage;
+    notifyListeners();
+  }
+
+  Future<bool> updatePassword({
+    required String token,
+    required String passwordLama,
+    required String passwordBaru,
+  }) async {
+    try {
+      Map<String, dynamic> data = await ProfileService().changePassword(
+          token: token, passwordLama: passwordLama, passwordBaru: passwordBaru);
+      _changePasswordMessage = data;
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 }
