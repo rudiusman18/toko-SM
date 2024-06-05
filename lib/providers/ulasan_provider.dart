@@ -44,4 +44,26 @@ class UlasanProvider with ChangeNotifier {
       return false;
     }
   }
+
+  Future<bool> postUlasanProduct({
+    required String token,
+    required int productId,
+    required String namaProduk,
+    required int rating,
+    required String ulasan,
+  }) async {
+    try {
+      var data = await UlasanService().sendUlasan(
+          token: token,
+          productId: productId,
+          namaProduk: namaProduk,
+          rating: rating,
+          ulasan: ulasan);
+      print(
+          "Sukses mengirimkan data ulasan $productId, $namaProduk, $rating, $ulasan");
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 }

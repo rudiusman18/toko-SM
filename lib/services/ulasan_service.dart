@@ -52,4 +52,41 @@ class UlasanService {
       throw Exception("Gagal mendapatkan data ulasan produk");
     }
   }
+
+  Future<Map<String, dynamic>> sendUlasan({
+    required String token,
+    required int productId,
+    required String namaProduk,
+    required int rating,
+    required String ulasan,
+  }) async {
+    var url = Uri.parse("${baseURL}ulasan");
+    var header = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token'
+    };
+
+    Map data = {
+      "produk_id": productId,
+      "nama_produk": namaProduk,
+      "rating": rating,
+      "ulasan": ulasan,
+    };
+
+    var body = jsonEncode(data);
+
+    var response = await http.post(url, headers: header, body: body);
+    // ignore: avoid_print
+    print(
+        "ulasan: ${response.body} dengan ${productId} dan $namaProduk $rating $ulasan");
+
+// **success melakukan post Ulasan
+    if (response.statusCode >= 200 && response.statusCode <= 299) {
+      var data = jsonDecode(response.body);
+
+      return data;
+    } else {
+      throw Exception("${jsonDecode(response.body)['message']}");
+    }
+  }
 }

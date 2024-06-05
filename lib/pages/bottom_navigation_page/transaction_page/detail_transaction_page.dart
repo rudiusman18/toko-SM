@@ -1,19 +1,37 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_stars/flutter_rating_stars.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:tokoSM/models/transaction_model.dart';
+import 'package:tokoSM/providers/login_provider.dart';
+import 'package:tokoSM/providers/ulasan_provider.dart';
 import 'package:tokoSM/theme/theme.dart';
 
-class DetailTransactionPage extends StatelessWidget {
-  final currencyFormatter = NumberFormat('#,##0.00', 'ID');
+class DetailTransactionPage extends StatefulWidget {
   Data transactionDetailItem = Data();
   DetailTransactionPage({super.key, required this.transactionDetailItem});
 
   @override
+  State<DetailTransactionPage> createState() => _DetailTransactionPageState();
+}
+
+class _DetailTransactionPageState extends State<DetailTransactionPage> {
+  final currencyFormatter = NumberFormat('#,##0.00', 'ID');
+
+  TextEditingController ulasanTextField = TextEditingController();
+
+  @override
   Widget build(BuildContext context) {
+    LoginProvider loginProvider = Provider.of<LoginProvider>(context);
+    UlasanProvider ulasanProvider = Provider.of<UlasanProvider>(context);
+
+    var starRating = 0.0;
+
     Widget statusView() {
-      String timestamp = "${transactionDetailItem.produk?.first.createdAt}";
+      String timestamp =
+          "${widget.transactionDetailItem.produk?.first.createdAt}";
       DateTime dateTime = DateTime.parse(timestamp);
       String formattedDate = DateFormat('dd MMMM yyyy, HH:mm').format(dateTime);
 
@@ -38,7 +56,7 @@ class DetailTransactionPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "${transactionDetailItem.keteranganStatus}",
+                  "${widget.transactionDetailItem.keteranganStatus}",
                   style: poppins.copyWith(
                     fontWeight: bold,
                   ),
@@ -66,7 +84,7 @@ class DetailTransactionPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "${transactionDetailItem.noInvoice}",
+                  "${widget.transactionDetailItem.noInvoice}",
                   style: poppins.copyWith(
                     color: Colors.grey,
                     fontSize: 12,
@@ -106,8 +124,182 @@ class DetailTransactionPage extends StatelessWidget {
       );
     }
 
-    Widget detailPRoductViewItem({required int index}) {
-      var produk = transactionDetailItem.produk?[index];
+    Widget customtextFormField({
+      required TextInputType keyboardType,
+      required TextEditingController controller,
+    }) {
+      return Container(
+        margin: const EdgeInsets.only(top: 10),
+        child: TextFormField(
+          textInputAction: TextInputAction.newline,
+          maxLines: 4,
+          style: poppins.copyWith(
+            color: backgroundColor1,
+          ),
+          keyboardType: keyboardType,
+          cursorColor: backgroundColor1,
+          controller: controller,
+          decoration: InputDecoration(
+            hintText: "...",
+            hintStyle: poppins.copyWith(
+              color: backgroundColor1,
+            ),
+            prefixIconColor: Colors.grey,
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              borderSide: const BorderSide(
+                color: Colors.grey,
+                width: 1.0,
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              borderSide: const BorderSide(
+                color: Colors.grey,
+                width: 2.0,
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    Widget showUlasanProduct({
+      required Produk product,
+    }) {
+      bool isLoading = false;
+      return StatefulBuilder(
+        builder: (context, stateSetter) {
+          return Container(
+            height: 350,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            ),
+            child: Container(
+              margin: const EdgeInsets.only(
+                left: 20,
+                right: 20,
+                top: 20,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Ulasan Produk",
+                    style: poppins.copyWith(
+                      fontWeight: semiBold,
+                      fontSize: 18,
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                        width: 60,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(
+                            20,
+                          ),
+                          image: DecorationImage(
+                            image: NetworkImage(
+                              "http://103.127.132.116/uploads/images/${product.imageUrl}",
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          "${product.namaProduk}",
+                          style: poppins.copyWith(
+                            fontSize: 17,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  RatingStars(
+                    value: starRating,
+                    onValueChanged: (v) {
+                      stateSetter(() {
+                        // value = v;
+                        starRating = v;
+                      });
+                    },
+                    starBuilder: (index, color) => Icon(
+                      Icons.star,
+                      color: color,
+                      size: 30,
+                    ),
+                    starCount: 5,
+                    starSize: 30,
+                    valueLabelColor: const Color(0xff9b9b9b),
+                    valueLabelTextStyle: TextStyle(
+                      color: Colors.white,
+                      fontWeight: medium,
+                      fontStyle: FontStyle.normal,
+                    ),
+                    valueLabelRadius: 10,
+                    maxValue: 5,
+                    starSpacing: 2,
+                    maxValueVisibility: true,
+                    valueLabelVisibility: false,
+                    animationDuration: const Duration(milliseconds: 1000),
+                    starOffColor: const Color(0xffe7e8ea),
+                    starColor: backgroundColor2,
+                  ),
+                  customtextFormField(
+                    controller: ulasanTextField,
+                    keyboardType: TextInputType.multiline,
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: backgroundColor3,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          )),
+                      onPressed: () async {
+                        stateSetter(() {
+                          isLoading = true;
+                        });
+                        await ulasanProvider.postUlasanProduct(
+                          namaProduk: product.namaProduk ?? "",
+                          productId: product.id ?? 0,
+                          token: loginProvider.loginModel.token ?? "",
+                          rating: int.parse("${starRating.round()}"),
+                          ulasan: ulasanTextField.text,
+                        );
+                        stateSetter(() {
+                          isLoading = false;
+                          Navigator.pop(context);
+                        });
+                      },
+                      child: isLoading
+                          ? const SizedBox(
+                              width: 15,
+                              height: 15,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            )
+                          : Text(
+                              "Simpan",
+                              style: poppins,
+                            ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      );
+    }
+
+    Widget detailProductViewItem({required int index}) {
+      var produk = widget.transactionDetailItem.produk?[index];
       return Container(
         padding: const EdgeInsets.all(
           10,
@@ -171,7 +363,6 @@ class DetailTransactionPage extends StatelessWidget {
               thickness: 1,
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -191,6 +382,45 @@ class DetailTransactionPage extends StatelessWidget {
                       ),
                     ),
                   ],
+                ),
+                const Spacer(),
+                InkWell(
+                  onTap: () {
+                    print("ditekan");
+
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
+                      builder: (BuildContext context) {
+                        return Padding(
+                          padding: EdgeInsets.only(
+                              bottom: MediaQuery.of(context).viewInsets.bottom),
+                          child: showUlasanProduct(product: produk ?? Produk()),
+                        );
+                      },
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(
+                      5,
+                    ),
+                    decoration: BoxDecoration(
+                      color: backgroundColor3,
+                      borderRadius: BorderRadius.circular(
+                        5,
+                      ),
+                    ),
+                    child: Text(
+                      "Beri Ulasan",
+                      style: poppins.copyWith(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
                 ),
                 InkWell(
                   onTap: () {},
@@ -250,7 +480,7 @@ class DetailTransactionPage extends StatelessWidget {
                 ),
                 Expanded(
                   child: Text(
-                    "Cabang ${transactionDetailItem.cabangId}", // (perlu diganti namanya)
+                    "Cabang ${widget.transactionDetailItem.cabangId}", // (perlu diganti namanya)
                     style: poppins.copyWith(
                       fontWeight: bold,
                     ),
@@ -263,9 +493,9 @@ class DetailTransactionPage extends StatelessWidget {
               height: 10,
             ),
             for (var i = 0;
-                i < (transactionDetailItem.produk?.length ?? 0);
+                i < (widget.transactionDetailItem.produk?.length ?? 0);
                 i++)
-              detailPRoductViewItem(index: i),
+              detailProductViewItem(index: i),
           ],
         ),
       );
@@ -315,7 +545,7 @@ class DetailTransactionPage extends StatelessWidget {
                   fit: FlexFit.tight,
                   flex: 10,
                   child: Text(
-                    "${transactionDetailItem.namaKurir}",
+                    "${widget.transactionDetailItem.namaKurir}",
                     style: poppins.copyWith(
                       fontSize: 12,
                     ),
@@ -375,14 +605,14 @@ class DetailTransactionPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "${transactionDetailItem.namaPenerima}",
+                        "${widget.transactionDetailItem.namaPenerima}",
                         style: poppins.copyWith(
                           fontSize: 12,
                           fontWeight: bold,
                         ),
                       ),
                       Text(
-                        "${transactionDetailItem.alamatPenerima}",
+                        "${widget.transactionDetailItem.alamatPenerima}",
                         style: poppins.copyWith(
                           fontSize: 12,
                         ),
@@ -433,7 +663,7 @@ class DetailTransactionPage extends StatelessWidget {
                   fit: FlexFit.tight,
                   flex: 1,
                   child: Text(
-                    "${transactionDetailItem.bankTransfer}",
+                    "${widget.transactionDetailItem.bankTransfer}",
                     style: poppins.copyWith(
                       fontSize: 12,
                     ),
@@ -452,7 +682,7 @@ class DetailTransactionPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Total Harga (${transactionDetailItem.produk?.length} Barang)",
+                  "Total Harga (${widget.transactionDetailItem.produk?.length} Barang)",
                   style: poppins.copyWith(
                     fontSize: 12,
                   ),
@@ -461,7 +691,7 @@ class DetailTransactionPage extends StatelessWidget {
                   fit: FlexFit.tight,
                   flex: 1,
                   child: Text(
-                    "Rp ${currencyFormatter.format(transactionDetailItem.totalBelanja!.toInt() - 15000)}",
+                    "Rp ${currencyFormatter.format(widget.transactionDetailItem.totalBelanja!.toInt() - 15000)}",
                     style: poppins.copyWith(
                       fontSize: 12,
                     ),
@@ -516,7 +746,7 @@ class DetailTransactionPage extends StatelessWidget {
                   fit: FlexFit.tight,
                   flex: 1,
                   child: Text(
-                    "Rp ${currencyFormatter.format(transactionDetailItem.totalBelanja)}",
+                    "Rp ${currencyFormatter.format(widget.transactionDetailItem.totalBelanja)}",
                     style: poppins.copyWith(
                       fontWeight: bold,
                     ),
