@@ -67,37 +67,39 @@ class _EditProfilePageState extends State<EditProfilePage> {
     });
   }
 
-  _loading(){
-    showDialog(context: context, builder: (BuildContext context){
-      return Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Center(
-          child: Container(
-            padding: EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: MediaQuery.sizeOf(context).width * 0.3,
-                  height: MediaQuery.sizeOf(context).width * 0.3,
-                  child: CircularProgressIndicator(
-                    color: backgroundColor3,
-                  ),
+  _loading() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Scaffold(
+            backgroundColor: Colors.transparent,
+            body: Center(
+              child: Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
                 ),
-                SizedBox(
-                  height: 20,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.sizeOf(context).width * 0.3,
+                      height: MediaQuery.sizeOf(context).width * 0.3,
+                      child: CircularProgressIndicator(
+                        color: backgroundColor3,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text("Loading...", style: poppins),
+                  ],
                 ),
-                Text("Loading...",style: poppins),
-              ],
+              ),
             ),
-          ),
-        ),
-      );
-    });
+          );
+        });
   }
 
   @override
@@ -110,21 +112,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
     emailTextField.text = "${profile?.emailPelanggan}";
     telpTextField.text = "${profile?.telpPelanggan}";
     alamatTextField.text = "${profile?.alamatPelanggan}";
-    wilayahTextField.text = "${profile?.provinsi?.toUpperCase()},${profile?.kabkota?.toUpperCase()},${profile?.kecamatan?.toUpperCase()},${profile?.kelurahan?.toUpperCase()}";
+    wilayahTextField.text =
+        "${profile?.provinsi?.toUpperCase()},${profile?.kabkota?.toUpperCase()},${profile?.kecamatan?.toUpperCase()},${profile?.kelurahan?.toUpperCase()}";
     tglLahirTextField.text = "${profile?.tglLahirPelanggan}";
     jenisKelaminTextField.text = "${profile?.jenisKelaminPelanggan}";
 
-    Future.delayed(Duration.zero, ()async{
-      String data =
-      await rootBundle.loadString('assets/wilayah.json');
+    Future.delayed(Duration.zero, () async {
+      String data = await rootBundle.loadString('assets/wilayah.json');
       var jsonResult = jsonDecode(data);
       wilayah = WilayahModel.fromJson(jsonResult);
 
       setState(() {
-        textDatabase = wilayah.data
-            ?.map((e) => (e.value) ?? "")
-            .toList() ??
-            [];
+        textDatabase = wilayah.data?.map((e) => (e.value) ?? "").toList() ?? [];
         print("isi wilayahnya adalah ${textDatabase}");
       });
     });
@@ -136,31 +135,46 @@ class _EditProfilePageState extends State<EditProfilePage> {
     ProfileProvider profileProvider = Provider.of<ProfileProvider>(context);
     LoginProvider loginProvider = Provider.of<LoginProvider>(context);
     CabangProvider cabangProvider = Provider.of<CabangProvider>(context);
-    List<String> dataCabang = cabangProvider.cabangModel.data?.map((e) => "${e.namaCabang}").toList() ?? [];
-    idCabangTextField.text = "${cabangProvider.cabangModel.data?.where((element) => element.namaCabang?.toLowerCase() == cabangTextField.text.toLowerCase()).first.id}";
+    List<String> dataCabang = cabangProvider.cabangModel.data
+            ?.map((e) => "${e.namaCabang}")
+            .toList() ??
+        [];
+    idCabangTextField.text =
+        "${cabangProvider.cabangModel.data?.where((element) => element.namaCabang?.toLowerCase() == cabangTextField.text.toLowerCase()).first.id}";
 
     // Digunakan ketika tombol simpan ditekan
-    _handleTapSimpan()async{
+    _handleTapSimpan() async {
       var profile = profileProvider.profileModel.data;
 
       setState(() {
         _loading();
       });
 
-        if(await profileProvider.updateProfile(token: loginProvider.loginModel.token ?? "", userId: profile?.id ?? 0, cabangId: int.parse(idCabangTextField.text), username: usernameTextField.text, email: emailTextField.text, telp: telpTextField.text, alamat: alamatTextField.text, wilayah: wilayahTextField.text, tglLahir: tglLahirTextField.text, jenisKelamin: jenisKelaminTextField.text, fullname: fullnameTextField.text)){
-          print("data berhasil diupdate");
-          setState(() {
-            loginProvider.loginModel.data?.cabangId = int.parse(idCabangTextField.text);
-            loginProvider.loginModel.data?.namaCabang = cabangTextField.text;
-          });
-        }
-        else{
-          print("data gagal diupdate");
-        }
+      if (await profileProvider.updateProfile(
+          token: loginProvider.loginModel.token ?? "",
+          userId: profile?.id ?? 0,
+          cabangId: int.parse(idCabangTextField.text),
+          username: usernameTextField.text,
+          email: emailTextField.text,
+          telp: telpTextField.text,
+          alamat: alamatTextField.text,
+          wilayah: wilayahTextField.text,
+          tglLahir: tglLahirTextField.text,
+          jenisKelamin: jenisKelaminTextField.text,
+          fullname: fullnameTextField.text)) {
+        print("data berhasil diupdate");
         setState(() {
-          Navigator.pop(context);
-          Navigator.pop(context);
+          loginProvider.loginModel.data?.cabangId =
+              int.parse(idCabangTextField.text);
+          loginProvider.loginModel.data?.namaCabang = cabangTextField.text;
         });
+      } else {
+        print("data gagal diupdate");
+      }
+      setState(() {
+        Navigator.pop(context);
+        Navigator.pop(context);
+      });
     }
 
     Widget customtextFormField({
@@ -386,11 +400,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       dropdownDecoratorProps: const DropDownDecoratorProps(
                         dropdownSearchDecoration: InputDecoration(
                           hintText: "...",
-
                         ),
                       ),
                       selectedItem: wilayahTextField.text,
-                      onChanged: (value){
+                      onChanged: (value) {
                         setState(() {
                           wilayahTextField.text = value ?? "";
                         });
@@ -556,11 +569,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       dropdownDecoratorProps: const DropDownDecoratorProps(
                         dropdownSearchDecoration: InputDecoration(
                           hintText: "...",
-
                         ),
                       ),
                       selectedItem: jenisKelaminTextField.text,
-                      onChanged: (value){
+                      onChanged: (value) {
                         setState(() {
                           jenisKelaminTextField.text = value ?? "";
                         });
@@ -633,10 +645,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         ),
                       ),
                       selectedItem: cabangTextField.text,
-                      onChanged: (value){
+                      onChanged: (value) {
                         setState(() {
                           cabangTextField.text = value ?? "";
-                          idCabangTextField.text = "${cabangProvider.cabangModel.data?.where((element) => element.namaCabang?.toLowerCase() == value?.toLowerCase()).first.id}";
+                          idCabangTextField.text =
+                              "${cabangProvider.cabangModel.data?.where((element) => element.namaCabang?.toLowerCase() == value?.toLowerCase()).first.id}";
                         });
                       },
                     ),
@@ -646,16 +659,22 @@ class _EditProfilePageState extends State<EditProfilePage> {
             ),
 
             Container(
-                margin: const EdgeInsets.only(left: 20, right:20, bottom:20,),
+                margin: const EdgeInsets.only(
+                  left: 20,
+                  right: 20,
+                  bottom: 20,
+                ),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)
-                    ),
+                        borderRadius: BorderRadius.circular(10)),
                     backgroundColor: backgroundColor3,
                   ),
                   onPressed: _handleTapSimpan,
-                  child: Text("Simpan",),)),
+                  child: Text(
+                    "Simpan",
+                  ),
+                )),
           ],
         ));
   }
