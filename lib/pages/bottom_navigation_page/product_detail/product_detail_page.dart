@@ -4,12 +4,14 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:intl/intl.dart';
 import 'package:tokoSM/models/detail_product_model.dart';
 import 'package:tokoSM/models/favorite_model.dart';
+import 'package:tokoSM/models/ulasan_model.dart';
 import 'package:tokoSM/pages/bottom_navigation_page/cart_page.dart';
 import 'package:tokoSM/pages/main_page.dart';
 import 'package:tokoSM/providers/cart_provider.dart';
 import 'package:tokoSM/providers/login_provider.dart';
 import 'package:tokoSM/providers/page_provider.dart';
 import 'package:tokoSM/providers/product_provider.dart';
+import 'package:tokoSM/providers/ulasan_provider.dart';
 import 'package:tokoSM/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
@@ -61,14 +63,17 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   bool isLoading = false;
   bool initLoading = false;
   bool favoriteLoading = false;
+  bool ulasanProductIsLoading = false;
   DetailProductModel detailProduct = DetailProductModel();
   FavoriteModel favoriteProduct = FavoriteModel();
+  UlasanModel ulasanProduct = UlasanModel();
 
   @override
   void initState() {
     super.initState();
     _getDetailproduct();
     _getFavoriteProduct();
+    _getUlasanProduct();
     fToast.init(context);
   }
 
@@ -122,6 +127,29 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       print("ada yang salah dengan logikamu");
       setState(() {
         favoriteLoading = false;
+      });
+    }
+  }
+
+  _getUlasanProduct() async {
+    LoginProvider loginProvider =
+        Provider.of<LoginProvider>(context, listen: false);
+    UlasanProvider ulasanProvider =
+        Provider.of<UlasanProvider>(context, listen: false);
+    setState(() {
+      ulasanProductIsLoading = true;
+    });
+    if (await ulasanProvider.getUlasanProduct(
+        token: loginProvider.loginModel.token ?? "",
+        productId: int.parse(widget.productId.toString()))) {
+      print("Ulasan Product ${ulasanProvider.ulasanProduct}");
+      setState(() {
+        ulasanProduct = ulasanProvider.ulasanProduct;
+        ulasanProductIsLoading = false;
+      });
+    } else {
+      setState(() {
+        ulasanProductIsLoading = false;
       });
     }
   }
@@ -372,7 +400,44 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       );
     }
 
-    Widget productReviewContent() {
+    Widget productReviewContent({
+      required String namaPengguna,
+      required int rating,
+      required String ulasan,
+      required String tanggalUlasan,
+    }) {
+      DateFormat dateFormat = DateFormat("yyyy-MM-dd");
+      DateTime dateTime = dateFormat.parse(tanggalUlasan);
+      print("isi tanggalnya: ${dateTime} dengan $tanggalUlasan");
+      String timeAgo(DateTime date) {
+        Duration diff = DateTime.now().difference(date);
+
+        if (diff.inDays >= 365) {
+          int years = (diff.inDays / 365).floor();
+          return years == 1 ? '1 tahun yang lalu' : '$years tahun yang lalu';
+        } else if (diff.inDays >= 30) {
+          int months = (diff.inDays / 30).floor();
+          return months == 1 ? '1 bulan yang lalu' : '$months bulan yang lalu';
+        } else if (diff.inDays >= 7) {
+          int weeks = (diff.inDays / 7).floor();
+          return weeks == 1 ? '1 minggu yang lalu' : '$weeks minggu yang lalu';
+        } else if (diff.inDays > 0) {
+          return diff.inDays == 1
+              ? '1 hari yang lalu'
+              : '${diff.inDays} hari yang lalu';
+        } else if (diff.inHours > 0) {
+          return diff.inHours == 1
+              ? '1 jam yang lalu'
+              : '${diff.inHours} jam yang lalu';
+        } else if (diff.inMinutes > 0) {
+          return diff.inMinutes == 1
+              ? '1 menit yang lalu'
+              : '${diff.inMinutes} menit yang lalu';
+        } else {
+          return 'Baru saja';
+        }
+      }
+
       return Container(
         margin: const EdgeInsets.only(
           top: 10,
@@ -396,19 +461,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     size: 30,
                   ),
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "John Doe",
-                      style: poppins.copyWith(fontWeight: semiBold),
-                    ),
-                    Text(
-                      "247 Ulasan - 8 Terbantu",
-                      style: poppins.copyWith(
-                          fontWeight: light, fontSize: 12, color: Colors.grey),
-                    ),
-                  ],
+                Text(
+                  namaPengguna,
+                  style: poppins.copyWith(fontWeight: semiBold),
                 ),
               ],
             ),
@@ -419,7 +474,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   RatingStars(
-                    value: 5.0,
+                    value: double.parse("$rating"),
                     onValueChanged: (v) {
                       //
                       setState(() {
@@ -450,7 +505,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 5),
                     child: Text(
-                      "2 Bulan lalu",
+                      timeAgo(dateTime),
                       style: poppins.copyWith(
                         color: Colors.grey,
                         fontSize: 12,
@@ -463,7 +518,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             Container(
               margin: const EdgeInsets.symmetric(vertical: 10),
               child: Text(
-                "Lorem Ipsum dolor sit amet Lorem Ipsum dolor sit amet Lorem Ipsum dolor sit amet Lorem Ipsum dolor sit amet tes komentar",
+                ulasan,
                 style: poppins,
               ),
             ),
@@ -560,85 +615,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         ],
                       ),
                     ),
-                  // Padding(
-                  //   padding: const EdgeInsets.only(top: 10),
-                  //   child: Row(
-                  //     mainAxisAlignment: MainAxisAlignment.start,
-                  //     crossAxisAlignment: CrossAxisAlignment.center,
-                  //     children: [
-                  //       Icon(
-                  //         Icons.location_city,
-                  //         color: backgroundColor2,
-                  //         size: 40,
-                  //       ),
-                  //       Text(
-                  //         "Cabang ",
-                  //         overflow: TextOverflow.ellipsis,
-                  //         maxLines: 1,
-                  //         style: poppins.copyWith(
-                  //           color: backgroundColor2,
-                  //           fontWeight: medium,
-                  //         ),
-                  //       ),
-                  //       DropdownMenu<String>(
-                  //         initialSelection: widget.productLoct,
-                  //         onSelected: (String? value) {
-                  //           // This is called when the user selects an item.
-                  //           setState(() {
-                  //             widget.productLoct = value!;
-                  //             print(' value $value');
-                  //           });
-                  //         },
-                  //         dropdownMenuEntries: dataCabang
-                  //             .map<DropdownMenuEntry<String>>((String value) {
-                  //           return DropdownMenuEntry<String>(
-                  //               value: value, label: value);
-                  //         }).toList(),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
-
-                  // Padding(
-                  //   padding: const EdgeInsets.only(top: 10),
-                  //   child: RatingStars(
-                  //     value: double.parse("${detailProduct.data?.rating ?? 0}"),
-                  //     onValueChanged: (v) {
-                  //       //
-                  //       setState(() {
-                  //         // value = v;
-                  //       });
-                  //     },
-                  //     starBuilder: (index, color) => Icon(
-                  //       Icons.star,
-                  //       color: color,
-                  //     ),
-                  //     starCount: 5,
-                  //     starSize: 20,
-                  //     valueLabelColor: const Color(0xff9b9b9b),
-                  //     valueLabelTextStyle: TextStyle(
-                  //       color: Colors.white,
-                  //       fontWeight: medium,
-                  //       fontStyle: FontStyle.normal,
-                  //     ),
-                  //     valueLabelRadius: 10,
-                  //     maxValue: 5,
-                  //     starSpacing: 2,
-                  //     maxValueVisibility: true,
-                  //     valueLabelVisibility: true,
-                  //     animationDuration: const Duration(milliseconds: 1000),
-                  //     valueLabelPadding:
-                  //         const EdgeInsets.symmetric(vertical: 1, horizontal: 8),
-                  //     valueLabelMargin: const EdgeInsets.only(right: 8, top: 5),
-                  //     starOffColor: const Color(0xffe7e8ea),
-                  //     starColor: backgroundColor2,
-                  //   ),
-                  // ),
-
                   const SizedBox(
                     height: 10,
                   ),
-
                   Row(
                     children: [
                       const Icon(
@@ -647,7 +626,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         color: Colors.yellow,
                       ),
                       Text(
-                        "${detailProduct.data?.rating} | 0 Ulasan",
+                        "${detailProduct.data?.rating} | ${ulasanProduct.data?.length ?? 0} Ulasan",
                         style: poppins.copyWith(
                           fontWeight: medium,
                         ),
@@ -810,16 +789,38 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 ],
               ),
             ),
-            Center(
-              child: Container(
-                margin: const EdgeInsets.only(top: 10),
-                child: Text(
-                  "Produk ini belum memiliki ulasan",
-                  style: poppins,
+            if (ulasanProductIsLoading) ...{
+              Center(
+                child: SizedBox(
+                  width: 40,
+                  height: 40,
+                  child: CircularProgressIndicator(
+                    color: backgroundColor1,
+                  ),
                 ),
               ),
-            ),
-            // productReviewContent(),
+            } else ...{
+              if ((ulasanProduct.data ?? []).isEmpty) ...{
+                Center(
+                  child: Container(
+                    margin: const EdgeInsets.only(top: 10),
+                    child: Text(
+                      "Produk ini belum memiliki ulasan",
+                      style: poppins,
+                    ),
+                  ),
+                )
+              } else ...{
+                for (var i = 0; i < (ulasanProduct.data?.length ?? 0); i++) ...{
+                  productReviewContent(
+                    namaPengguna: "${ulasanProduct.data?[i].namaPelanggan}",
+                    rating: ulasanProduct.data?[i].rating ?? 0,
+                    ulasan: ulasanProduct.data?[i].ulasan ?? "",
+                    tanggalUlasan: ulasanProduct.data?[i].createdAt ?? "",
+                  )
+                }
+              }
+            },
           ],
         ),
       );

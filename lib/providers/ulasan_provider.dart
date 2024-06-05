@@ -22,4 +22,26 @@ class UlasanProvider with ChangeNotifier {
       return false;
     }
   }
+
+  UlasanModel _ulasanProduct = UlasanModel();
+  UlasanModel get ulasanProduct => _ulasanProduct;
+  set ulasanProduct(UlasanModel newUlasanProduct) {
+    _ulasanProduct = newUlasanProduct;
+    notifyListeners();
+  }
+
+  Future<bool> getUlasanProduct(
+      {required String token,
+      required int productId,
+      String rating = ""}) async {
+    try {
+      UlasanModel ulasanModel = await UlasanService().retrieveUlasanProduct(
+          token: token, productId: productId, rating: rating);
+      _ulasanProduct = ulasanModel;
+      return true;
+    } catch (e) {
+      print("getUlasanProduct error dengan pesan: $e");
+      return false;
+    }
+  }
 }
