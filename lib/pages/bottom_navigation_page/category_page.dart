@@ -96,7 +96,7 @@ class _CategoryPageState extends State<CategoryPage> {
                 Navigator.push(
                     context,
                     PageTransition(
-                        child: ProductListSearchResult(
+                        child: ProductListSearchResultPage(
                           searchKeyword: "",
                           sort: "",
                           category:
@@ -179,7 +179,7 @@ class _CategoryPageState extends State<CategoryPage> {
                                               context,
                                               PageTransition(
                                                   child:
-                                                      ProductListSearchResult(
+                                                      ProductListSearchResultPage(
                                                     searchKeyword: "",
                                                     sort: "",
                                                     category:
@@ -223,7 +223,7 @@ class _CategoryPageState extends State<CategoryPage> {
                                                         context,
                                                         PageTransition(
                                                             child:
-                                                                ProductListSearchResult(
+                                                                ProductListSearchResultPage(
                                                               searchKeyword: "",
                                                               sort: "",
                                                               category:

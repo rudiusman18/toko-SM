@@ -11,12 +11,12 @@ import 'package:page_transition/page_transition.dart';
 import '../product_detail/product_detail_page.dart';
 
 // ignore: must_be_immutable
-class ProductListSearchResult extends StatefulWidget {
+class ProductListSearchResultPage extends StatefulWidget {
   String searchKeyword;
   String sort;
   String category;
   String categoryToShow;
-  ProductListSearchResult(
+  ProductListSearchResultPage(
       {super.key,
       required this.searchKeyword,
       required this.sort,
@@ -24,11 +24,12 @@ class ProductListSearchResult extends StatefulWidget {
       required this.categoryToShow});
 
   @override
-  State<ProductListSearchResult> createState() =>
-      _ProductListSearchResultState();
+  State<ProductListSearchResultPage> createState() =>
+      _ProductListSearchResultPageState();
 }
 
-class _ProductListSearchResultState extends State<ProductListSearchResult> {
+class _ProductListSearchResultPageState
+    extends State<ProductListSearchResultPage> {
   TextEditingController searchTextFieldController = TextEditingController();
   FocusNode searchTextFieldFocusNode = FocusNode();
   List<String> textSuggestion = [];
@@ -190,7 +191,7 @@ class _ProductListSearchResultState extends State<ProductListSearchResult> {
                     Navigator.push(
                         context,
                         PageTransition(
-                            child: ProductListSearchResult(
+                            child: ProductListSearchResultPage(
                               searchKeyword: searchTextFieldController.text,
                               sort: widget.sort,
                               category: widget.category,
@@ -242,7 +243,7 @@ class _ProductListSearchResultState extends State<ProductListSearchResult> {
                           Navigator.push(
                               context,
                               PageTransition(
-                                  child: ProductListSearchResult(
+                                  child: ProductListSearchResultPage(
                                     searchKeyword: text[index],
                                     category: widget.category,
                                     sort: widget.sort,

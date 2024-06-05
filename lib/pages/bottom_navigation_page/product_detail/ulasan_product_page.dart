@@ -5,14 +5,14 @@ import 'package:provider/provider.dart';
 import 'package:tokoSM/providers/ulasan_provider.dart';
 import 'package:tokoSM/theme/theme.dart';
 
-class UlasanProduct extends StatefulWidget {
-  const UlasanProduct({super.key});
+class UlasanProductPage extends StatefulWidget {
+  const UlasanProductPage({super.key});
 
   @override
-  State<UlasanProduct> createState() => _UlasanProductState();
+  State<UlasanProductPage> createState() => _UlasanProductPageState();
 }
 
-class _UlasanProductState extends State<UlasanProduct> {
+class _UlasanProductPageState extends State<UlasanProductPage> {
   @override
   Widget build(BuildContext context) {
     UlasanProvider ulasanProvider = Provider.of<UlasanProvider>(context);
@@ -154,7 +154,6 @@ class _UlasanProductState extends State<UlasanProduct> {
           "Ulasan Pembeli",
           style: poppins,
         ),
-        centerTitle: true,
         backgroundColor: backgroundColor3,
       ),
       body: ListView(

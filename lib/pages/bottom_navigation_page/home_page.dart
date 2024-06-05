@@ -330,7 +330,7 @@ class _HomePageState extends State<HomePage> {
               Navigator.push(
                   context,
                   PageTransition(
-                      child: ProductListSearchResult(
+                      child: ProductListSearchResultPage(
                         searchKeyword: searchTextFieldController.text,
                         sort: "",
                         category: "",
@@ -379,7 +379,7 @@ class _HomePageState extends State<HomePage> {
                           Navigator.push(
                               context,
                               PageTransition(
-                                  child: ProductListSearchResult(
+                                  child: ProductListSearchResultPage(
                                     searchKeyword: text[index],
                                     category: "",
                                     sort: "",
@@ -683,7 +683,7 @@ class _HomePageState extends State<HomePage> {
                         Navigator.push(
                             context,
                             PageTransition(
-                                child: ProductListSearchResult(
+                                child: ProductListSearchResultPage(
                                   searchKeyword: "",
                                   sort: "promo",
                                   category: "",

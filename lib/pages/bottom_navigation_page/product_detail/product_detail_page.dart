@@ -6,7 +6,7 @@ import 'package:tokoSM/models/detail_product_model.dart';
 import 'package:tokoSM/models/favorite_model.dart';
 import 'package:tokoSM/models/ulasan_model.dart';
 import 'package:tokoSM/pages/bottom_navigation_page/cart_page.dart';
-import 'package:tokoSM/pages/bottom_navigation_page/product_detail/ulasan_product.dart';
+import 'package:tokoSM/pages/bottom_navigation_page/product_detail/ulasan_product_page.dart';
 import 'package:tokoSM/pages/main_page.dart';
 import 'package:tokoSM/providers/cart_provider.dart';
 import 'package:tokoSM/providers/login_provider.dart';
@@ -785,7 +785,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                 Navigator.push(
                                     context,
                                     PageTransition(
-                                      child: const UlasanProduct(),
+                                      child: const UlasanProductPage(),
                                       type: PageTransitionType.rightToLeft,
                                     ));
                               },

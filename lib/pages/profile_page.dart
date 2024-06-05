@@ -4,6 +4,7 @@ import 'package:tokoSM/pages/bottom_navigation_page/cart_page/alamat_page.dart';
 import 'package:tokoSM/pages/login_page.dart';
 import 'package:tokoSM/pages/main_page.dart';
 import 'package:tokoSM/pages/profile_page/edit_profile_page.dart';
+import 'package:tokoSM/pages/profile_page/ubah_kata_sandi_page.dart';
 import 'package:tokoSM/pages/profile_page/ulasan_page.dart';
 import 'package:tokoSM/providers/cabang_provider.dart';
 import 'package:tokoSM/providers/login_provider.dart';
@@ -349,7 +350,14 @@ class _ProfilePageState extends State<ProfilePage> {
                   actionWidget(
                     icon: Icons.lock,
                     title: "Ubah Kata Sandi",
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          PageTransition(
+                            child: const UbahKataSandiPage(),
+                            type: PageTransitionType.leftToRight,
+                          ));
+                    },
                   ),
                   actionWidget(
                     icon: Icons.house,
