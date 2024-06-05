@@ -7,8 +7,10 @@ class LoginService {
   var client = HttpClient();
   var baseURL = "http://103.127.132.116/api/v1/";
 
-  Future<LoginModel> login(
-      {required String email, required String password}) async {
+  Future<LoginModel> login({
+    required String email,
+    required String password,
+  }) async {
     var url = Uri.parse("${baseURL}auth/login");
     var header = {'Content-Type': 'application/json'};
     Map data = {"email": email, "password": password};
@@ -23,6 +25,7 @@ class LoginService {
       LoginModel login = LoginModel.fromJson(data);
       return login;
     } else {
+      print(response.body);
       throw Exception("Gagal Login");
     }
   }

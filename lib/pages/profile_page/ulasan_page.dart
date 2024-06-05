@@ -21,6 +21,9 @@ class _UlasanPageState extends State<UlasanPage> {
   TextEditingController searchTextFieldController = TextEditingController();
   FocusNode searchTextFieldFocusNode = FocusNode();
 
+  // Loading
+  bool isLoading = false;
+
   @override
   void initState() {
     super.initState();
@@ -33,13 +36,21 @@ class _UlasanPageState extends State<UlasanPage> {
     UlasanProvider ulasanProvider =
         Provider.of<UlasanProvider>(context, listen: false);
 
+    setState(() {
+      isLoading = true;
+    });
     if (await ulasanProvider.getRiwayatUlasan(
         token: loginProvider.loginModel.token ?? "",
         search: searchTextFieldController.text)) {
       setState(() {
+        isLoading = false;
         ulasanModel = ulasanProvider.ulasanModel;
       });
-    } else {}
+    } else {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   @override
@@ -180,21 +191,33 @@ class _UlasanPageState extends State<UlasanPage> {
         body: ListView(
           children: [
             searchUlasanView(),
-            const SizedBox(
-              height: 10,
-            ),
-            if (ulasanModel.data?.isEmpty ?? true) ...{
+            if (isLoading) ...{
               Center(
-                child: Text(
-                  "Tidak ada data",
-                  style: poppins,
+                child: SizedBox(
+                  width: 40,
+                  height: 40,
+                  child: CircularProgressIndicator(
+                    color: backgroundColor1,
+                  ),
                 ),
               ),
             } else ...{
-              for (var i = 0; i < ((ulasanModel.data?.length ?? 1)); i++) ...{
-                ulasanItem(
-                  index: i,
+              const SizedBox(
+                height: 10,
+              ),
+              if (ulasanModel.data?.isEmpty ?? true) ...{
+                Center(
+                  child: Text(
+                    "Tidak ada data",
+                    style: poppins,
+                  ),
                 ),
+              } else ...{
+                for (var i = 0; i < ((ulasanModel.data?.length ?? 1)); i++) ...{
+                  ulasanItem(
+                    index: i,
+                  ),
+                }
               }
             }
           ],
