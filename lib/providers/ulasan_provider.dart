@@ -47,6 +47,7 @@ class UlasanProvider with ChangeNotifier {
 
   Future<bool> postUlasanProduct({
     required String token,
+    required String invoice,
     required int productId,
     required String namaProduk,
     required int rating,
@@ -55,12 +56,13 @@ class UlasanProvider with ChangeNotifier {
     try {
       var data = await UlasanService().sendUlasan(
           token: token,
+          invoice: invoice,
           productId: productId,
           namaProduk: namaProduk,
           rating: rating,
           ulasan: ulasan);
       print(
-          "Sukses mengirimkan data ulasan $productId, $namaProduk, $rating, $ulasan");
+          "Sukses mengirimkan data ulasan $invoice, $productId, $namaProduk, $rating, $ulasan");
       return true;
     } catch (e) {
       return false;

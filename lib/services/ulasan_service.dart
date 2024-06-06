@@ -55,6 +55,7 @@ class UlasanService {
 
   Future<Map<String, dynamic>> sendUlasan({
     required String token,
+    required String invoice,
     required int productId,
     required String namaProduk,
     required int rating,
@@ -67,6 +68,7 @@ class UlasanService {
     };
 
     Map data = {
+      "no_invoice": invoice,
       "produk_id": productId,
       "nama_produk": namaProduk,
       "rating": rating,

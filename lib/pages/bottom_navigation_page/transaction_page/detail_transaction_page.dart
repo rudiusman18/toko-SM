@@ -265,6 +265,7 @@ class _DetailTransactionPageState extends State<DetailTransactionPage> {
                           isLoading = true;
                         });
                         await ulasanProvider.postUlasanProduct(
+                          invoice: product.noInvoice ?? "",
                           namaProduk: product.namaProduk ?? "",
                           productId: product.id ?? 0,
                           token: loginProvider.loginModel.token ?? "",
