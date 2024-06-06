@@ -6,6 +6,7 @@ import 'package:tokoSM/services/transaksi_service.dart';
 class TransaksiProvider with ChangeNotifier {
   Future<bool> postTransaksi(
       {required String token,
+      required String namaPelanggan,
       required int pelangganId,
       required int cabangId,
       required int pengirimanId,
@@ -23,6 +24,7 @@ class TransaksiProvider with ChangeNotifier {
     try {
       await TransaksiService().sendTransaksi(
           token: token,
+          namaPelanggan: namaPelanggan,
           pelangganId: pelangganId,
           cabangId: cabangId,
           pengirimanId: pengirimanId,

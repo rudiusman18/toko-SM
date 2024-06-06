@@ -11,6 +11,7 @@ class TransaksiService {
 
   Future<Map<String, dynamic>> sendTransaksi({
     required String token,
+    required String namaPelanggan,
     required int pelangganId,
     required int cabangId,
     required int pengirimanId,
@@ -34,6 +35,7 @@ class TransaksiService {
 
     Map data = {
       "pelanggan_id": pelangganId,
+      "nama_pelanggan": namaPelanggan,
       "cabang_id": cabangId,
       "kurir_id": kurirId,
       "pengiriman_id": pengirimanId, // id alamat pengiriman
@@ -79,6 +81,7 @@ class TransaksiService {
       products.add({
         "id": product.produkId,
         "nama_produk": product.namaProduk,
+        "golongan_produk": product.golonganProduk,
         "image_url": product.imageUrl,
         "harga": product.harga,
         "jumlah": product.jumlah,

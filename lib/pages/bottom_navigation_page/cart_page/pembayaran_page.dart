@@ -74,6 +74,7 @@ class _PembayaranPageState extends State<PembayaranPage> {
     } else {
       if (await transaksiProvider.postTransaksi(
           token: loginProvider.loginModel.token ?? "",
+          namaPelanggan: loginProvider.loginModel.data?.namaPelanggan ?? "",
           pelangganId: widget.pelangganId,
           cabangId: int.parse(widget.cabangId),
           pengirimanId: widget.pengirimanId,
