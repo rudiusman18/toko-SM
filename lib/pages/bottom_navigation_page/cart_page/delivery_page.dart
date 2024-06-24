@@ -146,32 +146,37 @@ class _DeliverypageState extends State<Deliverypage> {
                         fontSize: 12,
                       ),
                     ),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.pin_drop,
-                          color: backgroundColor3,
-                        ),
-                        Text(
-                          alamatProvider.deliveryAlamat.data?.isEmpty ?? true
-                              ? "${alamatProvider.alamatModel.data?.first.namaAlamat} - ${alamatProvider.alamatModel.data?.first.namaPenerima}"
-                              : "${alamatProvider.deliveryAlamat.data?.first.namaAlamat} - ${alamatProvider.deliveryAlamat.data?.first.namaPenerima}",
-                          style: poppins.copyWith(
-                            fontWeight: bold,
+                    if (!(alamatProvider.deliveryAlamat.data?.isEmpty ??
+                            true) &&
+                        !(alamatProvider.alamatModel.data?.isEmpty ??
+                            true)) ...{
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.pin_drop,
+                            color: backgroundColor3,
                           ),
-                        ),
-                      ],
-                    ),
-                    Text(
-                      alamatProvider.deliveryAlamat.data?.isEmpty ?? true
-                          ? "${alamatProvider.alamatModel.data?.first.alamatLengkap}, ${alamatProvider.alamatModel.data?.first.kelurahan?.toLowerCase()}, ${alamatProvider.alamatModel.data?.first.kecamatan?.toLowerCase()}, ${alamatProvider.alamatModel.data?.first.kabkota?.toLowerCase()}, ${alamatProvider.alamatModel.data?.first.provinsi?.toLowerCase()}, ${alamatProvider.alamatModel.data?.first.kodepos?.toLowerCase()}"
-                          : "${alamatProvider.deliveryAlamat.data?.first.alamatLengkap}, ${alamatProvider.deliveryAlamat.data?.first.kelurahan?.toLowerCase()}, ${alamatProvider.deliveryAlamat.data?.first.kecamatan?.toLowerCase()}, ${alamatProvider.deliveryAlamat.data?.first.kabkota?.toLowerCase()}, ${alamatProvider.deliveryAlamat.data?.first.provinsi?.toLowerCase()}, ${alamatProvider.deliveryAlamat.data?.first.kodepos?.toLowerCase()}",
-                      style: poppins.copyWith(
-                        fontWeight: light,
-                        fontSize: 12,
+                          Text(
+                            alamatProvider.deliveryAlamat.data?.isEmpty ?? true
+                                ? "${alamatProvider.alamatModel.data?.first.namaAlamat} - ${alamatProvider.alamatModel.data?.first.namaPenerima}"
+                                : "${alamatProvider.deliveryAlamat.data?.first.namaAlamat} - ${alamatProvider.deliveryAlamat.data?.first.namaPenerima}",
+                            style: poppins.copyWith(
+                              fontWeight: bold,
+                            ),
+                          ),
+                        ],
                       ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                      Text(
+                        alamatProvider.deliveryAlamat.data?.isEmpty ?? true
+                            ? "${alamatProvider.alamatModel.data?.first.alamatLengkap}, ${alamatProvider.alamatModel.data?.first.kelurahan?.toLowerCase()}, ${alamatProvider.alamatModel.data?.first.kecamatan?.toLowerCase()}, ${alamatProvider.alamatModel.data?.first.kabkota?.toLowerCase()}, ${alamatProvider.alamatModel.data?.first.provinsi?.toLowerCase()}, ${alamatProvider.alamatModel.data?.first.kodepos?.toLowerCase()}"
+                            : "${alamatProvider.deliveryAlamat.data?.first.alamatLengkap}, ${alamatProvider.deliveryAlamat.data?.first.kelurahan?.toLowerCase()}, ${alamatProvider.deliveryAlamat.data?.first.kecamatan?.toLowerCase()}, ${alamatProvider.deliveryAlamat.data?.first.kabkota?.toLowerCase()}, ${alamatProvider.deliveryAlamat.data?.first.provinsi?.toLowerCase()}, ${alamatProvider.deliveryAlamat.data?.first.kodepos?.toLowerCase()}",
+                        style: poppins.copyWith(
+                          fontWeight: light,
+                          fontSize: 12,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    },
                   ],
                 ),
               ),

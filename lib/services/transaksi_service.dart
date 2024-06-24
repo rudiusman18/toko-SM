@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:tokoSM/models/cart_model.dart';
+import 'package:tokoSM/models/detail_status_model.dart';
 
 import '../models/transaction_model.dart';
 
@@ -121,6 +122,31 @@ class TransaksiService {
     if (response.statusCode >= 200 && response.statusCode <= 299) {
       var data = jsonDecode(response.body);
       TransactionModel transactionModel = TransactionModel.fromJson(data);
+
+      return transactionModel;
+    } else {
+      throw Exception("${jsonDecode(response.body)['message']}");
+    }
+  }
+
+  Future<DetailStatusModel> retrieveDetailStatus({
+    required String token,
+    required String invoice,
+  }) async {
+    var url = Uri.parse("${baseURL}transaksi/status/$invoice");
+    var header = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token'
+    };
+
+    var response = await http.get(url, headers: header);
+    // ignore: avoid_print
+    print("detailStatusModel: ${response.body}");
+
+// **success melakukan get cart
+    if (response.statusCode >= 200 && response.statusCode <= 299) {
+      var data = jsonDecode(response.body);
+      DetailStatusModel transactionModel = DetailStatusModel.fromJson(data);
 
       return transactionModel;
     } else {

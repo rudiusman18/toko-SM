@@ -1,5 +1,8 @@
+import 'dart:ffi';
+
 import 'package:flutter/cupertino.dart';
 import 'package:tokoSM/models/cart_model.dart';
+import 'package:tokoSM/models/detail_status_model.dart';
 import 'package:tokoSM/models/transaction_model.dart';
 import 'package:tokoSM/services/transaksi_service.dart';
 
@@ -70,6 +73,25 @@ class TransaksiProvider with ChangeNotifier {
         tanggalAkhir: tanggalAkhir,
       );
       _transactionModel = transactionModel;
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  DetailStatusModel _detailStatusModel = DetailStatusModel();
+  DetailStatusModel get detailStatusModel => _detailStatusModel;
+  set detailStatusModel(DetailStatusModel detailStatusModel) {
+    _detailStatusModel = detailStatusModel;
+    notifyListeners();
+  }
+
+  Future<bool> getDetailStatus(
+      {required String token, required String invoice}) async {
+    try {
+      DetailStatusModel detailStatusModel = await TransaksiService()
+          .retrieveDetailStatus(token: token, invoice: invoice);
+      _detailStatusModel = detailStatusModel;
       return true;
     } catch (e) {
       return false;

@@ -3,8 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
 import 'package:intl/intl.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:tokoSM/models/transaction_model.dart';
+import 'package:tokoSM/pages/bottom_navigation_page/transaction_page/detail_status_page.dart';
 import 'package:tokoSM/providers/login_provider.dart';
 import 'package:tokoSM/providers/ulasan_provider.dart';
 import 'package:tokoSM/theme/theme.dart';
@@ -61,11 +63,24 @@ class _DetailTransactionPageState extends State<DetailTransactionPage> {
                     fontWeight: bold,
                   ),
                 ),
-                Text(
-                  "Lihat Detail",
-                  style: poppins.copyWith(
-                    color: backgroundColor3,
-                    fontWeight: bold,
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        PageTransition(
+                          child: DetailStatusPage(
+                            invoice:
+                                widget.transactionDetailItem.noInvoice ?? "",
+                          ),
+                          type: PageTransitionType.rightToLeft,
+                        ));
+                  },
+                  child: Text(
+                    "Lihat Detail",
+                    style: poppins.copyWith(
+                      color: backgroundColor3,
+                      fontWeight: bold,
+                    ),
                   ),
                 ),
               ],
