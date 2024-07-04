@@ -37,6 +37,7 @@ class _CartPageState extends State<CartPage> {
   int totalHarga = 0;
 
   CartModel deliveryProduct = CartModel();
+  String golonganProduk = "";
 
   @override
   void initState() {

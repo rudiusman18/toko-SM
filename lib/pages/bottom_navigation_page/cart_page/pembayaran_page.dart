@@ -73,22 +73,23 @@ class _PembayaranPageState extends State<PembayaranPage> {
       ));
     } else {
       if (await transaksiProvider.postTransaksi(
-          token: loginProvider.loginModel.token ?? "",
-          namaPelanggan: loginProvider.loginModel.data?.namaPelanggan ?? "",
-          pelangganId: widget.pelangganId,
-          cabangId: int.parse(widget.cabangId),
-          pengirimanId: widget.pengirimanId,
-          kurirId: widget.kurirId,
-          namaKurir: widget.namaKurir,
-          totalHarga: widget.totalharga,
-          totalOngkosKirim: widget.totalOngkosKirim,
-          totalBelanja: int.parse(widget.totaltagihan),
-          metodePembayaran: "transfer",
-          namaPenerima: widget.namaPenerima,
-          alamatPenerima: widget.alamatPenerima,
-          banktransfer: pembayaranTerpilih.data?.first.namaBank ?? "",
-          noRekeningTransfer: pembayaranTerpilih.data?.first.noRekening ?? "",
-          product: widget.product)) {
+        token: loginProvider.loginModel.token ?? "",
+        namaPelanggan: loginProvider.loginModel.data?.namaPelanggan ?? "",
+        pelangganId: widget.pelangganId,
+        cabangId: int.parse(widget.cabangId),
+        pengirimanId: widget.pengirimanId,
+        kurirId: widget.kurirId,
+        namaKurir: widget.namaKurir,
+        totalHarga: widget.totalharga,
+        totalOngkosKirim: widget.totalOngkosKirim,
+        totalBelanja: int.parse(widget.totaltagihan),
+        metodePembayaran: "transfer",
+        namaPenerima: widget.namaPenerima,
+        alamatPenerima: widget.alamatPenerima,
+        banktransfer: pembayaranTerpilih.data?.first.namaBank ?? "",
+        noRekeningTransfer: pembayaranTerpilih.data?.first.noRekening ?? "",
+        product: widget.product,
+      )) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           backgroundColor: backgroundColor1,
           content: Text(

@@ -925,6 +925,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 int.parse((listMultiSatuanJumlah[i]));
           }
 
+          // var golonganProduct = "${detailProduct.data?.golonganProduk}".split("/");
+
           return StatefulBuilder(builder: (BuildContext context,
               StateSetter stateSetter /*You can rename this!*/) {
             return Container(
@@ -1060,7 +1062,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             .where((element) => element != 0)
                             .isNotEmpty) {
                           print(
-                              "yang akan dikirim adalah: $listJumlahMultiSatuan dengan $listMultiSatuanJumlah dan $listMultisatuanUnit");
+                              "yang akan dikirim adalah: $listJumlahMultiSatuan dengan $listMultiSatuanJumlah dan $listMultisatuanUnit dan ${detailProduct.data?.golonganProduk}");
                           Navigator.pop(context);
                           sendProduct(
                             cabangId: cabangId,

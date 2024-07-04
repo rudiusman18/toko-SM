@@ -79,6 +79,7 @@ class TransaksiService {
 
     // Convert Product objects to Map and add them to the list
     for (DataKeranjang product in initProducts) {
+      print("golongan product nya adalah: ${product.golonganProduk}");
       products.add({
         "id": product.produkId,
         "nama_produk": product.namaProduk,

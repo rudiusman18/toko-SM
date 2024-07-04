@@ -78,7 +78,9 @@ class _DeliverypageState extends State<Deliverypage> {
 
     if (await alamatProvider.getAlamat(
         token: loginProvider.loginModel.token ?? "")) {
-      setState(() {});
+      setState(() {
+        print("alamat dijalankan");
+      });
     } else {
       // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -147,7 +149,7 @@ class _DeliverypageState extends State<Deliverypage> {
                       ),
                     ),
                     if (!(alamatProvider.deliveryAlamat.data?.isEmpty ??
-                            true) &&
+                            true) ||
                         !(alamatProvider.alamatModel.data?.isEmpty ??
                             true)) ...{
                       Row(
@@ -192,6 +194,7 @@ class _DeliverypageState extends State<Deliverypage> {
 
     Widget productItem({required int index}) {
       var product = widget.product.data?[widget.indexCabang].data?[index];
+
       var totalharga = (product?.jumlah ?? 0) *
           ((product?.diskon != null)
               ? (product?.harga ?? 0)
