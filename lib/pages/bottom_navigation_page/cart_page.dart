@@ -488,7 +488,7 @@ class _CartPageState extends State<CartPage> {
                             children: [
                               Expanded(
                                 child: Text(
-                                  "${listMultisatuanUnit?[i]} (isi ${listMultiSatuanJumlah?[i]} produk)",
+                                  "${listMultisatuanUnit?[i]} (isi ${listMultiSatuanJumlah?[i]})",
                                   style: poppins,
                                 ),
                               ),
@@ -632,14 +632,6 @@ class _CartPageState extends State<CartPage> {
           "${product?.diskon != null ? product?.hargaDiskon : product?.harga ?? 0}";
       int numericValue =
           int.parse(numericString); // Parses the string as an integer
-
-      String multiSatuanString = "";
-      for (var i = 0; i < (product?.jumlahMultisatuan?.length ?? 0); i++) {
-        if (product?.jumlahMultisatuan?[i] != 0) {
-          multiSatuanString +=
-              "${product?.jumlahMultisatuan?[i]} ${product?.multisatuanUnit?[i]} ${product?.multisatuanJumlah?[i] == 1 ? "" : "(isi ${product?.multisatuanJumlah?[i]} produk)"} ";
-        }
-      }
 
       return InkWell(
         onTap: () {
@@ -787,10 +779,8 @@ class _CartPageState extends State<CartPage> {
                           i < (product?.jumlahMultisatuan?.length ?? 0);
                           i++) ...{
                         if (product?.jumlahMultisatuan?[i] != 0) ...{
-                          // multiSatuanString +=
-                          //     "${product?.jumlahMultisatuan?[i]} ${product?.multisatuanUnit?[i]} ${product?.multisatuanJumlah?[i] == 1 ? "" : "(isi ${product?.multisatuanJumlah?[i]} produk)"} ";
                           Text(
-                            "${product?.jumlahMultisatuan?[i]} ${product?.multisatuanUnit?[i]} ${product?.multisatuanJumlah?[i] == 1 ? "" : "(isi ${product?.multisatuanJumlah?[i]} produk)"}",
+                            "${product?.jumlahMultisatuan?[i]} ${product?.multisatuanUnit?[i]} ${product?.multisatuanJumlah?[i] == 1 ? "" : "(isi ${product?.jumlahMultisatuan?[i] * product?.multisatuanJumlah?[i]})"}",
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                             style: poppins.copyWith(
@@ -801,16 +791,6 @@ class _CartPageState extends State<CartPage> {
                           ),
                         },
                       },
-                      // Text(
-                      //   multiSatuanString,
-                      //   overflow: TextOverflow.ellipsis,
-                      //   maxLines: 1,
-                      //   style: poppins.copyWith(
-                      //     color: Colors.grey,
-                      //     fontSize: 10,
-                      //     fontWeight: bold,
-                      //   ),
-                      // ),
                       const Spacer(),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.end,

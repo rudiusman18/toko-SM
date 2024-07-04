@@ -970,7 +970,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             children: [
                               Expanded(
                                 child: Text(
-                                  "${listMultisatuanUnit[i]} (isi ${listMultiSatuanJumlah[i]} produk)",
+                                  "${listMultisatuanUnit[i]} (isi ${listMultiSatuanJumlah[i]})",
                                   style: poppins,
                                 ),
                               ),
