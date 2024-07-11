@@ -87,6 +87,8 @@ class TransaksiService {
         "image_url": product.imageUrl,
         "harga": product.harga,
         "jumlah": product.jumlah,
+        "kategori": product.kategori,
+        "kategori_slug": product.kategoriSlug,
         "jumlah_multisatuan": product.jumlahMultisatuan,
         "multisatuan_jumlah": product.multisatuanJumlah,
         "multisatuan_unit": product.multisatuanUnit,

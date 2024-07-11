@@ -65,6 +65,8 @@ class DataKeranjang {
   List? multisatuanUnit;
   String? namaProduk;
   dynamic golonganProduk;
+  dynamic kategori;
+  dynamic kategoriSlug;
   String? imageUrl;
   int? harga;
   int? hargaDiskon;
@@ -84,6 +86,8 @@ class DataKeranjang {
       this.multisatuanUnit,
       this.namaProduk,
       this.golonganProduk,
+      this.kategori,
+      this.kategoriSlug,
       this.imageUrl,
       this.harga,
       this.hargaDiskon,
@@ -103,6 +107,8 @@ class DataKeranjang {
     multisatuanUnit = json['multisatuan_unit'];
     namaProduk = json['nama_produk'];
     golonganProduk = json['golongan_produk'];
+    kategori = json['kategori'];
+    kategoriSlug = json['kategori_slug'];
     imageUrl = json['image_url'];
     harga = json['harga'];
     hargaDiskon = json['harga_diskon'];
@@ -123,7 +129,9 @@ class DataKeranjang {
     data['multisatuan_jumlah'] = multisatuanJumlah;
     data['multisatuan_unit'] = multisatuanUnit;
     data['nama_produk'] = namaProduk;
-    data['golongan_produk'] = this.golonganProduk;
+    data['golongan_produk'] = golonganProduk;
+    data['kategori'] = kategori;
+    data['kategori_slug'] = kategoriSlug;
     data['image_url'] = imageUrl;
     data['harga'] = harga;
     data['harga_diskon'] = hargaDiskon;
