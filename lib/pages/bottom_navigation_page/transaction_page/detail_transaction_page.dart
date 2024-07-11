@@ -400,66 +400,70 @@ class _DetailTransactionPageState extends State<DetailTransactionPage> {
                   ],
                 ),
                 const Spacer(),
-                InkWell(
-                  onTap: () {
-                    print("ditekan");
+                if (widget.transactionDetailItem.status == 4) ...{
+                  InkWell(
+                    onTap: () {
+                      print("ditekan");
 
-                    showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      backgroundColor: Colors.transparent,
-                      builder: (BuildContext context) {
-                        return Padding(
-                          padding: EdgeInsets.only(
-                              bottom: MediaQuery.of(context).viewInsets.bottom),
-                          child: showUlasanProduct(product: produk ?? Produk()),
-                        );
-                      },
-                    );
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(
-                      5,
-                    ),
-                    decoration: BoxDecoration(
-                      color: backgroundColor3,
-                      borderRadius: BorderRadius.circular(
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        builder: (BuildContext context) {
+                          return Padding(
+                            padding: EdgeInsets.only(
+                                bottom:
+                                    MediaQuery.of(context).viewInsets.bottom),
+                            child:
+                                showUlasanProduct(product: produk ?? Produk()),
+                          );
+                        },
+                      );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(
                         5,
                       ),
-                    ),
-                    child: Text(
-                      "Beri Ulasan",
-                      style: poppins.copyWith(
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                InkWell(
-                  onTap: () {},
-                  child: Container(
-                    padding: const EdgeInsets.all(
-                      5,
-                    ),
-                    decoration: BoxDecoration(
+                      decoration: BoxDecoration(
+                        color: backgroundColor3,
                         borderRadius: BorderRadius.circular(
                           5,
                         ),
-                        border: Border.all(
-                          color: backgroundColor3,
-                          width: 1,
-                        )),
-                    child: Text(
-                      "Beli Lagi",
-                      style: poppins.copyWith(
-                        color: backgroundColor3,
+                      ),
+                      child: Text(
+                        "Beri Ulasan",
+                        style: poppins.copyWith(
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
-                ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  InkWell(
+                    onTap: () {},
+                    child: Container(
+                      padding: const EdgeInsets.all(
+                        5,
+                      ),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(
+                            5,
+                          ),
+                          border: Border.all(
+                            color: backgroundColor3,
+                            width: 1,
+                          )),
+                      child: Text(
+                        "Beli Lagi",
+                        style: poppins.copyWith(
+                          color: backgroundColor3,
+                        ),
+                      ),
+                    ),
+                  ),
+                },
               ],
             ),
           ],

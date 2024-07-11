@@ -67,7 +67,7 @@ class _DetailStatusPageState extends State<DetailStatusPage> {
                       i < (detailStatusModel.data?.length ?? 0);
                       i++)
                     TrackerData(
-                      title: "${detailStatusModel.data?[i].status}",
+                      title: "${detailStatusModel.data?[i].keterangan}",
                       date:
                           "${detailStatusModel.data?[i].date} - ${detailStatusModel.data?[i].time}",
                       tracker_details: [

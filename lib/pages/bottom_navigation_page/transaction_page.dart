@@ -171,9 +171,6 @@ class _TransactionPageState extends State<TransactionPage> {
                       ),
                     ),
                   ),
-                  const Icon(
-                    Icons.more_vert,
-                  ),
                 ],
               ),
               const Divider(),
@@ -246,15 +243,17 @@ class _TransactionPageState extends State<TransactionPage> {
                       ),
                     ],
                   ),
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: backgroundColor3,
-                    ),
-                    child: const Text(
-                      "Beli Lagi",
-                    ),
-                  ),
+                  (transaction?.status == 4)
+                      ? ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: backgroundColor3,
+                          ),
+                          child: const Text(
+                            "Beli Lagi",
+                          ),
+                        )
+                      : const SizedBox(),
                 ],
               )
             ],

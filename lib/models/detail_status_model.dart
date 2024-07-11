@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_collection_literals
+
 class DetailStatusModel {
   String? message;
   List<Data>? data;
@@ -15,7 +17,7 @@ class DetailStatusModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['message'] = message;
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
@@ -25,24 +27,44 @@ class DetailStatusModel {
 }
 
 class Data {
-  String? status;
+  String? sId;
+  String? noInvoice;
+  int? status;
+  String? keterangan;
   String? deskripsi;
+  String? createdAt;
   String? date;
   String? time;
 
-  Data({this.status, this.deskripsi, this.date, this.time});
+  Data(
+      {this.sId,
+      this.noInvoice,
+      this.status,
+      this.keterangan,
+      this.deskripsi,
+      this.createdAt,
+      this.date,
+      this.time});
 
   Data.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    noInvoice = json['no_invoice'];
     status = json['status'];
+    keterangan = json['keterangan'];
     deskripsi = json['deskripsi'];
+    createdAt = json['created_at'];
     date = json['date'];
     time = json['time'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['_id'] = sId;
+    data['no_invoice'] = noInvoice;
     data['status'] = status;
+    data['keterangan'] = keterangan;
     data['deskripsi'] = deskripsi;
+    data['created_at'] = createdAt;
     data['date'] = date;
     data['time'] = time;
     return data;
