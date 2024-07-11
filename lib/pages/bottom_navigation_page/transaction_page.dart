@@ -83,6 +83,78 @@ class _TransactionPageState extends State<TransactionPage> {
 
   @override
   Widget build(BuildContext context) {
+    LoginProvider loginProvider = Provider.of<LoginProvider>(context);
+    TransaksiProvider transaksiProvider =
+        Provider.of<TransaksiProvider>(context);
+
+    void showAlertDialog(BuildContext context, String noInvoice) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Column(
+              children: [
+                Text(
+                  "Warning!",
+                  style: poppins.copyWith(
+                    color: backgroundColor1,
+                    fontWeight: semiBold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                Divider(
+                  thickness: 1,
+                  color: backgroundColor1,
+                ),
+              ],
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            alignment: Alignment.center,
+            content: Text(
+              "Anda yakin untuk mengubah status menjadi selesai?",
+              style: poppins.copyWith(color: backgroundColor1),
+              textAlign: TextAlign.center,
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  "Batal",
+                  style: poppins.copyWith(
+                    fontWeight: semiBold,
+                    color: backgroundColor1,
+                  ),
+                ),
+              ),
+              TextButton(
+                onPressed: () async {
+                  if (await transaksiProvider.postStatustransaksi(
+                    token: loginProvider.loginModel.token ?? "",
+                    noInvoice: noInvoice,
+                    status: 4,
+                  )) {
+                    _initTransaction();
+                    Navigator.pop(context);
+                  }
+                },
+                child: Text(
+                  "Lanjutkan",
+                  style: poppins.copyWith(
+                    fontWeight: semiBold,
+                    color: backgroundColor1,
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      );
+    }
+
     Widget transactionItem({required int index}) {
       var transaction = transactionModel.data?[index];
       String timestamp = "${transaction?.produk?.first.createdAt}";
@@ -98,7 +170,9 @@ class _TransactionPageState extends State<TransactionPage> {
               ),
               type: PageTransitionType.rightToLeft,
             ),
-          );
+          ).then((_) {
+            _initTransaction();
+          });
         },
         child: Container(
           margin: const EdgeInsets.only(
@@ -253,7 +327,20 @@ class _TransactionPageState extends State<TransactionPage> {
                             "Beli Lagi",
                           ),
                         )
-                      : const SizedBox(),
+                      : (transaction?.status == 3)
+                          ? ElevatedButton(
+                              onPressed: () {
+                                showAlertDialog(
+                                    context, transaction?.noInvoice ?? "");
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: backgroundColor3,
+                              ),
+                              child: const Text(
+                                "Selesai",
+                              ),
+                            )
+                          : const SizedBox(),
                 ],
               )
             ],

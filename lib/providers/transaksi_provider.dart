@@ -97,4 +97,18 @@ class TransaksiProvider with ChangeNotifier {
       return false;
     }
   }
+
+  Future<bool> postStatustransaksi({
+    required String token,
+    required String noInvoice,
+    required int status,
+  }) async {
+    try {
+      await TransaksiService().postStatusTransaksi(
+          token: token, noInvoice: noInvoice, status: status);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 }

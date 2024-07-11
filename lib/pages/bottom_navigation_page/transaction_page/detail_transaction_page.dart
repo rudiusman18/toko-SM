@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:tokoSM/models/transaction_model.dart';
 import 'package:tokoSM/pages/bottom_navigation_page/transaction_page/detail_status_page.dart';
 import 'package:tokoSM/providers/login_provider.dart';
+import 'package:tokoSM/providers/transaksi_provider.dart';
 import 'package:tokoSM/providers/ulasan_provider.dart';
 import 'package:tokoSM/theme/theme.dart';
 
@@ -28,8 +29,78 @@ class _DetailTransactionPageState extends State<DetailTransactionPage> {
   Widget build(BuildContext context) {
     LoginProvider loginProvider = Provider.of<LoginProvider>(context);
     UlasanProvider ulasanProvider = Provider.of<UlasanProvider>(context);
+    TransaksiProvider transaksiProvider =
+        Provider.of<TransaksiProvider>(context);
 
     var starRating = 0.0;
+
+    void showAlertDialog(BuildContext context) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Column(
+              children: [
+                Text(
+                  "Warning!",
+                  style: poppins.copyWith(
+                    color: backgroundColor1,
+                    fontWeight: semiBold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                Divider(
+                  thickness: 1,
+                  color: backgroundColor1,
+                ),
+              ],
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            alignment: Alignment.center,
+            content: Text(
+              "Anda yakin untuk mengubah status menjadi selesai?",
+              style: poppins.copyWith(color: backgroundColor1),
+              textAlign: TextAlign.center,
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  "Batal",
+                  style: poppins.copyWith(
+                    fontWeight: semiBold,
+                    color: backgroundColor1,
+                  ),
+                ),
+              ),
+              TextButton(
+                onPressed: () async {
+                  if (await transaksiProvider.postStatustransaksi(
+                    token: loginProvider.loginModel.token ?? "",
+                    noInvoice: widget.transactionDetailItem.noInvoice ?? "",
+                    status: 4,
+                  )) {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  }
+                },
+                child: Text(
+                  "Lanjutkan",
+                  style: poppins.copyWith(
+                    fontWeight: semiBold,
+                    color: backgroundColor1,
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      );
+    }
 
     Widget statusView() {
       String timestamp =
@@ -576,35 +647,6 @@ class _DetailTransactionPageState extends State<DetailTransactionPage> {
             const SizedBox(
               height: 10,
             ),
-            // NOTE: NO Resi
-
-            // Row(
-            //   crossAxisAlignment: CrossAxisAlignment.start,
-            //   children: [
-            //     Text(
-            //       "Nomor Resi",
-            //       style: poppins.copyWith(
-            //         fontSize: 12,
-            //       ),
-            //     ),
-            //     const SizedBox(
-            //       width: 63,
-            //     ),
-            //     Flexible(
-            //       fit: FlexFit.tight,
-            //       flex: 10,
-            //       child: Text(
-            //         "${transactionDetailItem.sId}",
-            //         style: poppins.copyWith(
-            //           fontSize: 12,
-            //         ),
-            //       ),
-            //     ),
-            //   ],
-            // ),
-            // const SizedBox(
-            //   height: 10,
-            // ),
             // NOTE: Alamat
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -790,24 +832,49 @@ class _DetailTransactionPageState extends State<DetailTransactionPage> {
           ),
         ),
       ),
-      body: ListView(
+      body: Column(
         children: [
-          statusView(),
-          const SizedBox(
-            height: 5,
+          Expanded(
+            child: ListView(
+              children: [
+                statusView(),
+                const SizedBox(
+                  height: 5,
+                ),
+                detailProductView(),
+                const SizedBox(
+                  height: 5,
+                ),
+                infoPengirimanView(),
+                const SizedBox(
+                  height: 5,
+                ),
+                infoPembayaranView(),
+                const SizedBox(
+                  height: 15,
+                ),
+              ],
+            ),
           ),
-          detailProductView(),
-          const SizedBox(
-            height: 5,
-          ),
-          infoPengirimanView(),
-          const SizedBox(
-            height: 5,
-          ),
-          infoPembayaranView(),
-          const SizedBox(
-            height: 15,
-          ),
+          Container(
+            margin: const EdgeInsets.only(
+              left: 24,
+              right: 24,
+              bottom: 15,
+            ),
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () {
+                showAlertDialog(context);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: backgroundColor3,
+              ),
+              child: const Text(
+                "Selesai",
+              ),
+            ),
+          )
         ],
       ),
     );

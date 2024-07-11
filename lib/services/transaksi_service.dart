@@ -156,4 +156,40 @@ class TransaksiService {
       throw Exception("${jsonDecode(response.body)['message']}");
     }
   }
+
+  Future<Map<String, dynamic>> postStatusTransaksi({
+    required String token,
+    required noInvoice,
+    required int status,
+  }) async {
+    var url = Uri.parse("${baseURL}transaksi/status");
+    var header = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token'
+    };
+
+    Map data = {
+      "no_invoice": noInvoice,
+      "status": status,
+    };
+
+    var body = jsonEncode(data);
+
+    var response = await http.post(
+      url,
+      headers: header,
+      body: body,
+    );
+    // ignore: avoid_print
+    print("status transaksi: ${response.body}");
+
+// **success melakukan post status transaksi
+    if (response.statusCode >= 200 && response.statusCode <= 299) {
+      var data = jsonDecode(response.body);
+
+      return data;
+    } else {
+      throw Exception("${jsonDecode(response.body)['message']}");
+    }
+  }
 }
