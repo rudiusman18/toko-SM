@@ -160,6 +160,7 @@ class _TransactionPageState extends State<TransactionPage> {
       String timestamp = "${transaction?.produk?.first.createdAt}";
       DateTime dateTime = DateTime.parse(timestamp);
       String formattedDate = DateFormat('dd MMM yyyy').format(dateTime);
+      print("nama cabangnya adalah: ${transaction?.namaCabang}");
       return InkWell(
         onTap: () {
           Navigator.push(

@@ -176,14 +176,14 @@ class _DetailTransactionPageState extends State<DetailTransactionPage> {
                     fontSize: 12,
                   ),
                 ),
-                Text(
-                  "Lihat Invoice",
-                  style: poppins.copyWith(
-                    color: backgroundColor3,
-                    fontWeight: bold,
-                    fontSize: 12,
-                  ),
-                ),
+                // Text(
+                //   "Lihat Invoice",
+                //   style: poppins.copyWith(
+                //     color: backgroundColor3,
+                //     fontWeight: bold,
+                //     fontSize: 12,
+                //   ),
+                // ),
               ],
             ),
             // NOTE: Tanggal Pembelian
@@ -433,12 +433,48 @@ class _DetailTransactionPageState extends State<DetailTransactionPage> {
                           fontWeight: bold,
                         ),
                       ),
-                      Text(
-                        "${produk?.jumlah} x Rp${currencyFormatter.format(produk?.harga)}",
-                        style: poppins.copyWith(
-                          color: Colors.grey,
-                          fontSize: 12,
-                        ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              "Rp${currencyFormatter.format(produk?.harga)}",
+                              style: poppins.copyWith(
+                                color: Colors.grey,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ),
+                          produk?.multisatuanUnit == null
+                              ? Text(
+                                  "${(produk?.jumlah ?? 0)} ${produk?.satuanProduk}",
+                                  style: poppins.copyWith(
+                                    color: Colors.grey,
+                                    fontSize: 12,
+                                  ),
+                                )
+                              : Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    for (var i = 0;
+                                        i <
+                                            (produk?.jumlahMultisatuan
+                                                    ?.length ??
+                                                0);
+                                        i++) ...{
+                                      (produk?.jumlahMultisatuan?[i] ?? 0) == 0
+                                          ? const SizedBox()
+                                          : Text(
+                                              "${(produk?.jumlahMultisatuan?[i] ?? 0)} ${produk?.multisatuanUnit?[i]}",
+                                              style: poppins.copyWith(
+                                                color: Colors.grey,
+                                                fontSize: 12,
+                                              ),
+                                            )
+                                    }
+                                  ],
+                                ),
+                        ],
                       ),
                     ],
                   ),
@@ -571,7 +607,7 @@ class _DetailTransactionPageState extends State<DetailTransactionPage> {
                 ),
                 Expanded(
                   child: Text(
-                    "Cabang ${widget.transactionDetailItem.cabangId}", // (perlu diganti namanya)
+                    "Cabang ${widget.transactionDetailItem.namaCabang}", // (perlu diganti namanya)
                     style: poppins.copyWith(
                       fontWeight: bold,
                     ),
