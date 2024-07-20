@@ -44,6 +44,7 @@ class Data {
   int? status;
   String? keteranganStatus;
   bool? online;
+  int? pembatalan;
   List<Produk>? produk;
 
   Data(
@@ -66,6 +67,7 @@ class Data {
       this.status,
       this.keteranganStatus,
       this.online,
+      this.pembatalan,
       this.produk});
 
   Data.fromJson(Map<String, dynamic> json) {
@@ -88,6 +90,7 @@ class Data {
     status = json['status'];
     keteranganStatus = json['keterangan_status'];
     online = json['online'];
+    pembatalan = json['pembatalan'];
     if (json['produk'] != null) {
       produk = <Produk>[];
       json['produk'].forEach((v) {
@@ -117,6 +120,7 @@ class Data {
     data['status'] = status;
     data['keterangan_status'] = keteranganStatus;
     data['online'] = online;
+    data['pembatalan'] = pembatalan;
     if (produk != null) {
       data['produk'] = produk!.map((v) => v.toJson()).toList();
     }

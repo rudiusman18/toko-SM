@@ -9,7 +9,7 @@ class MetodePembayaranService {
 
   Future<PembayaranModel> retrieveMetodePembayaran(
       {required String token, required String cabangId}) async {
-    var url = Uri.parse("${baseURL}pengaturan/bank?cabang=$cabangId");
+    var url = Uri.parse("${baseURL}pengaturan/pembayaran?cabang=$cabangId");
     var header = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $token'

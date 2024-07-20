@@ -9,6 +9,7 @@ import 'package:tokoSM/pages/bottom_navigation_page/transaction_page/detail_tran
 import 'package:tokoSM/providers/login_provider.dart';
 import 'package:tokoSM/providers/transaksi_provider.dart';
 import 'package:tokoSM/theme/theme.dart';
+import 'package:tokoSM/utils/alert_dialog.dart';
 
 class TransactionPage extends StatefulWidget {
   const TransactionPage({super.key});
@@ -87,74 +88,6 @@ class _TransactionPageState extends State<TransactionPage> {
     TransaksiProvider transaksiProvider =
         Provider.of<TransaksiProvider>(context);
 
-    void showAlertDialog(BuildContext context, String noInvoice) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Column(
-              children: [
-                Text(
-                  "Warning!",
-                  style: poppins.copyWith(
-                    color: backgroundColor1,
-                    fontWeight: semiBold,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                Divider(
-                  thickness: 1,
-                  color: backgroundColor1,
-                ),
-              ],
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            alignment: Alignment.center,
-            content: Text(
-              "Anda yakin untuk mengubah status menjadi selesai?",
-              style: poppins.copyWith(color: backgroundColor1),
-              textAlign: TextAlign.center,
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  "Batal",
-                  style: poppins.copyWith(
-                    fontWeight: semiBold,
-                    color: backgroundColor1,
-                  ),
-                ),
-              ),
-              TextButton(
-                onPressed: () async {
-                  if (await transaksiProvider.postStatustransaksi(
-                    token: loginProvider.loginModel.token ?? "",
-                    noInvoice: noInvoice,
-                    status: 4,
-                  )) {
-                    _initTransaction();
-                    Navigator.pop(context);
-                  }
-                },
-                child: Text(
-                  "Lanjutkan",
-                  style: poppins.copyWith(
-                    fontWeight: semiBold,
-                    color: backgroundColor1,
-                  ),
-                ),
-              ),
-            ],
-          );
-        },
-      );
-    }
-
     Widget transactionItem({required int index}) {
       var transaction = transactionModel.data?[index];
       String timestamp = "${transaction?.produk?.first.createdAt}";
@@ -222,12 +155,12 @@ class _TransactionPageState extends State<TransactionPage> {
                   const Spacer(),
                   Container(
                     color: "${transaction?.keteranganStatus}".toLowerCase() ==
-                            "belum dibayar"
-                        ? Colors.orange.withOpacity(0.2)
+                            "Selesai"
+                        ? Colors.green.withOpacity(0.2)
                         : "${transaction?.keteranganStatus}".toLowerCase() ==
                                 "dibatalkan"
                             ? Colors.red.withOpacity(0.2)
-                            : Colors.green.withOpacity(0.2),
+                            : Colors.orange.withOpacity(0.2),
                     padding: const EdgeInsets.all(5),
                     child: Text(
                       "${transaction?.keteranganStatus}",
@@ -235,13 +168,13 @@ class _TransactionPageState extends State<TransactionPage> {
                         fontWeight: bold,
                         color:
                             "${transaction?.keteranganStatus}".toLowerCase() ==
-                                    "belum dibayar"
-                                ? Colors.orange
+                                    "selesai"
+                                ? Colors.green
                                 : "${transaction?.keteranganStatus}"
                                             .toLowerCase() ==
                                         "dibatalkan"
                                     ? Colors.red
-                                    : Colors.green,
+                                    : Colors.orange,
                         fontSize: 10,
                       ),
                     ),
@@ -332,7 +265,27 @@ class _TransactionPageState extends State<TransactionPage> {
                           ? ElevatedButton(
                               onPressed: () {
                                 showAlertDialog(
-                                    context, transaction?.noInvoice ?? "");
+                                    context: context,
+                                    message:
+                                        "Anda yakin ingin mengubah status menjadi selesai?",
+                                    onCancelPressed: () =>
+                                        Navigator.pop(context),
+                                    onConfirmPressed: () async {
+                                      () async {
+                                        if (await transaksiProvider
+                                            .postStatustransaksi(
+                                          token:
+                                              loginProvider.loginModel.token ??
+                                                  "",
+                                          noInvoice:
+                                              transaction?.noInvoice ?? "",
+                                          status: 4,
+                                        )) {
+                                          _initTransaction();
+                                          Navigator.pop(context);
+                                        }
+                                      };
+                                    });
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: backgroundColor3,

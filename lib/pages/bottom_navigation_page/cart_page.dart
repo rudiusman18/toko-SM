@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+import 'package:tokoSM/utils/alert_dialog.dart';
 
 import '../../theme/theme.dart';
 
@@ -180,72 +181,6 @@ class _CartPageState extends State<CartPage> {
     final currencyFormatter = NumberFormat('#,##0.00', 'ID');
 
     LoginProvider loginProvider = Provider.of<LoginProvider>(context);
-
-    void showAlertDialog(BuildContext context, DataKeranjang? product) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Column(
-              children: [
-                Text(
-                  "Warning!",
-                  style: poppins.copyWith(
-                    color: backgroundColor1,
-                    fontWeight: semiBold,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                Divider(
-                  thickness: 1,
-                  color: backgroundColor1,
-                ),
-              ],
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            alignment: Alignment.center,
-            content: Text(
-              "Anda yakin untuk menghapus ${product?.namaProduk} dari keranjang?",
-              style: poppins.copyWith(color: backgroundColor1),
-              textAlign: TextAlign.center,
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  "Batal",
-                  style: poppins.copyWith(
-                    fontWeight: semiBold,
-                    color: backgroundColor1,
-                  ),
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    Navigator.pop(context);
-                    _deleteCartProduct(cuid: "${product?.sId}");
-                    // productProvider.cartData.removeWhere((element) =>
-                    //     element.product!.urlImg == product.product!.urlImg);
-                  });
-                },
-                child: Text(
-                  "Lanjutkan",
-                  style: poppins.copyWith(
-                    fontWeight: semiBold,
-                    color: backgroundColor1,
-                  ),
-                ),
-              ),
-            ],
-          );
-        },
-      );
-    }
 
     Widget customtextFormField({
       required TextInputType keyboardType,
@@ -797,7 +732,18 @@ class _CartPageState extends State<CartPage> {
                         children: [
                           InkWell(
                             onTap: () {
-                              showAlertDialog(context, product);
+                              showAlertDialog(
+                                  context: context,
+                                  message:
+                                      "Anda yakin untuk menghapus ${product?.namaProduk} dari keranjang?",
+                                  onCancelPressed: () => Navigator.pop(context),
+                                  onConfirmPressed: () async {
+                                    setState(() {
+                                      Navigator.pop(context);
+                                      _deleteCartProduct(
+                                          cuid: "${product?.sId}");
+                                    });
+                                  });
                             },
                             child: Container(
                               padding: const EdgeInsets.all(5),
@@ -860,7 +806,19 @@ class _CartPageState extends State<CartPage> {
                                   setState(() {
                                     if (product?.jumlahMultisatuan == null) {
                                       if ((product?.jumlah ?? 0) == 1) {
-                                        showAlertDialog(context, product);
+                                        showAlertDialog(
+                                            context: context,
+                                            message:
+                                                "Anda yakin untuk menghapus ${product?.namaProduk} dari keranjang?",
+                                            onCancelPressed: () =>
+                                                Navigator.pop(context),
+                                            onConfirmPressed: () async {
+                                              setState(() {
+                                                Navigator.pop(context);
+                                                _deleteCartProduct(
+                                                    cuid: "${product?.sId}");
+                                              });
+                                            });
                                       } else {
                                         _updateCartProduct(
                                           cuid: "${product?.sId}",

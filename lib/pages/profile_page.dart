@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tokoSM/utils/alert_dialog.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -148,75 +149,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
       // Return the initials string
       return initials;
-    }
-
-    void showAlertDialog(BuildContext context) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Column(
-              children: [
-                Text(
-                  "Warning!",
-                  style: poppins.copyWith(
-                    color: backgroundColor1,
-                    fontWeight: semiBold,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                Divider(
-                  thickness: 1,
-                  color: backgroundColor1,
-                ),
-              ],
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            alignment: Alignment.center,
-            content: Text(
-              "Anda yakin untuk melakukan logout?",
-              style: poppins.copyWith(color: backgroundColor1),
-              textAlign: TextAlign.center,
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  "Batal",
-                  style: poppins.copyWith(
-                    fontWeight: semiBold,
-                    color: backgroundColor1,
-                  ),
-                ),
-              ),
-              TextButton(
-                onPressed: () async {
-                  SharedPreferences preferences =
-                      await SharedPreferences.getInstance();
-                  await preferences.remove('loginData');
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      PageTransition(
-                          child: const LoginPage(),
-                          type: PageTransitionType.fade),
-                      (route) => false);
-                },
-                child: Text(
-                  "Lanjutkan",
-                  style: poppins.copyWith(
-                    fontWeight: semiBold,
-                    color: backgroundColor1,
-                  ),
-                ),
-              ),
-            ],
-          );
-        },
-      );
     }
 
     Widget profileData({required String title}) {
@@ -418,7 +350,21 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     child: ElevatedButton(
                       onPressed: () {
-                        showAlertDialog(context);
+                        showAlertDialog(
+                            context: context,
+                            message: "Anda yakin untuk melakukan logout?",
+                            onCancelPressed: () => Navigator.pop(context),
+                            onConfirmPressed: () async {
+                              SharedPreferences preferences =
+                                  await SharedPreferences.getInstance();
+                              await preferences.remove('loginData');
+                              Navigator.pushAndRemoveUntil(
+                                  context,
+                                  PageTransition(
+                                      child: const LoginPage(),
+                                      type: PageTransitionType.fade),
+                                  (route) => false);
+                            });
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red,

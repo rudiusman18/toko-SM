@@ -27,29 +27,52 @@ class PembayaranModel {
 }
 
 class Data {
-  int? id;
-  int? cabangId;
-  String? namaBank;
-  String? logoBank;
-  String? noRekening;
+  String? kategori;
+  List<Child>? child;
 
-  Data({this.id, this.cabangId, this.namaBank, this.logoBank, this.noRekening});
+  Data({this.kategori, this.child});
 
   Data.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    cabangId = json['cabang_id'];
-    namaBank = json['nama_bank'];
-    logoBank = json['logo_bank'];
-    noRekening = json['no_rekening'];
+    kategori = json['kategori'];
+    if (json['child'] != null) {
+      child = <Child>[];
+      json['child'].forEach((v) {
+        child!.add(Child.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
-    data['id'] = id;
-    data['cabang_id'] = cabangId;
-    data['nama_bank'] = namaBank;
-    data['logo_bank'] = logoBank;
-    data['no_rekening'] = noRekening;
+    data['kategori'] = kategori;
+    if (child != null) {
+      data['child'] = child!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class Child {
+  String? metode;
+  String? nama;
+  String? image;
+  String? kode;
+
+  Child({this.metode, this.nama, this.image});
+
+  Child.fromJson(Map<String, dynamic> json) {
+    metode = json['metode'];
+    nama = json['nama'];
+    image = json['image'];
+    kode = json['kode'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['metode'] = metode;
+    data['nama'] = nama;
+    data['image'] = image;
+    data['kode'] = kode;
     return data;
   }
 }

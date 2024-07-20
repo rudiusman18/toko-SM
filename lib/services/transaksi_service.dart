@@ -22,6 +22,7 @@ class TransaksiService {
     required int totalOngkosKirim,
     required int totalBelanja,
     required String metodePembayaran,
+    required String kodePembayaran,
     required String namaPenerima,
     required String alamatPenerima,
     required String banktransfer,
@@ -45,6 +46,7 @@ class TransaksiService {
       "total_ongkos_kirim": totalOngkosKirim,
       "total_belanja": totalBelanja,
       "metode_pembayaran": metodePembayaran,
+      "kode_pembayaran": kodePembayaran,
       "nama_penerima": namaPenerima, // nama dari id alamat pengiriman
       "alamat_penerima": alamatPenerima, // alamat dari id alamat pengiriman
       "bank_transfer": banktransfer,

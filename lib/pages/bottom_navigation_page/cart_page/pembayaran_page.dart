@@ -47,7 +47,9 @@ class _PembayaranPageState extends State<PembayaranPage> {
   PembayaranModel metodePembayaranModel = PembayaranModel();
   PembayaranModel pembayaranTerpilih = PembayaranModel();
   final currencyFormatter = NumberFormat('#,##0.00', 'ID');
-  List<bool> isChecked = [];
+  List<List<bool>> isChecked = [];
+  int index = 0;
+  int index2 = 0;
 
   _handleTapbayar() async {
     print(
@@ -72,6 +74,8 @@ class _PembayaranPageState extends State<PembayaranPage> {
         ),
       ));
     } else {
+      print(
+          "pembayaran terpilih: ${pembayaranTerpilih.data?[0].kategori ?? ""} dengan ${((pembayaranTerpilih.data?[0].kategori ?? "").toLowerCase() != "transfer bank") ? (pembayaranTerpilih.data?[0].child?[index2].nama ?? "") : ""}");
       if (await transaksiProvider.postTransaksi(
         token: loginProvider.loginModel.token ?? "",
         namaPelanggan: loginProvider.loginModel.data?.namaPelanggan ?? "",
@@ -83,11 +87,17 @@ class _PembayaranPageState extends State<PembayaranPage> {
         totalHarga: widget.totalharga,
         totalOngkosKirim: widget.totalOngkosKirim,
         totalBelanja: int.parse(widget.totaltagihan),
-        metodePembayaran: "transfer",
+        metodePembayaran:
+            pembayaranTerpilih.data?[0].child?[index2].metode ?? "",
+        kodePembayaran: pembayaranTerpilih.data?[0].child?[index2].kode ?? "",
         namaPenerima: widget.namaPenerima,
         alamatPenerima: widget.alamatPenerima,
-        banktransfer: pembayaranTerpilih.data?.first.namaBank ?? "",
-        noRekeningTransfer: pembayaranTerpilih.data?.first.noRekening ?? "",
+        banktransfer:
+            ((pembayaranTerpilih.data?[0].kategori ?? "").toLowerCase() !=
+                    "transfer bank")
+                ? (pembayaranTerpilih.data?[0].child?[index2].nama ?? "")
+                : "",
+        noRekeningTransfer: "",
         product: widget.product,
       )) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -144,28 +154,41 @@ class _PembayaranPageState extends State<PembayaranPage> {
         cabangId: widget.cabangId)) {
       setState(() {
         metodePembayaranModel = metodePembayaranProvider.metodePembayaranModel;
+        List<bool> data = [];
         for (var i = 0; i < (metodePembayaranModel.data?.length ?? 0); i++) {
-          isChecked.add(false);
+          data.clear();
+          for (var j = 0;
+              j < (metodePembayaranModel.data?[i].child?.length ?? 0);
+              j++) {
+            data.add(false);
+          }
+          isChecked.add(data);
         }
+        print("jumlah ischecked adalah: $isChecked");
       });
     }
   }
 
-  Widget pembayaranItem({required int index}) {
+  Widget pembayaranItem({required int index, required int index2}) {
     var metodePembayaran = metodePembayaranModel.data?[index];
     return InkWell(
       onTap: () {
         setState(() {
-          isChecked = isChecked.map((e) => e = false).toList();
-          isChecked[index] = !isChecked[index];
+          isChecked = isChecked.map((row) {
+            return row.map((value) => value = false).toList();
+          }).toList();
+          isChecked[index][index2] = !isChecked[index][index2];
           pembayaranTerpilih =
               PembayaranModel.fromJson(metodePembayaranModel.toJson());
-          if (isChecked[index] == true) {
+          if (isChecked[index][index2] == true) {
             pembayaranTerpilih.data?.clear();
             pembayaranTerpilih.data?.add(metodePembayaranModel.data![index]);
-            print(
-                "bank yang dipilih adalah ${pembayaranTerpilih.data?.first.namaBank}");
+            // print(
+            //     "bank yang dipilih adalah ${pembayaranTerpilih.data?.first.namaBank}");
           }
+          this.index = index;
+          this.index2 = index2;
+          print("pembayaran terpilih: $index dengan $index2");
         });
       },
       child: Container(
@@ -180,35 +203,24 @@ class _PembayaranPageState extends State<PembayaranPage> {
               children: [
                 Checkbox(
                   activeColor: backgroundColor3,
-                  value: isChecked[index],
+                  value: isChecked[index][index2],
                   onChanged: (_) {},
                 ),
                 SizedBox(
-                  width: 80,
-                  height: 80,
+                  width: 60,
+                  height: 60,
                   child: Image.network(
-                    "${metodePembayaran?.logoBank}",
+                    "${metodePembayaran?.child?[index2].image}",
                   ),
                 ),
                 const SizedBox(
                   width: 10,
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "${metodePembayaran?.namaBank}",
-                      style: poppins.copyWith(
-                        fontWeight: bold,
-                      ),
-                    ),
-                    Text(
-                      "${metodePembayaran?.noRekening}",
-                      style: poppins.copyWith(
-                        fontWeight: regular,
-                      ),
-                    ),
-                  ],
+                Text(
+                  "${metodePembayaran?.child?[index2].nama}",
+                  style: poppins.copyWith(
+                    fontWeight: bold,
+                  ),
                 ),
               ],
             ),
@@ -237,10 +249,39 @@ class _PembayaranPageState extends State<PembayaranPage> {
           Expanded(
             child: ListView(
               children: [
+                Container(
+                  padding: const EdgeInsets.only(
+                    top: 20,
+                    bottom: 20,
+                  ),
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                  ),
+                  child: Text(
+                    "Pilih Metode Pembayaran",
+                    style: poppins.copyWith(
+                      fontWeight: bold,
+                      fontSize: 15,
+                    ),
+                  ),
+                ),
                 for (var i = 0;
                     i < (metodePembayaranModel.data?.length ?? 0);
-                    i++)
-                  pembayaranItem(index: i)
+                    i++) ...{
+                  Container(
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                    ),
+                    child: Text(
+                      "${metodePembayaranModel.data?[i].kategori}",
+                    ),
+                  ),
+                  for (var index = 0;
+                      index <
+                          (metodePembayaranModel.data?[i].child?.length ?? 0);
+                      index++)
+                    pembayaranItem(index: i, index2: index)
+                },
               ],
             ),
           ),

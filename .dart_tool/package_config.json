@@ -8,16 +8,46 @@
       "languageVersion": "3.0"
     },
     {
+      "name": "args",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/args-2.5.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
       "name": "async",
       "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/async-2.11.0",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
+      "name": "audio_session",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/audio_session-0.1.21",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "boolean_selector",
       "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/boolean_selector-2.1.1",
       "packageUri": "lib/",
       "languageVersion": "2.17"
+    },
+    {
+      "name": "cached_network_image",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/cached_network_image-3.3.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "cached_network_image_platform_interface",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/cached_network_image_platform_interface-4.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "cached_network_image_web",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/cached_network_image_web-1.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
     },
     {
       "name": "carousel_slider",
@@ -30,6 +60,12 @@
       "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/characters-1.3.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "chewie",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/chewie-1.7.5",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
     },
     {
       "name": "clock",
@@ -50,10 +86,22 @@
       "languageVersion": "2.19"
     },
     {
+      "name": "csslib",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/csslib-1.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
       "name": "cupertino_icons",
       "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/cupertino_icons-1.0.6",
       "packageUri": "lib/",
       "languageVersion": "2.19"
+    },
+    {
+      "name": "dbus",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/dbus-0.7.10",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
     },
     {
       "name": "dropdown_search",
@@ -90,6 +138,12 @@
       "rootUri": "file:///D:/My%20application/Flutter/flutter/packages/flutter",
       "packageUri": "lib/",
       "languageVersion": "3.0"
+    },
+    {
+      "name": "flutter_cache_manager",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_cache_manager-3.3.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
     },
     {
       "name": "flutter_keyboard_visibility",
@@ -140,6 +194,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "flutter_svg",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_svg-2.0.10+1",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
       "name": "flutter_test",
       "rootUri": "file:///D:/My%20application/Flutter/flutter/packages/flutter_test",
       "packageUri": "lib/",
@@ -152,10 +212,58 @@
       "languageVersion": "3.0"
     },
     {
+      "name": "flutter_widget_from_html",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_widget_from_html-0.14.11",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
+      "name": "flutter_widget_from_html_core",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_widget_from_html_core-0.14.12",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
       "name": "fluttertoast",
       "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/fluttertoast-8.2.2",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "fwfh_cached_network_image",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/fwfh_cached_network_image-0.14.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
+      "name": "fwfh_chewie",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/fwfh_chewie-0.14.8",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
+      "name": "fwfh_just_audio",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/fwfh_just_audio-0.14.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
+      "name": "fwfh_svg",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/fwfh_svg-0.8.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
+      "name": "fwfh_url_launcher",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/fwfh_url_launcher-0.9.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
+      "name": "fwfh_webview",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/fwfh_webview-0.14.8",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
     },
     {
       "name": "geolocator",
@@ -200,6 +308,12 @@
       "languageVersion": "2.14"
     },
     {
+      "name": "html",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/html-0.15.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
       "name": "http",
       "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/http-1.1.0",
       "packageUri": "lib/",
@@ -218,10 +332,40 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "js",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/js-0.7.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
+      "name": "just_audio",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/just_audio-0.9.37",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "just_audio_platform_interface",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/just_audio_platform_interface-4.3.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "just_audio_web",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/just_audio_web-0.4.9",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "lints",
       "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/lints-2.1.1",
       "packageUri": "lib/",
       "languageVersion": "3.0"
+    },
+    {
+      "name": "logging",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/logging-1.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
     },
     {
       "name": "matcher",
@@ -248,10 +392,28 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "octo_image",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/octo_image-2.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "order_tracker_zen",
       "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/order_tracker_zen-1.0.0+4",
       "packageUri": "lib/",
       "languageVersion": "2.19"
+    },
+    {
+      "name": "package_info_plus",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/package_info_plus-4.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "package_info_plus_platform_interface",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/package_info_plus_platform_interface-2.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "page_transition",
@@ -262,6 +424,12 @@
     {
       "name": "path",
       "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/path-1.8.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "path_parsing",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/path_parsing-1.0.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -332,6 +500,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "petitparser",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/petitparser-5.4.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
       "name": "placeholder_images",
       "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/placeholder_images-0.0.1",
       "packageUri": "lib/",
@@ -360,6 +534,12 @@
       "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/readmore-2.2.0",
       "packageUri": "lib/",
       "languageVersion": "2.16"
+    },
+    {
+      "name": "rxdart",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/rxdart-0.27.7",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "shared_preferences",
@@ -428,6 +608,18 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "sqflite",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/sqflite-2.3.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "sqflite_common",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/sqflite_common-2.5.3",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
       "name": "stack_trace",
       "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/stack_trace-1.11.0",
       "packageUri": "lib/",
@@ -458,6 +650,12 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "synchronized",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/synchronized-3.1.0+1",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
       "name": "term_glyph",
       "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/term_glyph-1.2.1",
       "packageUri": "lib/",
@@ -476,10 +674,76 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "url_launcher",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher-6.2.4",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
+      "name": "url_launcher_android",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_android-6.2.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "url_launcher_ios",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_ios-6.2.4",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "url_launcher_linux",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_linux-3.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "url_launcher_macos",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_macos-3.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
+      "name": "url_launcher_platform_interface",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_platform_interface-2.3.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "url_launcher_web",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_web-2.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
+      "name": "url_launcher_windows",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_windows-3.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
       "name": "uuid",
       "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/uuid-4.2.2",
       "packageUri": "lib/",
       "languageVersion": "2.14"
+    },
+    {
+      "name": "vector_graphics",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/vector_graphics-1.1.11+1",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "vector_graphics_codec",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/vector_graphics_codec-1.1.11+1",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "vector_graphics_compiler",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/vector_graphics_compiler-1.1.11+1",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
     },
     {
       "name": "vector_math",
@@ -488,10 +752,76 @@
       "languageVersion": "2.14"
     },
     {
+      "name": "video_player",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/video_player-2.8.5",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
+      "name": "video_player_android",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/video_player_android-2.4.12",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "video_player_avfoundation",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/video_player_avfoundation-2.5.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
+      "name": "video_player_platform_interface",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/video_player_platform_interface-6.2.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
+      "name": "video_player_web",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/video_player_web-2.1.3",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
+      "name": "wakelock_plus",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/wakelock_plus-1.1.6",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "wakelock_plus_platform_interface",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/wakelock_plus_platform_interface-1.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
       "name": "web",
       "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/web-0.1.4-beta",
       "packageUri": "lib/",
       "languageVersion": "3.1"
+    },
+    {
+      "name": "webview_flutter",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/webview_flutter-4.5.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "webview_flutter_android",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/webview_flutter_android-3.15.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "webview_flutter_platform_interface",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/webview_flutter_platform_interface-2.9.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "webview_flutter_wkwebview",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/webview_flutter_wkwebview-3.10.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
     },
     {
       "name": "win32",
@@ -506,13 +836,19 @@
       "languageVersion": "2.19"
     },
     {
+      "name": "xml",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/xml-6.3.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
       "name": "tokoSM",
       "rootUri": "../",
       "packageUri": "lib/",
       "languageVersion": "3.1"
     }
   ],
-  "generated": "2024-06-26T12:00:32.113665Z",
+  "generated": "2024-07-19T18:40:39.936178Z",
   "generator": "pub",
   "generatorVersion": "3.1.2"
 }

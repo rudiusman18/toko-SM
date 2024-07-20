@@ -55,6 +55,7 @@ dependencies:
   syncfusion_flutter_datepicker: 23.2.4
   dropdown_search: ^5.0.6
   order_tracker_zen: ^1.0.0+4
+  flutter_widget_from_html: ^0.14.11
 
 dev_dependencies:
   flutter_test:

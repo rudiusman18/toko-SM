@@ -11,6 +11,8 @@ import 'package:tokoSM/providers/login_provider.dart';
 import 'package:tokoSM/providers/transaksi_provider.dart';
 import 'package:tokoSM/providers/ulasan_provider.dart';
 import 'package:tokoSM/theme/theme.dart';
+import 'package:tokoSM/utils/alert_dialog.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
 class DetailTransactionPage extends StatefulWidget {
   Data transactionDetailItem = Data();
@@ -33,74 +35,6 @@ class _DetailTransactionPageState extends State<DetailTransactionPage> {
         Provider.of<TransaksiProvider>(context);
 
     var starRating = 0.0;
-
-    void showAlertDialog(BuildContext context) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Column(
-              children: [
-                Text(
-                  "Warning!",
-                  style: poppins.copyWith(
-                    color: backgroundColor1,
-                    fontWeight: semiBold,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                Divider(
-                  thickness: 1,
-                  color: backgroundColor1,
-                ),
-              ],
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            alignment: Alignment.center,
-            content: Text(
-              "Anda yakin untuk mengubah status menjadi selesai?",
-              style: poppins.copyWith(color: backgroundColor1),
-              textAlign: TextAlign.center,
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  "Batal",
-                  style: poppins.copyWith(
-                    fontWeight: semiBold,
-                    color: backgroundColor1,
-                  ),
-                ),
-              ),
-              TextButton(
-                onPressed: () async {
-                  if (await transaksiProvider.postStatustransaksi(
-                    token: loginProvider.loginModel.token ?? "",
-                    noInvoice: widget.transactionDetailItem.noInvoice ?? "",
-                    status: 4,
-                  )) {
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                  }
-                },
-                child: Text(
-                  "Lanjutkan",
-                  style: poppins.copyWith(
-                    fontWeight: semiBold,
-                    color: backgroundColor1,
-                  ),
-                ),
-              ),
-            ],
-          );
-        },
-      );
-    }
 
     Widget statusView() {
       String timestamp =
@@ -726,6 +660,7 @@ class _DetailTransactionPageState extends State<DetailTransactionPage> {
     }
 
     Widget infoPembayaranView() {
+      print("object data ${widget.transactionDetailItem.pembatalan}");
       return Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -752,6 +687,42 @@ class _DetailTransactionPageState extends State<DetailTransactionPage> {
                   "Metode Pembayaran",
                   style: poppins.copyWith(
                     fontSize: 12,
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Flexible(
+                  fit: FlexFit.tight,
+                  flex: 1,
+                  child: Text(
+                    "${widget.transactionDetailItem.metodePembayaran}",
+                    style: poppins.copyWith(
+                      fontSize: 12,
+                    ),
+                    textAlign: TextAlign.end,
+                  ),
+                ),
+              ],
+            ),
+
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Icon(
+                  Icons.info,
+                  color: backgroundColor3,
+                  size: 20,
+                ),
+                const SizedBox(
+                  width: 2,
+                ),
+                Text(
+                  "Cara Pembayaran",
+                  style: poppins.copyWith(
+                    fontSize: 12,
+                    color: backgroundColor3,
                   ),
                 ),
                 const SizedBox(
@@ -892,25 +863,90 @@ class _DetailTransactionPageState extends State<DetailTransactionPage> {
               ],
             ),
           ),
-          Container(
-            margin: const EdgeInsets.only(
-              left: 24,
-              right: 24,
-              bottom: 15,
-            ),
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () {
-                showAlertDialog(context);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: backgroundColor3,
+          if ((widget.transactionDetailItem.status ?? 0) != 4 &&
+              (widget.transactionDetailItem.status ?? 0) != 5 &&
+              (widget.transactionDetailItem.status ?? 0) != 1 &&
+              (widget.transactionDetailItem.status ?? 0) != 2 &&
+              widget.transactionDetailItem.pembatalan != 1) ...{
+            if (widget.transactionDetailItem.bankTransfer?.toLowerCase() !=
+                    "cod" ||
+                widget.transactionDetailItem.status != 0)
+              Container(
+                margin: EdgeInsets.only(
+                  left: 24,
+                  right: 24,
+                  bottom: (widget.transactionDetailItem.bankTransfer
+                                  ?.toLowerCase() ==
+                              "cod" ||
+                          widget.transactionDetailItem.status == 0)
+                      ? 5
+                      : 15,
+                ),
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    showAlertDialog(
+                        context: context,
+                        message:
+                            "Anda yakin ingin mengubah status menjadi selesai?",
+                        onCancelPressed: () => Navigator.pop(context),
+                        onConfirmPressed: () async {
+                          if (await transaksiProvider.postStatustransaksi(
+                            token: loginProvider.loginModel.token ?? "",
+                            noInvoice:
+                                widget.transactionDetailItem.noInvoice ?? "",
+                            status: 4,
+                          )) {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          }
+                        });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: backgroundColor3,
+                  ),
+                  child: Text(
+                    (widget.transactionDetailItem.status == 0)
+                        ? "Konfirmasi Pembayaran"
+                        : "Selesai",
+                  ),
+                ),
               ),
-              child: const Text(
-                "Selesai",
+            if (widget.transactionDetailItem.status == 0)
+              Container(
+                margin: const EdgeInsets.only(
+                  left: 24,
+                  right: 24,
+                  bottom: 15,
+                ),
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    showAlertDialog(
+                        context: context,
+                        message: "Anda yakin ingin membatalkan pesanan?",
+                        onCancelPressed: () => Navigator.pop(context),
+                        onConfirmPressed: () async {
+                          if (await transaksiProvider.postStatustransaksi(
+                            token: loginProvider.loginModel.token ?? "",
+                            noInvoice:
+                                widget.transactionDetailItem.noInvoice ?? "",
+                            status: 5,
+                          )) {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          }
+                        });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                  ),
+                  child: const Text(
+                    "Batalkan",
+                  ),
+                ),
               ),
-            ),
-          )
+          },
         ],
       ),
     );

@@ -1,4 +1,7 @@
-#Fri Jul 12 21:56:45 ICT 2024
+#Sat Jul 20 07:25:16 ICT 2024
 base.0=D\:\\My_Project\\Project with mas galang\\toko-SM\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
+base.1=D\:\\My_Project\\Project with mas galang\\toko-SM\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes2.dex
 path.0=classes.dex
+path.1=classes2.dex
 renamed.0=classes.dex
+renamed.1=classes2.dex
