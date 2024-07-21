@@ -37,6 +37,7 @@ class Data {
   int? totalOngkosKirim;
   int? totalBelanja;
   String? metodePembayaran;
+  String? kodePembayaran;
   String? namaPenerima;
   String? alamatPenerima;
   String? bankTransfer;
@@ -60,6 +61,7 @@ class Data {
       this.totalOngkosKirim,
       this.totalBelanja,
       this.metodePembayaran,
+      this.kodePembayaran,
       this.namaPenerima,
       this.alamatPenerima,
       this.bankTransfer,
@@ -83,6 +85,7 @@ class Data {
     totalOngkosKirim = json['total_ongkos_kirim'];
     totalBelanja = json['total_belanja'];
     metodePembayaran = json['metode_pembayaran'];
+    kodePembayaran = json['kode_pembayaran'];
     namaPenerima = json['nama_penerima'];
     alamatPenerima = json['alamat_penerima'];
     bankTransfer = json['bank_transfer'];
@@ -113,6 +116,7 @@ class Data {
     data['total_ongkos_kirim'] = totalOngkosKirim;
     data['total_belanja'] = totalBelanja;
     data['metode_pembayaran'] = metodePembayaran;
+    data['kode_pembayaran'] = kodePembayaran;
     data['nama_penerima'] = namaPenerima;
     data['alamat_penerima'] = alamatPenerima;
     data['bank_transfer'] = bankTransfer;

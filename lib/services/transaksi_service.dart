@@ -195,4 +195,73 @@ class TransaksiService {
       throw Exception("${jsonDecode(response.body)['message']}");
     }
   }
+
+  Future<Map<String, dynamic>> getPaymentManual({
+    required String token,
+    required String cabangId,
+    required String kode,
+  }) async {
+    var url = Uri.parse(
+        "${baseURL}pengaturan/carapembayaran?cabang=$cabangId&kode=$kode");
+    print(
+        "getpaymentmanual url: ${baseURL}pengaturan/carapembayaran?cabang=$cabangId&kode=$kode");
+    var header = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token'
+    };
+
+    var response = await http.get(url, headers: header);
+    // ignore: avoid_print
+    print("payment manual: ${response.body}");
+
+// **success melakukan get payment manual
+    if (response.statusCode >= 200 && response.statusCode <= 299) {
+      var data = jsonDecode(response.body);
+      Map<String, dynamic> paymentManual = data;
+
+      return paymentManual;
+    } else {
+      throw Exception("${jsonDecode(response.body)['message']}");
+    }
+  }
+
+  Future<Map<String, dynamic>> postPaymentConfirmation({
+    required String token,
+    required String noInvoice,
+    required String bankPengirim,
+    required String norekeningPengirim,
+    required String namaPengirim,
+  }) async {
+    var url = Uri.parse("${baseURL}transaksi/konfirmpembayaran");
+    var header = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token'
+    };
+
+    Map data = {
+      'no_invoice': noInvoice,
+      'bank_pengirim': bankPengirim,
+      'norekening_pengirim': norekeningPengirim,
+      'nama_pengirim': namaPengirim,
+    };
+
+    var body = jsonEncode(data);
+
+    var response = await http.post(
+      url,
+      headers: header,
+      body: body,
+    );
+    // ignore: avoid_print
+    print("konfirmasi pembayaran: ${response.body}");
+
+// **success melakukan post konfirmasi pembayaran
+    if (response.statusCode >= 200 && response.statusCode <= 299) {
+      var data = jsonDecode(response.body);
+
+      return data;
+    } else {
+      throw Exception("${jsonDecode(response.body)['message']}");
+    }
+  }
 }

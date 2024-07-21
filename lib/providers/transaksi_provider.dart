@@ -113,4 +113,50 @@ class TransaksiProvider with ChangeNotifier {
       return false;
     }
   }
+
+  Map<String, dynamic> _paymentManual = {};
+  Map<String, dynamic> get paymentManual => _paymentManual;
+  set paymentManual(Map<String, dynamic> paymentManualResponse) {
+    _paymentManual = paymentManualResponse;
+    notifyListeners();
+  }
+
+  Future<bool> retrievePaymentManual({
+    required String token,
+    required String cabangId,
+    required String kode,
+  }) async {
+    try {
+      Map<String, dynamic> paymentManualResponse = await TransaksiService()
+          .getPaymentManual(token: token, cabangId: cabangId, kode: kode);
+      _paymentManual = paymentManualResponse;
+      print("berhasil mendapatkan data manual payment");
+      return true;
+    } catch (e) {
+      print("berhasil mendapatkan data manual payment dengan pesan error $e");
+      return false;
+    }
+  }
+
+  Future<bool> sendPaymentConfirmation({
+    required String token,
+    required String noInvoice,
+    required String bankPengirim,
+    required String noRekeningPengirim,
+    required String namaPengirim,
+  }) async {
+    try {
+      await TransaksiService().postPaymentConfirmation(
+          token: token,
+          noInvoice: noInvoice,
+          bankPengirim: bankPengirim,
+          norekeningPengirim: noRekeningPengirim,
+          namaPengirim: namaPengirim);
+      print("Konfirmasi Pembayaran berhasil dilakukan");
+      return true;
+    } catch (e) {
+      print("konfirmasi pembayaran gagal dilakuakn dengan pesan $e");
+      return false;
+    }
+  }
 }

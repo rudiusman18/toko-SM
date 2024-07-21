@@ -7,6 +7,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:tokoSM/models/transaction_model.dart';
 import 'package:tokoSM/pages/bottom_navigation_page/transaction_page/detail_status_page.dart';
+import 'package:tokoSM/pages/bottom_navigation_page/transaction_page/payment_manual_page.dart';
 import 'package:tokoSM/providers/login_provider.dart';
 import 'package:tokoSM/providers/transaksi_provider.dart';
 import 'package:tokoSM/providers/ulasan_provider.dart';
@@ -26,6 +27,14 @@ class _DetailTransactionPageState extends State<DetailTransactionPage> {
   final currencyFormatter = NumberFormat('#,##0.00', 'ID');
 
   TextEditingController ulasanTextField = TextEditingController();
+  TextEditingController bankPengirimTextField = TextEditingController(text: "");
+  TextEditingController noRekeningPengirimTextField =
+      TextEditingController(text: "");
+  TextEditingController namaPengirimTextField = TextEditingController(text: "");
+
+  FocusNode bankPengirimFocusNode = FocusNode();
+  FocusNode noRekeningFocusNode = FocusNode();
+  FocusNode namaPengirimFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +44,283 @@ class _DetailTransactionPageState extends State<DetailTransactionPage> {
         Provider.of<TransaksiProvider>(context);
 
     var starRating = 0.0;
+
+    // ignore: no_leading_underscores_for_local_identifiers
+    _bottomSheetKonfirmasiPembayaran() {
+      showModalBottomSheet<void>(
+        backgroundColor: Colors.transparent,
+        isScrollControlled: true,
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            height: 500,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              children: [
+                Center(
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(vertical: 10),
+                    color: Colors.grey,
+                    height: 2,
+                    width: MediaQuery.of(context).size.width * 0.4,
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(left: 24, right: 24, top: 10),
+                  child: Text(
+                    "Konfirmasi Pembayaran",
+                    style: poppins.copyWith(
+                      fontWeight: bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                    ),
+                    padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+                    ),
+                    child: ListView(
+                      children: [
+                        // NOTE: Bank Pengirim
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          "Bank Pengirim",
+                          style: poppins.copyWith(
+                            fontWeight: semiBold,
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(
+                            top: 5,
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 10,
+                            horizontal: 10,
+                          ),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: bankPengirimFocusNode.hasFocus
+                                  ? Colors.black
+                                  : Colors.grey,
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                              hintText: "nama bank pengirim",
+                              hintStyle: poppins,
+                              border: InputBorder.none,
+                              isDense: true,
+                              contentPadding: const EdgeInsets.all(0),
+                              prefixIconConstraints: const BoxConstraints(
+                                  minWidth: 23, maxHeight: 20),
+                              prefixIcon: const Padding(
+                                padding: EdgeInsets.only(right: 10),
+                                child: Icon(
+                                  Icons.account_balance,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
+                            controller: bankPengirimTextField,
+                            focusNode: bankPengirimFocusNode,
+                            onTap: () {
+                              setState(() {
+                                noRekeningFocusNode.canRequestFocus = false;
+                                namaPengirimFocusNode.canRequestFocus = false;
+                                bankPengirimFocusNode.canRequestFocus = true;
+                              });
+                            },
+                            onEditingComplete: () {
+                              setState(() {
+                                bankPengirimFocusNode.canRequestFocus = false;
+                              });
+                            },
+                          ),
+                        ),
+
+                        // NOTE: No Rekening Pengirim
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          "No Rekening Pengirim",
+                          style: poppins.copyWith(
+                            fontWeight: semiBold,
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(
+                            top: 5,
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 10,
+                            horizontal: 10,
+                          ),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: noRekeningFocusNode.hasFocus
+                                  ? Colors.black
+                                  : Colors.grey,
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: TextFormField(
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              hintText: "nomor rekening pengirim",
+                              hintStyle: poppins,
+                              border: InputBorder.none,
+                              isDense: true,
+                              contentPadding: const EdgeInsets.all(0),
+                              prefixIconConstraints: const BoxConstraints(
+                                  minWidth: 23, maxHeight: 20),
+                              prefixIcon: const Padding(
+                                padding: EdgeInsets.only(right: 10),
+                                child: Icon(
+                                  Icons.import_contacts,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
+                            controller: noRekeningPengirimTextField,
+                            focusNode: noRekeningFocusNode,
+                            onTap: () {
+                              setState(() {
+                                bankPengirimFocusNode.canRequestFocus = false;
+                                namaPengirimFocusNode.canRequestFocus = false;
+                                noRekeningFocusNode.canRequestFocus = true;
+                              });
+                            },
+                            onEditingComplete: () {
+                              setState(() {
+                                noRekeningFocusNode.canRequestFocus = false;
+                              });
+                            },
+                          ),
+                        ),
+
+                        // NOTE: Nama Pengirim
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          "nama Pengirim",
+                          style: poppins.copyWith(
+                            fontWeight: semiBold,
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(
+                            top: 5,
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 10,
+                            horizontal: 10,
+                          ),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: namaPengirimFocusNode.hasFocus
+                                  ? Colors.black
+                                  : Colors.grey,
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                              hintText: "nama pengirim",
+                              hintStyle: poppins,
+                              border: InputBorder.none,
+                              isDense: true,
+                              contentPadding: const EdgeInsets.all(0),
+                              prefixIconConstraints: const BoxConstraints(
+                                  minWidth: 23, maxHeight: 20),
+                              prefixIcon: const Padding(
+                                padding: EdgeInsets.only(right: 10),
+                                child: Icon(
+                                  Icons.person,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
+                            controller: namaPengirimTextField,
+                            focusNode: namaPengirimFocusNode,
+                            onTap: () {
+                              setState(() {
+                                noRekeningFocusNode.canRequestFocus = false;
+                                namaPengirimFocusNode.canRequestFocus = true;
+                                bankPengirimFocusNode.canRequestFocus = false;
+                              });
+                            },
+                            onEditingComplete: () {
+                              setState(() {
+                                namaPengirimFocusNode.canRequestFocus = false;
+                              });
+                            },
+                          ),
+                        ),
+
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: backgroundColor3,
+                            ),
+                            onPressed: () async {
+                              if (!await transaksiProvider
+                                  .sendPaymentConfirmation(
+                                      token:
+                                          loginProvider.loginModel.token ?? "",
+                                      noInvoice: widget.transactionDetailItem
+                                              .noInvoice ??
+                                          "",
+                                      bankPengirim: bankPengirimTextField.text,
+                                      noRekeningPengirim:
+                                          noRekeningPengirimTextField.text,
+                                      namaPengirim:
+                                          namaPengirimTextField.text)) {
+                                Navigator.pop(context);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      "gagal Menyimpan Informasi Pengiriman",
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                Navigator.pop(context);
+                              }
+                            },
+                            child: Text(
+                              "Simpan",
+                              style: poppins.copyWith(
+                                fontWeight: bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    }
 
     Widget statusView() {
       String timestamp =
@@ -706,40 +992,52 @@ class _DetailTransactionPageState extends State<DetailTransactionPage> {
               ],
             ),
 
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Icon(
-                  Icons.info,
-                  color: backgroundColor3,
-                  size: 20,
-                ),
-                const SizedBox(
-                  width: 2,
-                ),
-                Text(
-                  "Cara Pembayaran",
-                  style: poppins.copyWith(
-                    fontSize: 12,
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    PageTransition(
+                      child: PaymentManualPage(
+                        transactionDetailItem: widget.transactionDetailItem,
+                      ),
+                      type: PageTransitionType.bottomToTop,
+                    ));
+              },
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Icon(
+                    Icons.info,
                     color: backgroundColor3,
+                    size: 20,
                   ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Flexible(
-                  fit: FlexFit.tight,
-                  flex: 1,
-                  child: Text(
-                    "${widget.transactionDetailItem.bankTransfer}",
+                  const SizedBox(
+                    width: 2,
+                  ),
+                  Text(
+                    "Cara Pembayaran",
                     style: poppins.copyWith(
                       fontSize: 12,
+                      color: backgroundColor3,
                     ),
-                    textAlign: TextAlign.end,
                   ),
-                ),
-              ],
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Flexible(
+                    fit: FlexFit.tight,
+                    flex: 1,
+                    child: Text(
+                      "${widget.transactionDetailItem.bankTransfer}",
+                      style: poppins.copyWith(
+                        fontSize: 12,
+                      ),
+                      textAlign: TextAlign.end,
+                    ),
+                  ),
+                ],
+              ),
             ),
             Divider(
               color: Colors.grey.withOpacity(0.5),
@@ -885,22 +1183,26 @@ class _DetailTransactionPageState extends State<DetailTransactionPage> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    showAlertDialog(
-                        context: context,
-                        message:
-                            "Anda yakin ingin mengubah status menjadi selesai?",
-                        onCancelPressed: () => Navigator.pop(context),
-                        onConfirmPressed: () async {
-                          if (await transaksiProvider.postStatustransaksi(
-                            token: loginProvider.loginModel.token ?? "",
-                            noInvoice:
-                                widget.transactionDetailItem.noInvoice ?? "",
-                            status: 4,
-                          )) {
-                            Navigator.pop(context);
-                            Navigator.pop(context);
-                          }
-                        });
+                    if (widget.transactionDetailItem.status == 0) {
+                      _bottomSheetKonfirmasiPembayaran();
+                    } else {
+                      showAlertDialog(
+                          context: context,
+                          message:
+                              "Anda yakin ingin mengubah status menjadi selesai?",
+                          onCancelPressed: () => Navigator.pop(context),
+                          onConfirmPressed: () async {
+                            if (await transaksiProvider.postStatustransaksi(
+                              token: loginProvider.loginModel.token ?? "",
+                              noInvoice:
+                                  widget.transactionDetailItem.noInvoice ?? "",
+                              status: 4,
+                            )) {
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            }
+                          });
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: backgroundColor3,
