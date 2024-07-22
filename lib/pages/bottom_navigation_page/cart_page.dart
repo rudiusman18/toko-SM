@@ -1114,22 +1114,29 @@ class _CartPageState extends State<CartPage> {
                   : Expanded(
                       child: cartModel.data?.isEmpty ?? true
                           ? emptyCart()
-                          : ListView(
-                              children: [
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                for (var i = 0;
-                                    i <
-                                        (cartModel.data?[indexCabang].data
-                                                ?.length ??
-                                            0);
-                                    i++)
-                                  cartItem(index: i),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                              ],
+                          : RefreshIndicator(
+                              onRefresh: () async {
+                                _initCartProduct();
+                              },
+                              color: backgroundColor1,
+                              child: ListView(
+                                physics: const AlwaysScrollableScrollPhysics(),
+                                children: [
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  for (var i = 0;
+                                      i <
+                                          (cartModel.data?[indexCabang].data
+                                                  ?.length ??
+                                              0);
+                                      i++)
+                                    cartItem(index: i),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                ],
+                              ),
                             ),
                     ),
               cartModel.data?.isEmpty ?? true ? const SizedBox() : bottomView(),

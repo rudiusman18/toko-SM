@@ -68,6 +68,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   DetailProductModel detailProduct = DetailProductModel();
   FavoriteModel favoriteProduct = FavoriteModel();
   UlasanModel ulasanProduct = UlasanModel();
+  var totalProductInCart = 0;
 
   @override
   void initState() {
@@ -75,7 +76,30 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     _getDetailproduct();
     _getFavoriteProduct();
     _getUlasanProduct();
+    _initCartProduct();
     fToast.init(context);
+  }
+
+  _initCartProduct() async {
+    LoginProvider loginProvider =
+        Provider.of<LoginProvider>(context, listen: false);
+    CartProvider cartProvider =
+        Provider.of<CartProvider>(context, listen: false);
+
+    if (await cartProvider.getCart(
+        token: loginProvider.loginModel.token ?? "")) {
+      setState(() {
+        var jumlah = 0;
+        for (var i = 0; i < (cartProvider.cartModel.data?.length ?? 0); i++) {
+          setState(() {
+            jumlah += cartProvider.cartModel.data?[i].data?.length ?? 0;
+          });
+        }
+        setState(() {
+          totalProductInCart = jumlah;
+        });
+      });
+    }
   }
 
   _getDetailproduct() async {
@@ -237,10 +261,39 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               },
               child: Container(
                 padding: const EdgeInsets.all(10),
-                child: const Icon(
-                  Icons.shopping_cart,
-                  color: Colors.white,
-                  size: 30,
+                child: Stack(
+                  children: [
+                    const SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: Icon(
+                        Icons.shopping_cart,
+                        size: 30,
+                        color: Colors.white,
+                      ),
+                    ),
+                    totalProductInCart == 0
+                        ? const SizedBox()
+                        : Align(
+                            alignment: Alignment.topLeft,
+                            child: Container(
+                              padding: const EdgeInsets.all(5),
+                              alignment: Alignment.center,
+                              decoration: const BoxDecoration(
+                                color: Colors.red,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Text(
+                                "$totalProductInCart",
+                                style: poppins.copyWith(
+                                  color: Colors.white,
+                                  fontSize: 9,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ),
+                  ],
                 ),
               ),
             ),
@@ -861,6 +914,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         multiSatuanunit: multiSatuanunit,
         jumlahMultiSatuan: jumlahMultiSatuan,
       )) {
+        _initCartProduct();
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           backgroundColor: backgroundColor1,
           content: Text(

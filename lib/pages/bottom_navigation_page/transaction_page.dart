@@ -304,31 +304,34 @@ class _TransactionPageState extends State<TransactionPage> {
     }
 
     Widget emptyTransaction() {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset(
-            "assets/bag.png",
-            width: 150,
-            height: 150,
-          ),
-          Text(
-            "OOPS...!",
-            style: poppins.copyWith(
-              fontSize: 50,
-              fontWeight: semiBold,
-              color: backgroundColor3,
+      return SizedBox(
+        width: double.infinity,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              "assets/bag.png",
+              width: 150,
+              height: 150,
             ),
-          ),
-          Text(
-            "Anda tidak memiliki transaksi apapun saat ini",
-            style: poppins.copyWith(
-              fontSize: 15,
-              color: backgroundColor3,
-              fontWeight: medium,
+            Text(
+              "OOPS...!",
+              style: poppins.copyWith(
+                fontSize: 50,
+                fontWeight: semiBold,
+                color: backgroundColor3,
+              ),
             ),
-          ),
-        ],
+            Text(
+              "Anda tidak memiliki transaksi apapun saat ini",
+              style: poppins.copyWith(
+                fontSize: 15,
+                color: backgroundColor3,
+                fontWeight: medium,
+              ),
+            ),
+          ],
+        ),
       );
     }
 
@@ -409,23 +412,38 @@ class _TransactionPageState extends State<TransactionPage> {
             : Container(
                 color: Colors.white,
                 width: MediaQuery.sizeOf(context).width,
-                child: ListView(
-                  children: [
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    filter(),
-                    (transactionModel.data?.length ?? 0) == 0
-                        ? emptyTransaction()
-                        : const SizedBox(),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    for (var i = 0;
-                        i < (transactionModel.data?.length ?? 0);
-                        i++)
-                      transactionItem(index: i)
-                  ],
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    int index = items.indexOf(dropdownvalue);
+                    print("indexnya adalah ${index - 1}");
+                    _initTransaction(
+                        status: "${index - 1 < 0 ? "" : index - 1}");
+                  },
+                  color: backgroundColor1,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      filter(),
+                      (transactionModel.data?.length ?? 0) == 0
+                          ? Expanded(
+                              child: emptyTransaction(),
+                            )
+                          : Expanded(
+                              child: ListView(
+                                physics: const AlwaysScrollableScrollPhysics(),
+                                children: [
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  for (var i = 0;
+                                      i < (transactionModel.data?.length ?? 0);
+                                      i++)
+                                    transactionItem(index: i)
+                                ],
+                              ),
+                            ),
+                    ],
+                  ),
                 ),
               ),
       ),

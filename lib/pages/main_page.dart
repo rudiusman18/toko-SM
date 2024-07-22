@@ -1,3 +1,4 @@
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:tokoSM/pages/bottom_navigation_page/cart_page.dart';
 import 'package:tokoSM/pages/bottom_navigation_page/category_page.dart';
@@ -18,6 +19,8 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  DateTime? currentBackPressTime = null;
+
   @override
   Widget build(BuildContext context) {
     PageProvider pageProvider = Provider.of(context);
@@ -121,11 +124,24 @@ class _MainPageState extends State<MainPage> {
       );
     }
 
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white, //backgroundColor3,
-        bottomNavigationBar: customBottomNav(),
-        body: body(),
+    return WillPopScope(
+      onWillPop: () async {
+        DateTime now = DateTime.now();
+        if (currentBackPressTime == null ||
+            now.difference(currentBackPressTime ?? DateTime.now()) >
+                const Duration(seconds: 2)) {
+          currentBackPressTime = now;
+          Fluttertoast.showToast(msg: "tekan sekali lagi untuk keluar");
+          return false;
+        }
+        return true;
+      },
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: Colors.white, //backgroundColor3,
+          bottomNavigationBar: customBottomNav(),
+          body: body(),
+        ),
       ),
     );
   }

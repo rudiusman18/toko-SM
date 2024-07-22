@@ -306,19 +306,30 @@ class _ProductListSearchResultPageState
           ? Center(
               child: Text("hasil pencarian tidak ditemukan",
                   style: poppins.copyWith(color: backgroundColor1)))
-          : SingleChildScrollView(
-              controller: scrollController,
-              child: Container(
-                alignment: (productModel.data?.length ?? 0) > 1
-                    ? Alignment.center
-                    : Alignment.topLeft,
-                margin: const EdgeInsets.only(
-                  top: 0,
-                  bottom: 30,
-                  left: 20,
-                  right: 10,
-                ),
-                child: Column(
+          : Container(
+              width: double.infinity,
+              alignment: (productModel.data?.length ?? 0) > 1
+                  ? Alignment.center
+                  : Alignment.topLeft,
+              margin: const EdgeInsets.only(
+                top: 0,
+                bottom: 30,
+                left: 40,
+                right: 10,
+              ),
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  searchTextFieldController.text = widget.searchKeyword;
+                  searchTextFieldFocusNode.addListener(_onFocusChange);
+                  scrollController.addListener(_scrollController);
+                  _initProduct();
+
+                  _initSuggestionText();
+                },
+                color: backgroundColor1,
+                child: ListView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  controller: scrollController,
                   children: [
                     Wrap(
                       crossAxisAlignment: WrapCrossAlignment.center,

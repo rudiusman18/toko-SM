@@ -344,9 +344,14 @@ class _WishlistPageState extends State<WishlistPage> {
                   )
                 : Expanded(
                     child: (favoriteProduct.data ?? []).isNotEmpty
-                        ? SingleChildScrollView(
-                            controller: scrollController,
-                            child: Column(
+                        ? RefreshIndicator(
+                            onRefresh: () async {
+                              _initFavoriteProduct();
+                            },
+                            color: backgroundColor1,
+                            child: ListView(
+                              physics: AlwaysScrollableScrollPhysics(),
+                              controller: scrollController,
                               children: [
                                 for (var i = 0;
                                     i < (favoriteProduct.data?.length ?? 0);

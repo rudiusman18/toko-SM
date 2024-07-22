@@ -34,6 +34,11 @@ class _CategoryPageState extends State<CategoryPage> {
 
   @override
   void initState() {
+    _initcategory();
+    super.initState();
+  }
+
+  _initcategory() async {
     CategoryProvider categoryProvider =
         Provider.of<CategoryProvider>(context, listen: false);
     LoginProvider loginProvider =
@@ -52,7 +57,6 @@ class _CategoryPageState extends State<CategoryPage> {
         isLoading = false;
       });
     });
-    super.initState();
   }
 
   @override
@@ -78,60 +82,6 @@ class _CategoryPageState extends State<CategoryPage> {
       );
     }
 
-    Widget expandedItem({
-      required int kat1Index,
-      required int kat2Index,
-    }) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          for (var i = 0;
-              i <
-                  (categoryModel
-                          .data?[kat1Index].child?[kat2Index].child1?.length ??
-                      0);
-              i++)
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    PageTransition(
-                        child: ProductListSearchResultPage(
-                          searchKeyword: "",
-                          sort: "",
-                          category:
-                              "${categoryModel.data?[kat1Index].kat1Slug},${categoryModel.data?[kat1Index].child?[kat2Index].kat2Slug},${categoryModel.data?[kat1Index].child?[kat2Index].child1?[i].kat3Slug}",
-                          categoryToShow:
-                              "${categoryModel.data?[kat1Index].child?[kat2Index].child1?[i].kat3}",
-                        ),
-                        type: PageTransitionType.bottomToTop));
-              },
-              child: Container(
-                margin: const EdgeInsets.only(
-                  bottom: 10,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "${categoryModel.data?[kat1Index].child?[kat2Index].child1?[i].kat3}",
-                      style: poppins,
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    const Divider(
-                      color: Colors.grey,
-                      height: 1,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-        ],
-      );
-    }
-
     return SafeArea(
       child: Container(
         color: Colors.white,
@@ -152,128 +102,126 @@ class _CategoryPageState extends State<CategoryPage> {
                     ),
                   )
                 : Expanded(
-                    child: ListView(
-                      children: [
-                        for (var i = 0;
-                            i < (categoryModel.data?.length ?? 0);
-                            i++)
-                          ExpandableNotifier(
-                              child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: Card(
-                              clipBehavior: Clip.antiAlias,
-                              child: ScrollOnExpand(
-                                scrollOnExpand: true,
-                                scrollOnCollapse: false,
-                                child: ExpandablePanel(
-                                  theme: const ExpandableThemeData(
-                                    headerAlignment:
-                                        ExpandablePanelHeaderAlignment.center,
-                                    tapBodyToCollapse: true,
-                                  ),
-                                  header: Padding(
-                                      padding: const EdgeInsets.all(10),
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          Navigator.push(
-                                              context,
-                                              PageTransition(
-                                                  child:
-                                                      ProductListSearchResultPage(
-                                                    searchKeyword: "",
-                                                    sort: "",
-                                                    category:
-                                                        "${categoryModel.data?[i].kat1Slug}",
-                                                    categoryToShow:
-                                                        "${categoryModel.data?[i].kat1}",
-                                                  ),
-                                                  type: PageTransitionType
-                                                      .bottomToTop));
-                                        },
-                                        child: Text(
-                                          "${categoryModel.data?[i].kat1}",
-                                          style: poppins.copyWith(
-                                            fontWeight: bold,
-                                          ),
-                                        ),
-                                      )),
-                                  collapsed: const SizedBox(),
-                                  expanded: Column(
-                                    children: [
-                                      for (int j = 0;
-                                          j <
-                                              (categoryModel
-                                                      .data?[i].child?.length ??
-                                                  0);
-                                          j++)
-                                        ExpandableNotifier(
-                                          child: ExpandablePanel(
-                                            theme: const ExpandableThemeData(
-                                              headerAlignment:
-                                                  ExpandablePanelHeaderAlignment
-                                                      .center,
-                                              tapBodyToCollapse: true,
-                                            ),
-                                            header: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(10),
-                                                child: GestureDetector(
-                                                  onTap: () {
-                                                    Navigator.push(
-                                                        context,
-                                                        PageTransition(
-                                                            child:
-                                                                ProductListSearchResultPage(
-                                                              searchKeyword: "",
-                                                              sort: "",
-                                                              category:
-                                                                  "${categoryModel.data?[i].kat1Slug},${categoryModel.data?[i].child?[j].kat2Slug}",
-                                                              categoryToShow:
-                                                                  "${categoryModel.data?[i].child?[j].kat2}",
-                                                            ),
-                                                            type: PageTransitionType
-                                                                .bottomToTop));
-                                                  },
-                                                  child: Text(
-                                                    "${categoryModel.data?[i].child?[j].kat2}",
-                                                    style: poppins.copyWith(
-                                                      fontWeight: bold,
+                    child: RefreshIndicator(
+                      onRefresh: () async {
+                        _initcategory();
+                      },
+                      color: backgroundColor1,
+                      child: ListView(
+                        children: [
+                          for (var i = 0;
+                              i < (categoryModel.data?.length ?? 0);
+                              i++)
+                            ExpandableNotifier(
+                                child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              child: Card(
+                                clipBehavior: Clip.antiAlias,
+                                child: ScrollOnExpand(
+                                  scrollOnExpand: true,
+                                  scrollOnCollapse: false,
+                                  child: ExpandablePanel(
+                                    theme: const ExpandableThemeData(
+                                      headerAlignment:
+                                          ExpandablePanelHeaderAlignment.center,
+                                      tapBodyToCollapse: true,
+                                    ),
+                                    header: Padding(
+                                        padding: const EdgeInsets.all(10),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                PageTransition(
+                                                    child:
+                                                        ProductListSearchResultPage(
+                                                      searchKeyword: "",
+                                                      sort: "",
+                                                      category:
+                                                          "${categoryModel.data?[i].kat1Slug}",
+                                                      categoryToShow:
+                                                          "${categoryModel.data?[i].kat1}",
                                                     ),
-                                                  ),
-                                                )),
-                                            collapsed: const SizedBox(),
-                                            expanded: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                horizontal: 10,
+                                                    type: PageTransitionType
+                                                        .bottomToTop));
+                                          },
+                                          child: Text(
+                                            "${categoryModel.data?[i].kat1}",
+                                            style: poppins.copyWith(
+                                              fontWeight: bold,
+                                            ),
+                                          ),
+                                        )),
+                                    collapsed: const SizedBox(),
+                                    expanded: Column(
+                                      children: [
+                                        for (int j = 0;
+                                            j <
+                                                (categoryModel.data?[i].child
+                                                        ?.length ??
+                                                    0);
+                                            j++)
+                                          GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(
+                                                  context,
+                                                  PageTransition(
+                                                      child:
+                                                          ProductListSearchResultPage(
+                                                        searchKeyword: "",
+                                                        sort: "",
+                                                        category:
+                                                            "${categoryModel.data?[i].kat1Slug},${categoryModel.data?[i].child?[j].kat2Slug}",
+                                                        categoryToShow:
+                                                            "${categoryModel.data?[i].child?[j].kat2}",
+                                                      ),
+                                                      type: PageTransitionType
+                                                          .bottomToTop));
+                                            },
+                                            child: Container(
+                                              margin: const EdgeInsets.only(
+                                                bottom: 10,
                                               ),
-                                              width: double.infinity,
-                                              child: expandedItem(
-                                                kat1Index: i,
-                                                kat2Index: j,
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "${categoryModel.data?[i].child?[j].kat2}",
+                                                    style: poppins,
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 5,
+                                                  ),
+                                                  const Divider(
+                                                    color: Colors.grey,
+                                                    height: 1,
+                                                  ),
+                                                ],
                                               ),
                                             ),
                                           ),
+                                      ],
+                                    ),
+                                    builder: (_, collapsed, expanded) {
+                                      return Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 10, right: 10, bottom: 10),
+                                        child: Expandable(
+                                          collapsed: collapsed,
+                                          expanded: expanded,
+                                          theme: const ExpandableThemeData(
+                                              crossFadePoint: 0),
                                         ),
-                                    ],
+                                      );
+                                    },
                                   ),
-                                  builder: (_, collapsed, expanded) {
-                                    return Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 10, right: 10, bottom: 10),
-                                      child: Expandable(
-                                        collapsed: collapsed,
-                                        expanded: expanded,
-                                        theme: const ExpandableThemeData(
-                                            crossFadePoint: 0),
-                                      ),
-                                    );
-                                  },
                                 ),
                               ),
-                            ),
-                          )),
-                      ],
+                            )),
+                        ],
+                      ),
                     ),
                   ),
           ],

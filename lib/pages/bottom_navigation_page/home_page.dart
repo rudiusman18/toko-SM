@@ -1,10 +1,12 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:intl/intl.dart';
+import 'package:tokoSM/models/cart_model.dart';
 import 'package:tokoSM/models/product_model.dart';
 import 'package:tokoSM/pages/bottom_navigation_page/cart_page.dart';
 import 'package:tokoSM/pages/bottom_navigation_page/home_page/product_list_search_result.dart';
 import 'package:tokoSM/pages/bottom_navigation_page/product_detail/product_detail_page.dart';
 import 'package:tokoSM/pages/profile_page.dart';
+import 'package:tokoSM/providers/cart_provider.dart';
 import 'package:tokoSM/providers/login_provider.dart';
 import 'package:tokoSM/providers/product_provider.dart';
 import 'package:tokoSM/theme/theme.dart';
@@ -51,6 +53,7 @@ class _HomePageState extends State<HomePage> {
   bool scrollIsAtEnd = false;
   int page = 1;
   bool palingLarisProductisReachEnd = false;
+  var totalProductInCart = 0;
 
   @override
   void initState() {
@@ -61,6 +64,7 @@ class _HomePageState extends State<HomePage> {
     _initPromoProduct();
     _initPalingLarisProduct();
     _initSuggestionText();
+    _initCartProduct();
   }
 
   _scrollController() {
@@ -76,6 +80,28 @@ class _HomePageState extends State<HomePage> {
     } else {
       setState(() {
         scrollIsAtEnd = false;
+      });
+    }
+  }
+
+  _initCartProduct() async {
+    LoginProvider loginProvider =
+        Provider.of<LoginProvider>(context, listen: false);
+    CartProvider cartProvider =
+        Provider.of<CartProvider>(context, listen: false);
+
+    if (await cartProvider.getCart(
+        token: loginProvider.loginModel.token ?? "")) {
+      setState(() {
+        var jumlah = 0;
+        for (var i = 0; i < (cartProvider.cartModel.data?.length ?? 0); i++) {
+          setState(() {
+            jumlah += cartProvider.cartModel.data?[i].data?.length ?? 0;
+          });
+        }
+        setState(() {
+          totalProductInCart = jumlah;
+        });
       });
     }
   }
@@ -266,10 +292,39 @@ class _HomePageState extends State<HomePage> {
                         _initPromoProduct();
                       });
                     },
-                    child: Icon(
-                      Icons.shopping_cart,
-                      size: 30,
-                      color: backgroundColor3,
+                    child: Stack(
+                      children: [
+                        SizedBox(
+                          width: 40,
+                          height: 40,
+                          child: Icon(
+                            Icons.shopping_cart,
+                            size: 30,
+                            color: backgroundColor3,
+                          ),
+                        ),
+                        totalProductInCart == 0
+                            ? const SizedBox()
+                            : Align(
+                                alignment: Alignment.topLeft,
+                                child: Container(
+                                  padding: const EdgeInsets.all(5),
+                                  alignment: Alignment.center,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.red,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Text(
+                                    "$totalProductInCart",
+                                    style: poppins.copyWith(
+                                      color: Colors.white,
+                                      fontSize: 9,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ),
+                      ],
                     ),
                   ),
                 ),
@@ -712,175 +767,6 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
-    // Widget verticalListItem(int i) {
-    //   return InkWell(
-    //     onTap: () {
-    //       Navigator.push(
-    //         context,
-    //         PageTransition(
-    //           child: ProductDetailPage(
-    //             imageURL: "${palingLarisProduct.data?[i].gambar?.first}",
-    //             productId: "${palingLarisProduct.data?[i].id}",
-    //             productLoct: loginProvider.loginModel.data?.namaCabang ?? "",
-    //             productName: "${palingLarisProduct.data?[i].namaProduk}",
-    //             productPrice: "${palingLarisProduct.data?[i].hargaDiskon}",
-    //             productStar: "${palingLarisProduct.data?[i].rating}",
-    //             beforeDiscountPrice: palingLarisProduct.data?[i].diskon == null
-    //                 ? ""
-    //                 : "${palingLarisProduct.data?[i].harga}",
-    //             discountPercentage: palingLarisProduct.data?[i].diskon == null
-    //                 ? ""
-    //                 : "${palingLarisProduct.data?[i].diskon}%",
-    //             isDiscount:
-    //                 palingLarisProduct.data?[i].diskon == null ? false : true,
-    //           ),
-    //           type: PageTransitionType.bottomToTop,
-    //         ),
-    //       );
-    //     },
-    //     child: Container(
-    //       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-    //       decoration: BoxDecoration(
-    //         color: Colors.white,
-    //         boxShadow: [
-    //           BoxShadow(
-    //             color: Colors.grey.withOpacity(0.5),
-    //             blurRadius: 4,
-    //             offset: const Offset(0, 8), // Shadow position
-    //           ),
-    //         ],
-    //         borderRadius: BorderRadius.circular(10),
-    //       ),
-    //       child: Row(
-    //         children: [
-    //           ClipRRect(
-    //             borderRadius: BorderRadius.circular(10),
-    //             child: Image.network(
-    //               "${palingLarisProduct.data?[i].gambar?.first}",
-    //               width: 120,
-    //               height: 120,
-    //               fit: BoxFit.cover,
-    //             ),
-    //           ),
-    //           Expanded(
-    //             child: Column(
-    //               crossAxisAlignment: CrossAxisAlignment.start,
-    //               mainAxisAlignment: MainAxisAlignment.center,
-    //               children: [
-    //                 Padding(
-    //                   padding: const EdgeInsets.symmetric(horizontal: 10),
-    //                   child: Text(
-    //                     "${palingLarisProduct.data?[i].namaProduk}",
-    //                     overflow: TextOverflow.ellipsis,
-    //                     maxLines: 2,
-    //                     style: poppins.copyWith(
-    //                       color: backgroundColor1,
-    //                       fontWeight: medium,
-    //                     ),
-    //                   ),
-    //                 ),
-    //                 Padding(
-    //                   padding: const EdgeInsets.symmetric(horizontal: 10),
-    //                   child: Text(
-    //                     palingLarisProduct.data?[i].diskon == null
-    //                         ? "Rp ${currencyFormatter.format(palingLarisProduct.data?[i].harga)}"
-    //                         : "Rp ${currencyFormatter.format(palingLarisProduct.data?[i].hargaDiskon)}",
-    //                     overflow: TextOverflow.ellipsis,
-    //                     maxLines: 1,
-    //                     style: poppins.copyWith(
-    //                       color: backgroundColor1,
-    //                       fontWeight: semiBold,
-    //                     ),
-    //                   ),
-    //                 ),
-    //                 Padding(
-    //                   padding: const EdgeInsets.symmetric(horizontal: 5),
-    //                   child: Row(
-    //                     mainAxisSize: MainAxisSize.min,
-    //                     mainAxisAlignment: MainAxisAlignment.start,
-    //                     children: [
-    //                       Icon(
-    //                         Icons.star,
-    //                         color: backgroundColor2,
-    //                       ),
-    //                       Text(
-    //                         "${palingLarisProduct.data?[i].rating}",
-    //                         style: poppins.copyWith(
-    //                           fontWeight: semiBold,
-    //                         ),
-    //                       ),
-    //                     ],
-    //                   ),
-    //                 ),
-    //                 if (palingLarisProduct.data?[i].diskon == null
-    //                     ? false
-    //                     : true)
-    //                   Padding(
-    //                     padding: const EdgeInsets.symmetric(horizontal: 10),
-    //                     child: Row(
-    //                       mainAxisSize: MainAxisSize.min,
-    //                       children: [
-    //                         Flexible(
-    //                           child: Text(
-    //                             "Rp ${currencyFormatter.format(palingLarisProduct.data?[i].harga)}",
-    //                             overflow: TextOverflow.ellipsis,
-    //                             maxLines: 1,
-    //                             style: poppins.copyWith(
-    //                                 decoration: TextDecoration.lineThrough,
-    //                                 color: Colors.grey,
-    //                                 fontSize: 10),
-    //                           ),
-    //                         ),
-    //                         Container(
-    //                           margin: const EdgeInsets.only(left: 5),
-    //                           child: Text(
-    //                             "${palingLarisProduct.data?[i].diskon}%",
-    //                             overflow: TextOverflow.ellipsis,
-    //                             maxLines: 1,
-    //                             style: poppins.copyWith(
-    //                               color: Colors.red,
-    //                               fontSize: 10,
-    //                               fontWeight: bold,
-    //                             ),
-    //                           ),
-    //                         ),
-    //                       ],
-    //                     ),
-    //                   ),
-    //                 // Padding(
-    //                 //   padding: const EdgeInsets.symmetric(horizontal: 5),
-    //                 //   child: Row(
-    //                 //     mainAxisAlignment: MainAxisAlignment.start,
-    //                 //     crossAxisAlignment: CrossAxisAlignment.end,
-    //                 //     children: [
-    //                 //       Icon(
-    //                 //         Icons.location_city,
-    //                 //         color: backgroundColor2,
-    //                 //       ),
-    //                 //       Expanded(
-    //                 //         child: Text(
-    //                 //           "Cabang ${loginProvider.loginModel.data?.namaCabang ?? ""}",
-    //                 //           overflow: TextOverflow.ellipsis,
-    //                 //           maxLines: 1,
-    //                 //           style: poppins.copyWith(
-    //                 //             color: backgroundColor2,
-    //                 //             fontWeight: medium,
-    //                 //             fontSize: 12,
-    //                 //           ),
-    //                 //         ),
-    //                 //       ),
-    //                 //     ],
-    //                 //   ),
-    //                 // )
-    //               ],
-    //             ),
-    //           ),
-    //         ],
-    //       ),
-    //     ),
-    //   );
-    // }
-
     Widget palingLarisItem() {
       return Container(
         alignment: (palingLarisProduct.data?.length ?? 0) > 1
@@ -1053,44 +939,54 @@ class _HomePageState extends State<HomePage> {
     }
 
     Widget homePageContent() {
-      return SingleChildScrollView(
-        controller: scrollController,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            carouselSlider(),
-            const SizedBox(
-              height: 20,
-            ),
-            titleText("Sedang Promo"),
-            horizontalListItem(isOnDiscountContent: true),
-            const SizedBox(
-              height: 20,
-            ),
-            titleText("Paling Laris"),
-            const SizedBox(
-              height: 5,
-            ),
-            // for (int i = 0; i < (palingLarisProduct.data?.length ?? 0); i++)
-            palingLarisItem(),
-            scrollIsAtEnd == true && palingLarisProductisReachEnd == false
-                ? Center(
-                    child: Container(
-                      margin: const EdgeInsets.only(
-                        top: 10,
+      return RefreshIndicator(
+        onRefresh: () async {
+          _initBannerProduct();
+          _initPromoProduct();
+          _initPalingLarisProduct();
+          _initSuggestionText();
+          _initCartProduct();
+        },
+        color: backgroundColor1,
+        child: SingleChildScrollView(
+          controller: scrollController,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              carouselSlider(),
+              const SizedBox(
+                height: 20,
+              ),
+              titleText("Sedang Promo"),
+              horizontalListItem(isOnDiscountContent: true),
+              const SizedBox(
+                height: 20,
+              ),
+              titleText("Paling Laris"),
+              const SizedBox(
+                height: 5,
+              ),
+              // for (int i = 0; i < (palingLarisProduct.data?.length ?? 0); i++)
+              palingLarisItem(),
+              scrollIsAtEnd == true && palingLarisProductisReachEnd == false
+                  ? Center(
+                      child: Container(
+                        margin: const EdgeInsets.only(
+                          top: 10,
+                        ),
+                        width: 15,
+                        height: 15,
+                        child: CircularProgressIndicator(
+                          color: backgroundColor1,
+                        ),
                       ),
-                      width: 15,
-                      height: 15,
-                      child: CircularProgressIndicator(
-                        color: backgroundColor1,
-                      ),
-                    ),
-                  )
-                : const SizedBox(),
-            const SizedBox(
-              height: 40,
-            ),
-          ],
+                    )
+                  : const SizedBox(),
+              const SizedBox(
+                height: 40,
+              ),
+            ],
+          ),
         ),
       );
     }
