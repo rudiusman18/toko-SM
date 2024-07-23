@@ -2,6 +2,7 @@
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:intl/intl.dart';
+import 'package:tokoSM/models/cart_model.dart';
 import 'package:tokoSM/models/detail_product_model.dart';
 import 'package:tokoSM/models/favorite_model.dart';
 import 'package:tokoSM/models/ulasan_model.dart';
@@ -68,6 +69,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   DetailProductModel detailProduct = DetailProductModel();
   FavoriteModel favoriteProduct = FavoriteModel();
   UlasanModel ulasanProduct = UlasanModel();
+  CartModel cartModel = CartModel();
   var totalProductInCart = 0;
 
   @override
@@ -97,6 +99,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         }
         setState(() {
           totalProductInCart = jumlah;
+          cartModel = cartProvider.cartModel;
         });
       });
     }
@@ -254,10 +257,16 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             InkWell(
               onTap: () {
                 Navigator.push(
-                    context,
-                    PageTransition(
-                        child: const CartPage(),
-                        type: PageTransitionType.rightToLeft));
+                        context,
+                        PageTransition(
+                            child: const CartPage(),
+                            type: PageTransitionType.rightToLeft))
+                    .then((_) {
+                  _getDetailproduct();
+                  _getFavoriteProduct();
+                  _getUlasanProduct();
+                  _initCartProduct();
+                });
               },
               child: Container(
                 padding: const EdgeInsets.all(10),
@@ -902,6 +911,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       List<int>? multiSatuanJumlah,
       List<String>? multiSatuanunit,
       List<int>? jumlahMultiSatuan,
+      int? jumlahProduk,
     }) async {
       setState(() {
         isLoading = true;
@@ -909,6 +919,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       if (await cartProvider.postCart(
         token: loginProvider.loginModel.token ?? "",
         cabangId: cabangId,
+        jumlah: jumlahProduk,
         productId: detailProduct.data?.id ?? 0,
         multiSatuanJumlah: multiSatuanJumlah,
         multiSatuanunit: multiSatuanunit,
@@ -956,67 +967,261 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     }
 
     void bottomDialog({required int cabangId}) {
+      DataKeranjang productInCart = DataKeranjang();
+      cartModel.data?.forEach((sublist) {
+        sublist.data?.forEach((product) {
+          if (product.namaProduk == widget.productName) {
+            productInCart = product;
+          }
+        });
+      });
+
+      print("isi productInCart: ${productInCart}");
+
       showModalBottomSheet<void>(
         context: context,
         backgroundColor: Colors.transparent,
         builder: (BuildContext context) {
-          var listMultisatuanUnit =
-              "${detailProduct.data?.multisatuanUnit}".split("/");
-          var listMultiSatuanJumlah =
-              "${detailProduct.data?.multisatuanJumlah}".split("/");
-          List<int> listJumlahMultiSatuan = [];
-          for (var i = 0; i < (listMultisatuanUnit.length); i++) {
-            listJumlahMultiSatuan.add(0);
-          }
-          if ((widget.jumlahMultiSatuan ?? []).isNotEmpty) {
-            listJumlahMultiSatuan = widget.jumlahMultiSatuan ?? [];
-          }
+          if (detailProduct.data?.multisatuanJumlah != null &&
+              detailProduct.data?.multisatuanUnit != null) {
+            var listMultisatuanUnit =
+                "${detailProduct.data?.multisatuanUnit}".split("/");
+            var listMultiSatuanJumlah =
+                (productInCart.multisatuanJumlah ?? []).isEmpty
+                    ? "${detailProduct.data?.multisatuanJumlah}".split("/")
+                    : (productInCart.multisatuanJumlah ?? []);
+            List<int> listJumlahMultiSatuan = [];
+            for (var i = 0; i < (listMultisatuanUnit.length); i++) {
+              listJumlahMultiSatuan.add(0);
+            }
+            if ((widget.jumlahMultiSatuan ?? []).isNotEmpty) {
+              listJumlahMultiSatuan = widget.jumlahMultiSatuan ?? [];
+            }
 
-          var jumlahTotalBarang = 0;
+            var jumlahTotalBarang = 0;
 
-          for (var i = 0; i < (listJumlahMultiSatuan.length); i++) {
-            jumlahTotalBarang += listJumlahMultiSatuan[i] *
-                int.parse((listMultiSatuanJumlah[i]));
-          }
+            for (var i = 0; i < (listJumlahMultiSatuan.length); i++) {
+              jumlahTotalBarang += listJumlahMultiSatuan[i] *
+                  int.parse((listMultiSatuanJumlah[i]));
+            }
 
-          // var golonganProduct = "${detailProduct.data?.golonganProduk}".split("/");
+            // var golonganProduct = "${detailProduct.data?.golonganProduk}".split("/");
 
-          return StatefulBuilder(builder: (BuildContext context,
-              StateSetter stateSetter /*You can rename this!*/) {
-            return Container(
-              padding: const EdgeInsets.all(20),
-              height: 300,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(
-                    child: Container(
-                      color: Colors.black,
-                      width: MediaQuery.of(context).size.width * 0.4,
-                      height: 2,
+            return StatefulBuilder(builder: (BuildContext context,
+                StateSetter stateSetter /*You can rename this!*/) {
+              return Container(
+                padding: const EdgeInsets.all(20),
+                height: 300,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: Container(
+                        color: Colors.black,
+                        width: MediaQuery.of(context).size.width * 0.4,
+                        height: 2,
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    "Satuan Produk",
-                    style: poppins.copyWith(
-                      fontSize: 18,
-                      fontWeight: semiBold,
-                      color: backgroundColor1,
+                    const SizedBox(
+                      height: 10,
                     ),
-                  ),
-                  Expanded(
-                    child: ListView(
-                      children: <Widget>[
-                        for (var i = 0;
-                            i < (listMultisatuanUnit.length);
-                            i++) ...{
+                    Text(
+                      "Satuan Produk",
+                      style: poppins.copyWith(
+                        fontSize: 18,
+                        fontWeight: semiBold,
+                        color: backgroundColor1,
+                      ),
+                    ),
+                    Expanded(
+                      child: ListView(
+                        children: <Widget>[
+                          for (var i = 0;
+                              i < (listMultisatuanUnit.length);
+                              i++) ...{
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    "${listMultisatuanUnit[i]} (isi ${listMultiSatuanJumlah[i]})",
+                                    style: poppins,
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        if (listJumlahMultiSatuan[i] > 0) {
+                                          stateSetter(() {
+                                            listJumlahMultiSatuan[i] -= 1;
+                                            jumlahTotalBarang -= (int.parse(
+                                                listMultiSatuanJumlah[i]));
+                                          });
+                                        }
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.all(5),
+                                        decoration: BoxDecoration(
+                                          color: backgroundColor2,
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: const Icon(
+                                          Icons.remove,
+                                          size: 15,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 10),
+                                      child: Text(
+                                        // "${product?.jumlah}",
+                                        "${listJumlahMultiSatuan[i]}",
+                                        style: poppins.copyWith(
+                                          color: backgroundColor1,
+                                        ),
+                                      ),
+                                    ),
+                                    InkWell(
+                                      onTap: () {
+                                        var cek = listJumlahMultiSatuan[i] +
+                                            1; // 1 2 3
+                                        if (jumlahTotalBarang +
+                                                int.parse(listMultiSatuanJumlah[
+                                                    i]) <= // 1 12 34
+                                            (detailProduct.data?.stok
+                                                    ?.where((element) =>
+                                                        element.cabang
+                                                            ?.toLowerCase() ==
+                                                        widget.productLoct
+                                                            ?.toLowerCase())
+                                                    .first
+                                                    .stok ??
+                                                0)) {
+                                          stateSetter(() {
+                                            listJumlahMultiSatuan[i] += 1;
+                                            jumlahTotalBarang += (int.parse(
+                                                listMultiSatuanJumlah[i]));
+                                          });
+                                        }
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.all(5),
+                                        decoration: BoxDecoration(
+                                          color: backgroundColor3,
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: const Icon(
+                                          Icons.add,
+                                          color: Colors.white,
+                                          size: 15,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            )
+                          }
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      width: double.infinity,
+                      child: TextButton(
+                        onPressed: () {
+                          if (listJumlahMultiSatuan
+                              .where((element) => element != 0)
+                              .isNotEmpty) {
+                            print(
+                                "yang akan dikirim adalah: $listJumlahMultiSatuan dengan $listMultiSatuanJumlah dan $listMultisatuanUnit dan ${detailProduct.data?.golonganProduk}");
+                            Navigator.pop(context);
+                            sendProduct(
+                              cabangId: cabangId,
+                              jumlahMultiSatuan: listJumlahMultiSatuan,
+                              multiSatuanJumlah: listMultiSatuanJumlah
+                                  .map((e) => int.parse(e))
+                                  .toList(),
+                              multiSatuanunit: listMultisatuanUnit,
+                            );
+                          } else {
+                            Navigator.pop(context);
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              backgroundColor: Colors.red,
+                              content: Text(
+                                "Anda belum memilih jumlah produk",
+                                style: poppins,
+                              ),
+                              duration: const Duration(seconds: 1),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                            ));
+                          }
+                          // sendProduct(cabangId: cabangId, jumlahMultiSatuan: listJumlahMultiSatuan);
+                        },
+                        style: TextButton.styleFrom(
+                            backgroundColor: backgroundColor3,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            )),
+                        child: Text(
+                          "Konfirmasi",
+                          style: poppins.copyWith(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            });
+          } else {
+            var jumlahProduk = (productInCart.jumlah ?? 0) == 0
+                ? 0
+                : productInCart.jumlah ?? 0;
+            return StatefulBuilder(builder: (BuildContext context,
+                StateSetter stateSetter /*You can rename this!*/) {
+              return Container(
+                padding: const EdgeInsets.all(20),
+                height: 200,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: Container(
+                        color: Colors.black,
+                        width: MediaQuery.of(context).size.width * 0.4,
+                        height: 2,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      "Satuan Produk",
+                      style: poppins.copyWith(
+                        fontSize: 18,
+                        fontWeight: semiBold,
+                        color: backgroundColor1,
+                      ),
+                    ),
+                    Expanded(
+                      child: ListView(
+                        children: <Widget>[
                           const SizedBox(
                             height: 10,
                           ),
@@ -1024,7 +1229,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             children: [
                               Expanded(
                                 child: Text(
-                                  "${listMultisatuanUnit[i]} (isi ${listMultiSatuanJumlah[i]})",
+                                  "${detailProduct.data?.satuanProduk}",
                                   style: poppins,
                                 ),
                               ),
@@ -1032,11 +1237,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                 children: [
                                   InkWell(
                                     onTap: () {
-                                      if (listJumlahMultiSatuan[i] > 0) {
+                                      if (jumlahProduk > 0) {
                                         stateSetter(() {
-                                          listJumlahMultiSatuan[i] -= 1;
-                                          jumlahTotalBarang -= (int.parse(
-                                              listMultiSatuanJumlah[i]));
+                                          jumlahProduk -= 1;
                                         });
                                       }
                                     },
@@ -1058,7 +1261,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                         horizontal: 10),
                                     child: Text(
                                       // "${product?.jumlah}",
-                                      "${listJumlahMultiSatuan[i]}",
+                                      "$jumlahProduk",
                                       style: poppins.copyWith(
                                         color: backgroundColor1,
                                       ),
@@ -1066,24 +1269,19 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                   ),
                                   InkWell(
                                     onTap: () {
-                                      var cek =
-                                          listJumlahMultiSatuan[i] + 1; // 1 2 3
-                                      if (jumlahTotalBarang +
-                                              int.parse(listMultiSatuanJumlah[
-                                                  i]) <= // 1 12 34
+                                      if (jumlahProduk <
                                           (detailProduct.data?.stok
                                                   ?.where((element) =>
                                                       element.cabang
                                                           ?.toLowerCase() ==
                                                       widget.productLoct
                                                           ?.toLowerCase())
+                                                  .toList()
                                                   .first
                                                   .stok ??
                                               0)) {
                                         stateSetter(() {
-                                          listJumlahMultiSatuan[i] += 1;
-                                          jumlahTotalBarang += (int.parse(
-                                              listMultiSatuanJumlah[i]));
+                                          jumlahProduk += 1;
                                         });
                                       }
                                     },
@@ -1104,61 +1302,51 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               ),
                             ],
                           )
-                        }
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    width: double.infinity,
-                    child: TextButton(
-                      onPressed: () {
-                        if (listJumlahMultiSatuan
-                            .where((element) => element != 0)
-                            .isNotEmpty) {
-                          print(
-                              "yang akan dikirim adalah: $listJumlahMultiSatuan dengan $listMultiSatuanJumlah dan $listMultisatuanUnit dan ${detailProduct.data?.golonganProduk}");
-                          Navigator.pop(context);
-                          sendProduct(
-                            cabangId: cabangId,
-                            jumlahMultiSatuan: listJumlahMultiSatuan,
-                            multiSatuanJumlah: listMultiSatuanJumlah
-                                .map((e) => int.parse(e))
-                                .toList(),
-                            multiSatuanunit: listMultisatuanUnit,
-                          );
-                        } else {
-                          Navigator.pop(context);
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            backgroundColor: Colors.red,
-                            content: Text(
-                              "Anda belum memilih jumlah produk",
-                              style: poppins,
-                            ),
-                            duration: const Duration(seconds: 1),
+                    SizedBox(
+                      width: double.infinity,
+                      child: TextButton(
+                        onPressed: () {
+                          if (jumlahProduk != 0) {
+                            Navigator.pop(context);
+                            sendProduct(
+                                cabangId: cabangId, jumlahProduk: jumlahProduk);
+                          } else {
+                            Navigator.pop(context);
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              backgroundColor: Colors.red,
+                              content: Text(
+                                "Anda belum memilih jumlah produk",
+                                style: poppins,
+                              ),
+                              duration: const Duration(seconds: 1),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                            ));
+                          }
+                          // sendProduct(cabangId: cabangId, jumlahMultiSatuan: listJumlahMultiSatuan);
+                        },
+                        style: TextButton.styleFrom(
+                            backgroundColor: backgroundColor3,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
-                            ),
-                          ));
-                        }
-                        // sendProduct(cabangId: cabangId, jumlahMultiSatuan: listJumlahMultiSatuan);
-                      },
-                      style: TextButton.styleFrom(
-                          backgroundColor: backgroundColor3,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          )),
-                      child: Text(
-                        "Konfirmasi",
-                        style: poppins.copyWith(
-                          color: Colors.white,
+                            )),
+                        child: Text(
+                          "Konfirmasi",
+                          style: poppins.copyWith(
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            );
-          });
+                  ],
+                ),
+              );
+            });
+          }
         },
       );
     }
@@ -1187,13 +1375,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 print("cabangId yang akan digunakan adalah: $cabangId");
                 // CartModel
                 if (detailProduct.data != null) {
-                  if (detailProduct.data?.multisatuanJumlah != null &&
-                      detailProduct.data?.multisatuanUnit != null) {
-                    bottomDialog(cabangId: cabangId ?? 0);
-                  } else {
-                    // Jika multisatuan kosong
-                    sendProduct(cabangId: cabangId ?? 0);
-                  }
+                  bottomDialog(cabangId: cabangId ?? 0);
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     backgroundColor: Colors.red,

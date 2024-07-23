@@ -1,10 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:tokoSM/models/cart_model.dart';
 import 'package:tokoSM/models/product_model.dart';
 import 'package:tokoSM/pages/bottom_navigation_page/cart_page.dart';
 import 'package:tokoSM/pages/bottom_navigation_page/home_page/product_list_search_result.dart';
 import 'package:tokoSM/pages/bottom_navigation_page/product_detail/product_detail_page.dart';
+import 'package:tokoSM/pages/main_page.dart';
 import 'package:tokoSM/pages/profile_page.dart';
 import 'package:tokoSM/providers/cart_provider.dart';
 import 'package:tokoSM/providers/login_provider.dart';
@@ -23,7 +26,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   List<Map<String, dynamic>> adsBannerList = [];
 
   List<String> textSuggestion = [];
@@ -58,6 +61,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _checkPermission();
     searchTextFieldFocusNode.addListener(_onFocusChange);
     scrollController.addListener(_scrollController);
     _initBannerProduct();
@@ -65,6 +70,103 @@ class _HomePageState extends State<HomePage> {
     _initPalingLarisProduct();
     _initSuggestionText();
     _initCartProduct();
+  }
+
+  // current location
+  late Position _currentPosition;
+  bool _resumed = false; // Flag to check if app is already resumed
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed && !_resumed) {
+      setState(() {
+        _resumed = true;
+      });
+    } else if (state == AppLifecycleState.paused) {
+      // Reset _resumed flag when app goes to the background
+      setState(() {
+        _resumed = false;
+      });
+    }
+  }
+
+  _checkPermission() async {
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.deniedForever) {
+      _showPermissionDeniedForeverDialog();
+    } else {
+      _requestPermission();
+    }
+  }
+
+  _requestPermission() async {
+    var status = await Permission.location.request();
+    if (status == PermissionStatus.denied) {
+      _showPermissionDeniedForeverDialog();
+    } else if (status == PermissionStatus.granted) {
+      _getCurrentLocation();
+    } else if (status == PermissionStatus.permanentlyDenied) {
+      _showPermissionDeniedForeverDialog();
+    }
+  }
+
+  _showPermissionDeniedForeverDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        title: Text(
+          "Butuh Perizinan Lokasi",
+          style: poppins,
+        ),
+        content: Text(
+          "Aplikasi ini membutuhkan perizinan lokasi anda untuk menentukan lokasi cabang terdekat toko kami. Mohon untuk mengatur perizinan lokasi di pengaturan",
+          style: poppins,
+        ),
+        actions: <Widget>[
+          ElevatedButton(
+            child: Text(
+              "BATAL",
+              style: poppins,
+            ),
+            onPressed: () {
+              Navigator.pushReplacement(
+                      context,
+                      PageTransition(
+                          child: const MainPage(),
+                          type: PageTransitionType.fade))
+                  .then((value) => setState(() {}));
+            },
+          ),
+          ElevatedButton(
+            child: const Text("BUKA PENGATURAN"),
+            onPressed: () {
+              setState(() {
+                _resumed = false;
+              });
+              openAppSettings();
+              Navigator.pushReplacement(
+                      context,
+                      PageTransition(
+                          child: const MainPage(),
+                          type: PageTransitionType.fade))
+                  .then((value) => setState(() {}));
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  _getCurrentLocation() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    setState(() {
+      _currentPosition = position;
+      print("current Location: ${_currentPosition}");
+    });
   }
 
   _scrollController() {
@@ -218,6 +320,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void dispose() {
     super.dispose();
+
+    WidgetsBinding.instance.removeObserver(this);
     searchTextFieldFocusNode.removeListener(_onFocusChange);
     searchTextFieldFocusNode.dispose();
   }

@@ -34,6 +34,7 @@ class CartService {
     required String token,
     required int cabangId,
     required int productId,
+    int? jumlah,
     List<int>? multiSatuanJumlah,
     List<String>? multiSatuanunit,
     List<int>? jumlahMultiSatuan,
@@ -47,6 +48,7 @@ class CartService {
     Map data = {
       "cabang_id": cabangId,
       "produk_id": productId,
+      "jumlah": jumlah,
       "multisatuan_jumlah": multiSatuanJumlah,
       "multisatuan_unit": multiSatuanunit,
       "jumlah_multisatuan": jumlahMultiSatuan,
