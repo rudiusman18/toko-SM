@@ -32,8 +32,11 @@ class TransaksiService {
     required List<DataKeranjang> product,
   }) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    DataCabang cabangterpilih = DataCabang.fromJson(
-        jsonDecode(prefs.getString("cabangterpilih") ?? ""));
+    DataCabang cabangterpilih = DataCabang();
+    if (prefs.getString("cabangterpilih") != null) {
+      cabangterpilih = DataCabang.fromJson(
+          jsonDecode(prefs.getString("cabangterpilih") ?? ""));
+    }
     var url = Uri.parse("${baseURL}transaksi");
     var header = {
       'Content-Type': 'application/json',
@@ -207,8 +210,11 @@ class TransaksiService {
     required String kode,
   }) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    DataCabang cabangterpilih = DataCabang.fromJson(
-        jsonDecode(prefs.getString("cabangterpilih") ?? ""));
+    DataCabang cabangterpilih = DataCabang();
+    if (prefs.getString("cabangterpilih") != null) {
+      cabangterpilih = DataCabang.fromJson(
+          jsonDecode(prefs.getString("cabangterpilih") ?? ""));
+    }
     var url = Uri.parse(
         "${baseURL}pengaturan/carapembayaran?cabang=${cabangterpilih.id ?? cabangId}&kode=$kode");
     var header = {

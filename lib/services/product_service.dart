@@ -19,8 +19,12 @@ class ProductService {
     String search = "",
   }) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    DataCabang cabangterpilih = DataCabang.fromJson(
-        jsonDecode(prefs.getString("cabangterpilih") ?? ""));
+    DataCabang cabangterpilih = DataCabang();
+    if (prefs.getString("cabangterpilih") != null) {
+      cabangterpilih = DataCabang.fromJson(
+          jsonDecode(prefs.getString("cabangterpilih") ?? ""));
+    }
+
     var baseURL = "http://103.127.132.116/api/v1/";
 
     var url = Uri.parse(
@@ -50,13 +54,16 @@ class ProductService {
     required String cabangId,
   }) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    DataCabang cabangterpilih = DataCabang.fromJson(
-        jsonDecode(prefs.getString("cabangterpilih") ?? ""));
+    DataCabang cabangterpilih = DataCabang();
+    if (prefs.getString("cabangterpilih") != null) {
+      cabangterpilih = DataCabang.fromJson(
+          jsonDecode(prefs.getString("cabangterpilih") ?? ""));
+    }
     var baseURL = "http://103.127.132.116/api/v1/";
 
     var url = Uri.parse(
         "${baseURL}produk/detail/$productId?cabang=${cabangterpilih.id ?? cabangId}");
-        
+
     var header = {
       'Authorization': 'Bearer $token',
       'Content-Type': 'application/json',

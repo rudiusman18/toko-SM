@@ -42,8 +42,11 @@ class CartService {
     List<int>? jumlahMultiSatuan,
   }) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    DataCabang cabangterpilih = DataCabang.fromJson(
-        jsonDecode(prefs.getString("cabangterpilih") ?? ""));
+    DataCabang cabangterpilih = DataCabang();
+    if (prefs.getString("cabangterpilih") != null) {
+      cabangterpilih = DataCabang.fromJson(
+          jsonDecode(prefs.getString("cabangterpilih") ?? ""));
+    }
 
     var url = Uri.parse("${baseURL}keranjang");
     var header = {

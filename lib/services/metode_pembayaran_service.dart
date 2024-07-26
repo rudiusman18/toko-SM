@@ -12,8 +12,11 @@ class MetodePembayaranService {
   Future<PembayaranModel> retrieveMetodePembayaran(
       {required String token, required String cabangId}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    DataCabang cabangterpilih = DataCabang.fromJson(
-        jsonDecode(prefs.getString("cabangterpilih") ?? ""));
+    DataCabang cabangterpilih = DataCabang();
+    if (prefs.getString("cabangterpilih") != null) {
+      cabangterpilih = DataCabang.fromJson(
+          jsonDecode(prefs.getString("cabangterpilih") ?? ""));
+    }
     var url = Uri.parse(
         "${baseURL}pengaturan/pembayaran?cabang=${cabangterpilih.id ?? cabangId}");
     var header = {

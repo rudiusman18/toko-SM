@@ -208,7 +208,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     print(
         "isi dari cabang terpilih adalah: ${prefs.getString("cabangterpilih") ?? ""}");
-    cabangTerpilih = jsonDecode(prefs.getString("cabangterpilih") ?? "");
+
+    if (prefs.getString("cabangterpilih") != null) {
+      cabangTerpilih = jsonDecode(prefs.getString("cabangterpilih") ?? "");
+    }
   }
 
   _initCartProduct() async {
@@ -287,7 +290,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           "cabang yang diakses adalah: ${"${loginProvider.loginModel.data?.cabangId}"}");
     });
     if (await productProvider.getProduct(
-      cabangId: "${loginProvider.loginModel.data?.cabangId ?? 1}",
+      cabangId:
+          "${cabangTerpilih["id"] ?? loginProvider.loginModel.data?.cabangId}",
       token: loginProvider.loginModel.token ?? "",
       page: "1",
       limit: "5",
@@ -314,7 +318,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       palingLarisLoading = true;
     });
     if (await productProvider.getProduct(
-      cabangId: "${loginProvider.loginModel.data?.cabangId ?? 1}",
+      cabangId:
+          "${cabangTerpilih["id"] ?? loginProvider.loginModel.data?.cabangId}",
       token: loginProvider.loginModel.token ?? "",
       page: page,
       limit: "5",
@@ -787,7 +792,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                         child: ProductDetailPage(
                           imageURL: "${promoProduct.data?[i].gambar?.first}",
                           productId: "${promoProduct.data?[i].id}",
-                          cabangId: "${cabangTerpilih["id"]}",
+                          cabangId:
+                              "${cabangTerpilih["id"] ?? loginProvider.loginModel.data?.cabangId}",
                           productLoct:
                               loginProvider.loginModel.data?.namaCabang ?? "",
                           productName: "${promoProduct.data?[i].namaProduk}",
@@ -1006,7 +1012,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                         imageURL:
                             "${palingLarisProduct.data?[i].gambar?.first}",
                         productId: "${palingLarisProduct.data?[i].id}",
-                        cabangId: "${cabangTerpilih["id"]}",
+                        cabangId:
+                            "${cabangTerpilih["id"] ?? loginProvider.loginModel.data?.cabangId}",
                         productLoct:
                             loginProvider.loginModel.data?.namaCabang ?? "",
                         productName:
