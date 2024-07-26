@@ -1,5 +1,9 @@
 // ignore_for_file: avoid_print
 
+import 'dart:convert';
+
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tokoSM/models/cabang_model.dart';
 import 'package:tokoSM/models/cart_model.dart';
 import 'package:tokoSM/models/login_model.dart';
 import 'package:tokoSM/pages/bottom_navigation_page/cart_page/delivery_page.dart';
@@ -39,6 +43,8 @@ class _CartPageState extends State<CartPage> {
 
   CartModel deliveryProduct = CartModel();
   String golonganProduk = "";
+
+  DataCabang cabangterpilih = DataCabang();
 
   @override
   void initState() {
@@ -129,6 +135,12 @@ class _CartPageState extends State<CartPage> {
         print(
             "isi loginModel adalah: ${loginmodel.data?.namaCabang} dengan index: $indexCabang dengan ${(cartModel.data?.length)}");
       });
+    }
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getString("cabangterpilih") != null) {
+      cabangterpilih = DataCabang.fromJson(
+          jsonDecode(prefs.getString("cabangterpilih") ?? ""));
     }
 
     if (isChangeAmount == false) {
@@ -567,6 +579,8 @@ class _CartPageState extends State<CartPage> {
           "${product?.diskon != null ? product?.hargaDiskon : product?.harga ?? 0}";
       int numericValue =
           int.parse(numericString); // Parses the string as an integer
+
+          
 
       return InkWell(
         onTap: () {
