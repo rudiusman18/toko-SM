@@ -443,6 +443,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   onChanged: (value) async {
                     setState(() {
                       cabangTerpilih = jsonDecode(value ?? "");
+                      print(
+                          "isi cabang yang dipilih adalah: ${cabangTerpilih.keys}");
                     });
                     var data = DataCabang.fromJson(cabangTerpilih);
                     SharedPreferences prefs =
@@ -795,7 +797,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                           cabangId:
                               "${cabangTerpilih["id"] ?? loginProvider.loginModel.data?.cabangId}",
                           productLoct:
-                              loginProvider.loginModel.data?.namaCabang ?? "",
+                              "${cabangTerpilih["nama_cabang"] ?? loginProvider.loginModel.data?.namaCabang}",
                           productName: "${promoProduct.data?[i].namaProduk}",
                           productPrice: "${promoProduct.data?[i].hargaDiskon}",
                           productStar: "${promoProduct.data?[i].rating}",
@@ -1015,7 +1017,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                         cabangId:
                             "${cabangTerpilih["id"] ?? loginProvider.loginModel.data?.cabangId}",
                         productLoct:
-                            loginProvider.loginModel.data?.namaCabang ?? "",
+                            "${cabangTerpilih["nama_cabang"] ?? loginProvider.loginModel.data?.namaCabang}",
                         productName:
                             "${palingLarisProduct.data?[i].namaProduk}",
                         productPrice:

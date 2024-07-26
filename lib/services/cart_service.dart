@@ -55,8 +55,7 @@ class CartService {
     };
 
     Map data = {
-      "cabang_id":
-          cabangterpilih.namaCabang == "" ? cabangId : cabangterpilih.id,
+      "cabang_id": cabangId,
       "produk_id": productId,
       "jumlah": jumlah,
       "multisatuan_jumlah": multiSatuanJumlah,

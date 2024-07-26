@@ -46,7 +46,7 @@ class TransaksiService {
     Map data = {
       "pelanggan_id": pelangganId,
       "nama_pelanggan": namaPelanggan,
-      "cabang_id": cabangterpilih.id ?? cabangId,
+      "cabang_id": cabangId,
       "kurir_id": kurirId,
       "pengiriman_id": pengirimanId, // id alamat pengiriman
       "nama_kurir": namaKurir,
