@@ -17,8 +17,7 @@ class KurirService {
       cabangterpilih = DataCabang.fromJson(
           jsonDecode(prefs.getString("cabangterpilih") ?? ""));
     }
-    var url = Uri.parse(
-        "${baseURL}pengaturan/kurir?cabang=${cabangterpilih.id ?? cabangId}");
+    var url = Uri.parse("${baseURL}pengaturan/kurir?cabang=$cabangId");
     var header = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $token'
