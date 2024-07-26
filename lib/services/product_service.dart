@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tokoSM/models/cabang_model.dart';
 import 'package:tokoSM/models/favorite_model.dart';
 import 'package:tokoSM/models/product_model.dart';
 import 'package:tokoSM/models/suggestion_model.dart';
@@ -16,10 +18,13 @@ class ProductService {
     String sort = "",
     String search = "",
   }) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    DataCabang cabangterpilih = DataCabang.fromJson(
+        jsonDecode(prefs.getString("cabangterpilih") ?? ""));
     var baseURL = "http://103.127.132.116/api/v1/";
 
     var url = Uri.parse(
-        "${baseURL}produk?cabang=$cabangId&cat=$category&sort=$sort&page=$page&limit=$limit&q=$search");
+        "${baseURL}produk?cabang=${cabangterpilih.id ?? cabangId}&cat=$category&sort=$sort&page=$page&limit=$limit&q=$search");
     print("URL yang diakses adalah: ${url}");
     var header = {
       'Authorization': 'Bearer $token',
@@ -39,11 +44,19 @@ class ProductService {
     }
   }
 
-  Future<DetailProductModel> detailProduct(
-      {required String productId, required String token}) async {
+  Future<DetailProductModel> detailProduct({
+    required String productId,
+    required String token,
+    required String cabangId,
+  }) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    DataCabang cabangterpilih = DataCabang.fromJson(
+        jsonDecode(prefs.getString("cabangterpilih") ?? ""));
     var baseURL = "http://103.127.132.116/api/v1/";
 
-    var url = Uri.parse("${baseURL}produk/detail/$productId");
+    var url = Uri.parse(
+        "${baseURL}produk/detail/$productId?cabang=${cabangterpilih.id ?? cabangId}");
+        
     var header = {
       'Authorization': 'Bearer $token',
       'Content-Type': 'application/json',

@@ -27,6 +27,7 @@ class ProductDetailPage extends StatefulWidget {
   final currencyFormatter = NumberFormat('#,##0.00', 'ID');
   final String? imageURL;
   final String? productId;
+  final String? cabangId;
   final String? productName;
   final String? productPrice;
   final String? productStar;
@@ -41,6 +42,7 @@ class ProductDetailPage extends StatefulWidget {
     super.key,
     this.imageURL,
     this.productId,
+    this.cabangId,
     this.productName,
     this.productPrice,
     this.productStar,
@@ -114,8 +116,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     LoginProvider loginProvider =
         Provider.of<LoginProvider>(context, listen: false);
     if (await productProvider.getDetailProduct(
-        productId: widget.productId ?? "",
-        token: loginProvider.loginModel.token ?? "")) {
+      productId: widget.productId ?? "",
+      token: loginProvider.loginModel.token ?? "",
+      cabangId: widget.cabangId ?? "",
+    )) {
       setState(() {
         initLoading = false;
         detailProduct = productProvider.detailProductModel;

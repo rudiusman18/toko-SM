@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:ffi';
 import 'dart:io';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tokoSM/models/cabang_model.dart';
 import 'package:tokoSM/models/cart_model.dart';
 import 'package:http/http.dart' as http;
 
@@ -39,6 +41,10 @@ class CartService {
     List<String>? multiSatuanunit,
     List<int>? jumlahMultiSatuan,
   }) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    DataCabang cabangterpilih = DataCabang.fromJson(
+        jsonDecode(prefs.getString("cabangterpilih") ?? ""));
+
     var url = Uri.parse("${baseURL}keranjang");
     var header = {
       'Content-Type': 'application/json',
@@ -46,7 +52,8 @@ class CartService {
     };
 
     Map data = {
-      "cabang_id": cabangId,
+      "cabang_id":
+          cabangterpilih.namaCabang == "" ? cabangId : cabangterpilih.id,
       "produk_id": productId,
       "jumlah": jumlah,
       "multisatuan_jumlah": multiSatuanJumlah,

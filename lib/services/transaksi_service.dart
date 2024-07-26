@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tokoSM/models/cabang_model.dart';
 import 'package:tokoSM/models/cart_model.dart';
 import 'package:tokoSM/models/detail_status_model.dart';
 
@@ -29,6 +31,9 @@ class TransaksiService {
     required String noRekeningTransfer,
     required List<DataKeranjang> product,
   }) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    DataCabang cabangterpilih = DataCabang.fromJson(
+        jsonDecode(prefs.getString("cabangterpilih") ?? ""));
     var url = Uri.parse("${baseURL}transaksi");
     var header = {
       'Content-Type': 'application/json',
@@ -38,7 +43,7 @@ class TransaksiService {
     Map data = {
       "pelanggan_id": pelangganId,
       "nama_pelanggan": namaPelanggan,
-      "cabang_id": cabangId,
+      "cabang_id": cabangterpilih.id ?? cabangId,
       "kurir_id": kurirId,
       "pengiriman_id": pengirimanId, // id alamat pengiriman
       "nama_kurir": namaKurir,
@@ -201,10 +206,11 @@ class TransaksiService {
     required String cabangId,
     required String kode,
   }) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    DataCabang cabangterpilih = DataCabang.fromJson(
+        jsonDecode(prefs.getString("cabangterpilih") ?? ""));
     var url = Uri.parse(
-        "${baseURL}pengaturan/carapembayaran?cabang=$cabangId&kode=$kode");
-    print(
-        "getpaymentmanual url: ${baseURL}pengaturan/carapembayaran?cabang=$cabangId&kode=$kode");
+        "${baseURL}pengaturan/carapembayaran?cabang=${cabangterpilih.id ?? cabangId}&kode=$kode");
     var header = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $token'

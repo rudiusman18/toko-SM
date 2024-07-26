@@ -103,6 +103,7 @@ class _WishlistPageState extends State<WishlistPage> {
                   productId: "${(favoriteProduct.data?[i].produkId ?? 0)}",
                   imageURL: favoriteProduct.data?[i].imageUrl,
                   productLoct: loginModel.data?.namaCabang ?? "",
+                  cabangId: "${loginModel.data?.cabangId}",
                   discountPercentage: favoriteProduct.data?[i].diskon == null
                       ? ""
                       : "${favoriteProduct.data?[i].diskon}%",

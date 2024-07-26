@@ -577,6 +577,7 @@ class _CartPageState extends State<CartPage> {
                 imageURL:
                     "http://103.127.132.116/uploads/images/${product?.imageUrl}",
                 productId: "${product?.produkId}",
+                cabangId: "${product?.cabangId}",
                 productLoct: "${cartModel.data?[indexCabang].namaCabang}",
                 productName: "${product?.namaProduk}",
                 productPrice: "${product?.hargaDiskon}",

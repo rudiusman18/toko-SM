@@ -348,6 +348,7 @@ class _ProductListSearchResultPageState
                                     imageURL:
                                         "${productModel.data?[i].gambar?.first}",
                                     productId: "${productModel.data?[i].id}",
+                                    cabangId: "${loginModel.data?.cabangId}",
                                     productLoct:
                                         loginModel.data?.namaCabang ?? "",
                                     productName:

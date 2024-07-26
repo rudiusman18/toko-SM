@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tokoSM/models/cabang_model.dart';
 import 'package:tokoSM/models/pembayaran_model.dart';
 
 class MetodePembayaranService {
@@ -9,7 +11,11 @@ class MetodePembayaranService {
 
   Future<PembayaranModel> retrieveMetodePembayaran(
       {required String token, required String cabangId}) async {
-    var url = Uri.parse("${baseURL}pengaturan/pembayaran?cabang=$cabangId");
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    DataCabang cabangterpilih = DataCabang.fromJson(
+        jsonDecode(prefs.getString("cabangterpilih") ?? ""));
+    var url = Uri.parse(
+        "${baseURL}pengaturan/pembayaran?cabang=${cabangterpilih.id ?? cabangId}");
     var header = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $token'

@@ -1,22 +1,22 @@
 class CabangModel {
   String? message;
-  List<Data>? data;
+  List<DataCabang>? data;
 
   CabangModel({this.message, this.data});
 
   CabangModel.fromJson(Map<String, dynamic> json) {
     message = json['message'];
     if (json['data'] != null) {
-      data = <Data>[];
+      data = <DataCabang>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(DataCabang.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['message'] = this.message;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['message'] = message;
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
@@ -24,39 +24,51 @@ class CabangModel {
   }
 }
 
-class Data {
+class DataCabang {
   int? id;
   int? cabangKelasId;
   String? namaCabang;
   String? alamatCabang;
   double? latitude;
   double? longitude;
+  int? jarak;
+  String? jarakSatuan;
+  bool? terdekat;
 
-  Data(
+  DataCabang(
       {this.id,
-        this.cabangKelasId,
-        this.namaCabang,
-        this.alamatCabang,
-        this.latitude,
-        this.longitude});
+      this.cabangKelasId,
+      this.namaCabang,
+      this.alamatCabang,
+      this.latitude,
+      this.longitude,
+      this.jarak,
+      this.jarakSatuan,
+      this.terdekat});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  DataCabang.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     cabangKelasId = json['cabang_kelas_id'];
     namaCabang = json['nama_cabang'];
     alamatCabang = json['alamat_cabang'];
     latitude = json['latitude'];
     longitude = json['longitude'];
+    jarak = json['jarak'];
+    jarakSatuan = json['jarak_satuan'];
+    terdekat = json['terdekat'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['cabang_kelas_id'] = this.cabangKelasId;
-    data['nama_cabang'] = this.namaCabang;
-    data['alamat_cabang'] = this.alamatCabang;
-    data['latitude'] = this.latitude;
-    data['longitude'] = this.longitude;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['cabang_kelas_id'] = cabangKelasId;
+    data['nama_cabang'] = namaCabang;
+    data['alamat_cabang'] = alamatCabang;
+    data['latitude'] = latitude;
+    data['longitude'] = longitude;
+    data['jarak'] = jarak;
+    data['jarak_satuan'] = jarakSatuan;
+    data['terdekat'] = terdekat;
     return data;
   }
 }

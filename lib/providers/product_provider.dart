@@ -84,12 +84,16 @@ class ProductProvider extends ChangeNotifier {
     _detailProductModel = newDetailProductModel;
   }
 
-  Future<bool> getDetailProduct(
-      {required String productId, required String token}) async {
+  Future<bool> getDetailProduct({
+    required String productId,
+    required String token,
+    required String cabangId,
+  }) async {
     try {
       DetailProductModel detailProduct = await ProductService().detailProduct(
         productId: productId,
         token: token,
+        cabangId: cabangId,
       );
       print("isi datanya adalah ${detailProduct.data?.id}");
       _detailProductModel = detailProduct;
@@ -176,17 +180,18 @@ class ProductProvider extends ChangeNotifier {
 
   SuggestionModel _suggestionModel = SuggestionModel();
   SuggestionModel get suggestionModel => _suggestionModel;
-  set suggestionModel(SuggestionModel suggestionModel){
+  set suggestionModel(SuggestionModel suggestionModel) {
     _suggestionModel = suggestionModel;
     notifyListeners();
   }
 
-  Future<bool>getSuggestion({required String token}) async{
-    try{
-       SuggestionModel suggestionModel = await ProductService().suggestion(token: token);
+  Future<bool> getSuggestion({required String token}) async {
+    try {
+      SuggestionModel suggestionModel =
+          await ProductService().suggestion(token: token);
       _suggestionModel = suggestionModel;
       return true;
-    }catch(e){
+    } catch (e) {
       print("Gagal mendapatkan suggestion: $e");
       return false;
     }

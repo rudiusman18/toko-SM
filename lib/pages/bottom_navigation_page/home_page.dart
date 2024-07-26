@@ -1,14 +1,18 @@
+import 'dart:convert';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:tokoSM/models/cart_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tokoSM/models/cabang_model.dart';
 import 'package:tokoSM/models/product_model.dart';
 import 'package:tokoSM/pages/bottom_navigation_page/cart_page.dart';
 import 'package:tokoSM/pages/bottom_navigation_page/home_page/product_list_search_result.dart';
 import 'package:tokoSM/pages/bottom_navigation_page/product_detail/product_detail_page.dart';
 import 'package:tokoSM/pages/main_page.dart';
 import 'package:tokoSM/pages/profile_page.dart';
+import 'package:tokoSM/providers/cabang_provider.dart';
 import 'package:tokoSM/providers/cart_provider.dart';
 import 'package:tokoSM/providers/login_provider.dart';
 import 'package:tokoSM/providers/product_provider.dart';
@@ -57,6 +61,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   int page = 1;
   bool palingLarisProductisReachEnd = false;
   var totalProductInCart = 0;
+
+  Map<String, dynamic> cabangTerpilih = {};
+  CabangModel cabangModel = CabangModel();
 
   @override
   void initState() {
@@ -166,6 +173,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     setState(() {
       _currentPosition = position;
       print("current Location: ${_currentPosition}");
+      _initDataCabang();
     });
   }
 
@@ -184,6 +192,23 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         scrollIsAtEnd = false;
       });
     }
+  }
+
+  _initDataCabang() async {
+    LoginProvider loginProvider =
+        Provider.of<LoginProvider>(context, listen: false);
+    CabangProvider cabangProvider =
+        Provider.of<CabangProvider>(context, listen: false);
+    if (await cabangProvider.postLatLonToGetDataCabang(
+        token: loginProvider.loginModel.token ?? "",
+        lat: "${_currentPosition.latitude}",
+        lon: "${_currentPosition.longitude}")) {
+      cabangModel = cabangProvider.cabangModel;
+    }
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    print(
+        "isi dari cabang terpilih adalah: ${prefs.getString("cabangterpilih") ?? ""}");
+    cabangTerpilih = jsonDecode(prefs.getString("cabangterpilih") ?? "");
   }
 
   _initCartProduct() async {
@@ -361,20 +386,97 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         child: Row(
           children: [
             Expanded(
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.location_city,
-                    color: backgroundColor2,
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton2<String>(
+                  isExpanded: true,
+                  hint: (cabangModel.data ?? []).isEmpty
+                      ? const Center(
+                          child: SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: CircularProgressIndicator(
+                              color: Colors.grey,
+                            ),
+                          ),
+                        )
+                      : Row(
+                          children: [
+                            Icon(
+                              Icons.location_city,
+                              size: 16,
+                              color: backgroundColor2,
+                            ),
+                            const SizedBox(
+                              width: 4,
+                            ),
+                            Expanded(
+                              child: Text(
+                                cabangTerpilih['nama_cabang'] == null
+                                    ? '${cabangModel.data?.first.namaCabang}'
+                                    : '${cabangTerpilih['nama_cabang']}',
+                                style: poppins.copyWith(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: backgroundColor2,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
+                  items: (cabangModel.data ?? [])
+                      .map(
+                        (DataCabang item) => DropdownMenuItem<String>(
+                          value: jsonEncode(item.toJson()),
+                          child: Text(
+                            "${item.namaCabang ?? ""} ${item.terdekat ?? false ? "(Terdekat)" : ""}",
+                            style: poppins,
+                          ),
+                        ),
+                      )
+                      .toList(),
+                  onChanged: (value) async {
+                    setState(() {
+                      cabangTerpilih = jsonDecode(value ?? "");
+                    });
+                    var data = DataCabang.fromJson(cabangTerpilih);
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    prefs.setString("cabangterpilih", jsonEncode(data));
+                    _checkPermission();
+                    _initBannerProduct();
+                    _initPromoProduct();
+                    _initPalingLarisProduct();
+                    _initSuggestionText();
+                    _initCartProduct();
+                  },
+                  iconStyleData: IconStyleData(
+                    icon: const Icon(
+                      Icons.arrow_forward_ios_outlined,
+                    ),
+                    iconSize: 14,
+                    iconEnabledColor: backgroundColor2,
+                    iconDisabledColor: Colors.grey,
                   ),
-                  Text(
-                    "Cabang ${loginProvider.loginModel.data?.namaCabang ?? ""}",
-                    style: poppins.copyWith(
-                      color: backgroundColor2,
-                      fontSize: 16,
+                  dropdownStyleData: DropdownStyleData(
+                    maxHeight: 200,
+                    width: 200,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(14),
+                      color: Colors.white,
+                    ),
+                    offset: const Offset(-20, 0),
+                    scrollbarTheme: ScrollbarThemeData(
+                      radius: const Radius.circular(40),
+                      thickness: MaterialStateProperty.all(6),
+                      thumbVisibility: MaterialStateProperty.all(true),
                     ),
                   ),
-                ],
+                  menuItemStyleData: const MenuItemStyleData(
+                    height: 40,
+                    padding: EdgeInsets.only(left: 14, right: 14),
+                  ),
+                ),
               ),
             ),
             Row(
@@ -391,9 +493,12 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                   child: const CartPage(),
                                   type: PageTransitionType.rightToLeft))
                           .then((value) {
+                        _checkPermission();
                         _initBannerProduct();
-                        _initPalingLarisProduct();
                         _initPromoProduct();
+                        _initPalingLarisProduct();
+                        _initSuggestionText();
+                        _initCartProduct();
                       });
                     },
                     child: Stack(
@@ -444,9 +549,12 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                   child: const ProfilePage(),
                                   type: PageTransitionType.rightToLeft))
                           .then((value) {
+                        _checkPermission();
                         _initBannerProduct();
-                        _initPalingLarisProduct();
                         _initPromoProduct();
+                        _initPalingLarisProduct();
+                        _initSuggestionText();
+                        _initCartProduct();
                       });
                     },
                     child: Icon(
@@ -679,6 +787,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                         child: ProductDetailPage(
                           imageURL: "${promoProduct.data?[i].gambar?.first}",
                           productId: "${promoProduct.data?[i].id}",
+                          cabangId: "${cabangTerpilih["id"]}",
                           productLoct:
                               loginProvider.loginModel.data?.namaCabang ?? "",
                           productName: "${promoProduct.data?[i].namaProduk}",
@@ -897,6 +1006,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                         imageURL:
                             "${palingLarisProduct.data?[i].gambar?.first}",
                         productId: "${palingLarisProduct.data?[i].id}",
+                        cabangId: "${cabangTerpilih["id"]}",
                         productLoct:
                             loginProvider.loginModel.data?.namaCabang ?? "",
                         productName:
@@ -1045,6 +1155,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     Widget homePageContent() {
       return RefreshIndicator(
         onRefresh: () async {
+          _checkPermission();
           _initBannerProduct();
           _initPromoProduct();
           _initPalingLarisProduct();
