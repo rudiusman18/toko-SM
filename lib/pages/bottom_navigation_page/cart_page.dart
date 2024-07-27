@@ -580,8 +580,6 @@ class _CartPageState extends State<CartPage> {
       int numericValue =
           int.parse(numericString); // Parses the string as an integer
 
-          
-
       return InkWell(
         onTap: () {
           Navigator.push(
@@ -1140,13 +1138,19 @@ class _CartPageState extends State<CartPage> {
                                   const SizedBox(
                                     height: 20,
                                   ),
-                                  for (var i = 0;
-                                      i <
-                                          (cartModel.data?[indexCabang].data
-                                                  ?.length ??
-                                              0);
-                                      i++)
-                                    cartItem(index: i),
+                                  if (cartModel
+                                          .data?[indexCabang].data?.isEmpty ??
+                                      true) ...{
+                                    emptyCart(),
+                                  } else ...{
+                                    for (var i = 0;
+                                        i <
+                                            (cartModel.data?[indexCabang].data
+                                                    ?.length ??
+                                                0);
+                                        i++)
+                                      cartItem(index: i),
+                                  },
                                   const SizedBox(
                                     height: 20,
                                   ),

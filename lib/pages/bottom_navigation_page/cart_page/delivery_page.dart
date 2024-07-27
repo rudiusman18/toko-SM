@@ -197,8 +197,8 @@ class _DeliverypageState extends State<Deliverypage> {
 
       var totalharga = (product?.jumlah ?? 0) *
           ((product?.diskon != null)
-              ? (product?.harga ?? 0)
-              : (product?.hargaDiskon ?? 0));
+              ? (product?.hargaDiskon ?? 0)
+              : (product?.harga ?? 0));
       totalHargaRingkasan += totalharga;
       return Container(
         margin: const EdgeInsets.only(
@@ -228,7 +228,7 @@ class _DeliverypageState extends State<Deliverypage> {
                       style: poppins,
                     ),
                     Text(
-                      "${product?.jumlah} x Rp ${currencyFormatter.format(product?.diskon != null ? product?.harga : product?.hargaDiskon)}",
+                      "${product?.jumlah} x Rp ${currencyFormatter.format(product?.diskon != null ? product?.hargaDiskon : product?.harga)}",
                       style: poppins.copyWith(
                         fontWeight: bold,
                       ),

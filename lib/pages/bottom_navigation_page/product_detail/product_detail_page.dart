@@ -974,7 +974,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       DataKeranjang productInCart = DataKeranjang();
       cartModel.data?.forEach((sublist) {
         sublist.data?.forEach((product) {
-          if (product.namaProduk == widget.productName) {
+          if (product.namaProduk == widget.productName &&
+              "${product.cabangId}" == "${widget.cabangId}") {
             productInCart = product;
           }
         });

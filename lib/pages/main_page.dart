@@ -126,15 +126,19 @@ class _MainPageState extends State<MainPage> {
 
     return WillPopScope(
       onWillPop: () async {
-        DateTime now = DateTime.now();
-        if (currentBackPressTime == null ||
-            now.difference(currentBackPressTime ?? DateTime.now()) >
-                const Duration(seconds: 2)) {
-          currentBackPressTime = now;
-          Fluttertoast.showToast(msg: "tekan sekali lagi untuk keluar");
-          return false;
+        if (!Navigator.canPop(context)) {
+          DateTime now = DateTime.now();
+          if (currentBackPressTime == null ||
+              now.difference(currentBackPressTime ?? DateTime.now()) >
+                  const Duration(seconds: 2)) {
+            currentBackPressTime = now;
+            Fluttertoast.showToast(msg: "tekan sekali lagi untuk keluar");
+            return false;
+          }
+          return true;
+        } else {
+          return true;
         }
-        return true;
       },
       child: SafeArea(
         child: Scaffold(
