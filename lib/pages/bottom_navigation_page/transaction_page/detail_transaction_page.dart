@@ -326,7 +326,8 @@ class _DetailTransactionPageState extends State<DetailTransactionPage> {
       String timestamp =
           "${widget.transactionDetailItem.produk?.first.createdAt}";
       DateTime dateTime = DateTime.parse(timestamp);
-      String formattedDate = DateFormat('dd MMMM yyyy, HH:mm').format(dateTime);
+      String formattedDate =
+          DateFormat('dd MMMM yyyy, HH:mm', "id_ID").format(dateTime);
 
       return Container(
         padding: const EdgeInsets.all(

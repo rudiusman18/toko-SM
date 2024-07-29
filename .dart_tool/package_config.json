@@ -194,6 +194,18 @@
       "languageVersion": "2.19"
     },
     {
+      "name": "flutter_localization",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_localization-0.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "flutter_localizations",
+      "rootUri": "file:///D:/My%20application/Flutter/flutter/packages/flutter_localizations",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
       "name": "flutter_rating_stars",
       "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_rating_stars-1.0.3+4",
       "packageUri": "lib/",
@@ -525,9 +537,9 @@
     },
     {
       "name": "plugin_platform_interface",
-      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/plugin_platform_interface-2.1.6",
+      "rootUri": "file:///C:/Users/Rudi/AppData/Local/Pub/Cache/hosted/pub.dev/plugin_platform_interface-2.1.8",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "3.0"
     },
     {
       "name": "provider",
@@ -854,7 +866,7 @@
       "languageVersion": "3.1"
     }
   ],
-  "generated": "2024-07-27T08:15:00.603286Z",
+  "generated": "2024-07-29T13:30:56.516409Z",
   "generator": "pub",
   "generatorVersion": "3.1.2"
 }

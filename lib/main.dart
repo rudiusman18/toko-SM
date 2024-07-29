@@ -1,3 +1,4 @@
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:tokoSM/pages/splash_page.dart';
 import 'package:tokoSM/providers/alamat_provider.dart';
 import 'package:tokoSM/providers/cabang_provider.dart';
@@ -48,6 +49,15 @@ class MyApp extends StatelessWidget {
           );
         },
         title: "Toko SM",
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('id', 'ID'),
+        ],
+        theme: ThemeData.light(),
         debugShowCheckedModeBanner: false,
         home: const Scaffold(
           body: SplashPage(),

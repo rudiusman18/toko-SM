@@ -56,6 +56,9 @@ dependencies:
   order_tracker_zen: ^1.0.0+4
   flutter_widget_from_html: ^0.14.11
   dropdown_button2: ^2.3.9
+  flutter_localization: ^0.2.0
+  flutter_localizations:
+    sdk: flutter
 
 dev_dependencies:
   flutter_test:

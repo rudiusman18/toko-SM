@@ -24,7 +24,7 @@ class _TransactionPageState extends State<TransactionPage> {
   bool isLoading = false;
 
   // Initial Selected Value
-  String dropdownvalue = 'Semua Status';
+  // String dropdownvalue = 'Semua Status';
 
   // List of items in our dropdown menu
   var items = [
@@ -35,6 +35,10 @@ class _TransactionPageState extends State<TransactionPage> {
     'Selesai',
     'Dibatalkan',
   ];
+
+  bool isFiltered = false;
+  String selectedStatusFilter = "";
+  String selectedDateFilter = "";
 
   @override
   void initState() {
@@ -335,50 +339,279 @@ class _TransactionPageState extends State<TransactionPage> {
       );
     }
 
+    // Widget filter() {
+    //   return Container(
+    //     margin: const EdgeInsets.symmetric(
+    //       horizontal: 20,
+    //     ),
+    //     child: SingleChildScrollView(
+    //       scrollDirection: Axis.horizontal,
+    //       child: Row(
+    //         children: [
+    //           DropdownButton(
+    //             // Initial Value
+    //             value: dropdownvalue,
+
+    //             // Down Arrow Icon
+    //             icon: const Icon(Icons.keyboard_arrow_down),
+
+    //             // Array list of items
+    //             items: items.map((String items) {
+    //               return DropdownMenuItem(
+    //                 value: items,
+    //                 child: Text(items),
+    //               );
+    //             }).toList(),
+    //             // After selecting the desired option,it will
+    //             // change button value to selected value
+    //             onChanged: (String? newValue) {
+    //               setState(() {
+    //                 dropdownvalue = newValue!;
+    //                 int index = items.indexOf(newValue);
+    //                 print("indexnya adalah ${index - 1}");
+    //                 _initTransaction(
+    //                     status: "${index - 1 < 0 ? "" : index - 1}");
+    //               });
+    //             },
+    //           ),
+
+    //           Container(
+    //             decoration: BoxDecoration(boxShadow: []),
+    //           )
+    //           // Text(
+    //           //   "Status",
+    //           // ),
+    //           // Text(
+    //           //   "Status",
+    //           // ),
+    //         ],
+    //       ),
+    //     ),
+    //   );
+    // }
+
+    void filterModalBottomSheet({required String title}) {
+      String indexFilter = "";
+      showModalBottomSheet<void>(
+        backgroundColor: Colors.transparent,
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            padding: const EdgeInsets.all(24),
+            height: MediaQuery.sizeOf(context).height * 0.4,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(
+                  20,
+                ),
+              ),
+            ),
+            child: StatefulBuilder(
+              builder: (context, setState) {
+                return ListView(
+                  children: [
+                    Row(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Icon(
+                            Icons.close,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          title.toLowerCase().contains("status")
+                              ? "Mau lihat status apa?"
+                              : "Pilih tanggal",
+                          style: poppins.copyWith(
+                            fontWeight: semiBold,
+                            fontSize: 18,
+                          ),
+                        ),
+                      ],
+                    ),
+                    if (title.toLowerCase().contains("status")) ...{
+                      Wrap(
+                        children: [
+                          for (String item in items) ...{
+                            InkWell(
+                              onTap: () {
+                                setState(() {
+                                  if (title.toLowerCase().contains("status")) {
+                                    indexFilter = (items.indexWhere(
+                                                (element) => element == item) -
+                                            1)
+                                        .toString();
+                                    indexFilter =
+                                        indexFilter == "-1" ? "" : indexFilter;
+                                  }
+                                  isFiltered = true;
+                                  selectedStatusFilter = item;
+                                });
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.only(
+                                  top: 20,
+                                  right: 5,
+                                ),
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: selectedStatusFilter == item
+                                      ? backgroundColor3
+                                      : Colors.grey.withAlpha(70),
+                                  borderRadius: BorderRadius.circular(
+                                    20,
+                                  ),
+                                ),
+                                child: Text(
+                                  item,
+                                  style: poppins.copyWith(
+                                      color: selectedStatusFilter == item
+                                          ? Colors.white
+                                          : Colors.black),
+                                ),
+                              ),
+                            ),
+                          }
+                        ],
+                      )
+                    },
+                  ],
+                );
+              },
+            ),
+          );
+        },
+      ).then((_) {
+        print("Mengambil data: ${indexFilter}");
+        if (indexFilter == "") {
+          setState(() {
+            isFiltered = false;
+            selectedStatusFilter = "";
+          });
+        }
+        _initTransaction(
+          status: indexFilter,
+        );
+      });
+    }
+
+    Widget filterItem({required String title}) {
+      return InkWell(
+        onTap: () {
+          filterModalBottomSheet(title: title);
+        },
+        child: Container(
+          margin: const EdgeInsets.only(
+            top: 20,
+          ),
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: isFiltered &&
+                    title.toLowerCase().contains("status") &&
+                    selectedStatusFilter != ""
+                ? backgroundColor3
+                : isFiltered &&
+                        title.toLowerCase().contains("tanggal") &&
+                        selectedDateFilter != ""
+                    ? backgroundColor3
+                    : Colors.grey.withAlpha(70),
+            borderRadius: BorderRadius.circular(
+              20,
+            ),
+          ),
+          child: Row(
+            children: [
+              Text(
+                isFiltered &&
+                        title.toLowerCase().contains("status") &&
+                        selectedStatusFilter != ""
+                    ? selectedStatusFilter
+                    : isFiltered &&
+                            title.toLowerCase().contains("tanggal") &&
+                            selectedDateFilter != ""
+                        ? selectedDateFilter
+                        : title,
+                style: poppins.copyWith(
+                  color: isFiltered &&
+                          title.toLowerCase().contains("status") &&
+                          selectedStatusFilter != ""
+                      ? Colors.white
+                      : isFiltered &&
+                              title.toLowerCase().contains("tanggal") &&
+                              selectedDateFilter != ""
+                          ? Colors.white
+                          : Colors.black,
+                ),
+              ),
+              Icon(
+                Icons.keyboard_arrow_down_rounded,
+                color: isFiltered &&
+                        title.toLowerCase().contains("status") &&
+                        selectedStatusFilter != ""
+                    ? Colors.white
+                    : isFiltered &&
+                            title.toLowerCase().contains("tanggal") &&
+                            selectedDateFilter != ""
+                        ? Colors.white
+                        : Colors.black,
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     Widget filter() {
       return Container(
-        margin: const EdgeInsets.symmetric(
-          horizontal: 20,
-        ),
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
             children: [
-              DropdownButton(
-                // Initial Value
-                value: dropdownvalue,
-
-                // Down Arrow Icon
-                icon: const Icon(Icons.keyboard_arrow_down),
-
-                // Array list of items
-                items: items.map((String items) {
-                  return DropdownMenuItem(
-                    value: items,
-                    child: Text(items),
-                  );
-                }).toList(),
-                // After selecting the desired option,it will
-                // change button value to selected value
-                onChanged: (String? newValue) {
-                  setState(() {
-                    dropdownvalue = newValue!;
-                    int index = items.indexOf(newValue);
-                    print("indexnya adalah ${index - 1}");
-                    _initTransaction(
-                        status: "${index - 1 < 0 ? "" : index - 1}");
-                  });
-                },
+              const SizedBox(
+                width: 24,
               ),
-              Container(
-                decoration: BoxDecoration(boxShadow: []),
-              )
-              // Text(
-              //   "Status",
-              // ),
-              // Text(
-              //   "Status",
-              // ),
+
+              if (!isFiltered) ...{
+                const SizedBox(),
+              } else ...{
+                //NOTE : Cancel semua filter
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      isFiltered = false;
+                      selectedDateFilter = "";
+                      selectedStatusFilter = "";
+                    });
+                    _initTransaction();
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(top: 24),
+                    child: const Icon(
+                      Icons.close,
+                    ),
+                  ),
+                ),
+
+                const SizedBox(
+                  width: 10,
+                ),
+              },
+
+              // NOTE: Status
+              filterItem(title: "Semua Status"),
+
+              const SizedBox(
+                width: 10,
+              ),
+
+              // NOTE: Tanggal
+              filterItem(title: "Semua Tanggal"),
             ],
           ),
         ),
@@ -414,10 +647,11 @@ class _TransactionPageState extends State<TransactionPage> {
                 width: MediaQuery.sizeOf(context).width,
                 child: RefreshIndicator(
                   onRefresh: () async {
-                    int index = items.indexOf(dropdownvalue);
-                    print("indexnya adalah ${index - 1}");
-                    _initTransaction(
-                        status: "${index - 1 < 0 ? "" : index - 1}");
+                    // int index = items.indexOf(dropdownvalue);
+                    // print("indexnya adalah ${index - 1}");
+                    // _initTransaction(
+                    //     status: "${index - 1 < 0 ? "" : index - 1}");
+                    _initTransaction();
                   },
                   color: backgroundColor1,
                   child: Column(
