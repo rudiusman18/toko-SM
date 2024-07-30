@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:tokoSM/models/transaction_model.dart';
 import 'package:tokoSM/pages/bottom_navigation_page/transaction_page/detail_transaction_page.dart';
 import 'package:tokoSM/providers/login_provider.dart';
@@ -35,6 +36,9 @@ class _TransactionPageState extends State<TransactionPage> {
     'Selesai',
     'Dibatalkan',
   ];
+
+  String startDate = "";
+  String endDate = "";
 
   bool isFiltered = false;
   String selectedStatusFilter = "";
@@ -390,15 +394,32 @@ class _TransactionPageState extends State<TransactionPage> {
     //   );
     // }
 
+    // ignore: no_leading_underscores_for_local_identifiers
+    void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
+      setState(() {
+        if (args.value is PickerDateRange) {
+          isFiltered = true;
+          // ignore: lines_longer_than_80_chars
+          ' ${DateFormat('dd/MM/yyyy').format(args.value.endDate ?? args.value.startDate)}';
+          startDate =
+              "${DateFormat('yyyy/MM/dd').format(args.value.startDate)}";
+          endDate =
+              "${DateFormat('yyyy/MM/dd').format(args.value.endDate ?? args.value.startDate)}";
+          selectedDateFilter = "$startDate - $endDate";
+        }
+      });
+    }
+
     void filterModalBottomSheet({required String title}) {
       String indexFilter = "";
+      DateFormat dateFormat = DateFormat("yyyy/MM/dd");
       showModalBottomSheet<void>(
         backgroundColor: Colors.transparent,
         context: context,
         builder: (BuildContext context) {
           return Container(
             padding: const EdgeInsets.all(24),
-            height: MediaQuery.sizeOf(context).height * 0.4,
+            height: MediaQuery.sizeOf(context).height * 0.55,
             decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.vertical(
@@ -409,6 +430,7 @@ class _TransactionPageState extends State<TransactionPage> {
             ),
             child: StatefulBuilder(
               builder: (context, setState) {
+                print("startDate: $startDate");
                 return ListView(
                   children: [
                     Row(
@@ -424,17 +446,40 @@ class _TransactionPageState extends State<TransactionPage> {
                         const SizedBox(
                           width: 10,
                         ),
-                        Text(
-                          title.toLowerCase().contains("status")
-                              ? "Mau lihat status apa?"
-                              : "Pilih tanggal",
-                          style: poppins.copyWith(
-                            fontWeight: semiBold,
-                            fontSize: 18,
+                        Expanded(
+                          child: Text(
+                            title.toLowerCase().contains("status")
+                                ? "Mau lihat status apa?"
+                                : "Pilih tanggal",
+                            style: poppins.copyWith(
+                              fontWeight: semiBold,
+                              fontSize: 18,
+                            ),
                           ),
                         ),
+                        !title.toLowerCase().contains("tanggal")
+                            ? const SizedBox()
+                            : ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: backgroundColor3,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    isFiltered = false;
+                                    selectedDateFilter = "";
+                                    startDate = "";
+                                    endDate = "";
+                                    Navigator.pop(context);
+                                    filterModalBottomSheet(title: title);
+                                  });
+                                },
+                                child: Text(
+                                  "Semua Tanggal",
+                                  style: poppins,
+                                )),
                       ],
                     ),
+                    // NOTE: Mau lihat status apa?
                     if (title.toLowerCase().contains("status")) ...{
                       Wrap(
                         children: [
@@ -480,6 +525,31 @@ class _TransactionPageState extends State<TransactionPage> {
                           }
                         ],
                       )
+                    }
+                    // NOTE: Pilih Tanggal
+                    else ...{
+                      Theme(
+                        data: Theme.of(context).copyWith(
+                          colorScheme: ColorScheme.light(
+                            primary:
+                                backgroundColor1, // header background color
+                            onPrimary: Colors.white, // header text color
+                          ),
+                        ),
+                        child: SfDateRangePicker(
+                          onSelectionChanged: _onSelectionChanged,
+                          selectionMode: DateRangePickerSelectionMode.range,
+                          initialSelectedRange: startDate != ""
+                              ? PickerDateRange(
+                                  dateFormat.parse(startDate),
+                                  dateFormat.parse(endDate),
+                                )
+                              : PickerDateRange(
+                                  DateTime.now(),
+                                  DateTime.now(),
+                                ),
+                        ),
+                      ),
                     },
                   ],
                 );
@@ -488,8 +558,7 @@ class _TransactionPageState extends State<TransactionPage> {
           );
         },
       ).then((_) {
-        print("Mengambil data: ${indexFilter}");
-        if (indexFilter == "") {
+        if (indexFilter == "" && title.toLowerCase().contains("status")) {
           setState(() {
             isFiltered = false;
             selectedStatusFilter = "";
@@ -497,6 +566,8 @@ class _TransactionPageState extends State<TransactionPage> {
         }
         _initTransaction(
           status: indexFilter,
+          tanggalAwal: startDate,
+          tanggalAkhir: endDate,
         );
       });
     }
@@ -587,6 +658,8 @@ class _TransactionPageState extends State<TransactionPage> {
                       isFiltered = false;
                       selectedDateFilter = "";
                       selectedStatusFilter = "";
+                      startDate = "";
+                      endDate = "";
                     });
                     _initTransaction();
                   },
@@ -612,6 +685,10 @@ class _TransactionPageState extends State<TransactionPage> {
 
               // NOTE: Tanggal
               filterItem(title: "Semua Tanggal"),
+
+              const SizedBox(
+                width: 24,
+              ),
             ],
           ),
         ),

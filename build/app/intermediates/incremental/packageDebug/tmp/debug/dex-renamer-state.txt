@@ -1,7 +1,19 @@
-#Mon Jul 29 20:29:22 ICT 2024
-base.0=D\:\\My_Project\\Project with mas galang\\toko-SM\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
-base.1=D\:\\My_Project\\Project with mas galang\\toko-SM\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes2.dex
+#Tue Jul 30 10:51:11 WIB 2024
+base.0=/Users/enygma/Documents/github/toko-SM/build/app/intermediates/dex/debug/mergeExtDexDebug/classes.dex
+base.1=/Users/enygma/Documents/github/toko-SM/build/app/intermediates/dex/debug/mergeLibDexDebug/0/classes.dex
+base.2=/Users/enygma/Documents/github/toko-SM/build/app/intermediates/dex/debug/mergeProjectDexDebug/0/classes.dex
+base.3=/Users/enygma/Documents/github/toko-SM/build/app/intermediates/dex/debug/mergeProjectDexDebug/1/classes.dex
+base.4=/Users/enygma/Documents/github/toko-SM/build/app/intermediates/dex/debug/mergeProjectDexDebug/14/classes.dex
+base.5=/Users/enygma/Documents/github/toko-SM/build/app/intermediates/dex/debug/mergeExtDexDebug/classes2.dex
 path.0=classes.dex
-path.1=classes2.dex
+path.1=0/classes.dex
+path.2=0/classes.dex
+path.3=1/classes.dex
+path.4=14/classes.dex
+path.5=classes2.dex
 renamed.0=classes.dex
 renamed.1=classes2.dex
+renamed.2=classes3.dex
+renamed.3=classes4.dex
+renamed.4=classes5.dex
+renamed.5=classes6.dex

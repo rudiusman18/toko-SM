@@ -4,7 +4,7 @@
             "outputFile": "id.project.tokoSM.app-mergeDebugResources-18:/values-v24/values-v24.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\Rudi\\.gradle\\caches\\transforms-3\\33aeac6041f7f32f65addefb234a1ba0\\transformed\\media-1.4.1\\res\\values-v24\\values-v24.xml",
+                    "source": "/Users/enygma/.gradle/caches/transforms-3/33aeac6041f7f32f65addefb234a1ba0/transformed/media-1.4.1/res/values-v24/values-v24.xml",
                     "from": {
                         "startLines": "2,3,4,5",
                         "startColumns": "4,4,4,4",

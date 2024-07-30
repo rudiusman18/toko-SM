@@ -11,12 +11,6 @@ class KurirService {
 
   Future<KurirModel> retrieveKurir(
       {required String token, required String cabangId}) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    DataCabang cabangterpilih = DataCabang();
-    if (prefs.getString("cabangterpilih") != null) {
-      cabangterpilih = DataCabang.fromJson(
-          jsonDecode(prefs.getString("cabangterpilih") ?? ""));
-    }
     var url = Uri.parse("${baseURL}pengaturan/kurir?cabang=$cabangId");
     var header = {
       'Content-Type': 'application/json',
