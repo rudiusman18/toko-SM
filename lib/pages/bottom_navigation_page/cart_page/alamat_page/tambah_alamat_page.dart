@@ -36,7 +36,7 @@ class _TambahAlamatPageState extends State<TambahAlamatPage> {
                 child: InAppWebView(
                   initialUrlRequest: URLRequest(
                       url: Uri.parse(
-                          "https://103.127.132.116/api/v2/map?lat=-7&lng=112")),
+                          "http://10.10.10.90:3000/api/v2/map?lat=-7&lng=112")),
                   initialOptions: InAppWebViewGroupOptions(
                     android: AndroidInAppWebViewOptions(
                       // allowFileAccessFromFileURLs: true,
