@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:provider/provider.dart';
+import 'package:tokoSM/providers/login_provider.dart';
 
 class TambahAlamatPage extends StatefulWidget {
   @override
@@ -14,6 +16,7 @@ class _TambahAlamatPageState extends State<TambahAlamatPage> {
 
   @override
   Widget build(BuildContext context) {
+    LoginProvider loginProvider = Provider.of(context);
     return SafeArea(
       child: Scaffold(
         body: Container(
@@ -36,7 +39,7 @@ class _TambahAlamatPageState extends State<TambahAlamatPage> {
                 child: InAppWebView(
                   initialUrlRequest: URLRequest(
                       url: Uri.parse(
-                          "http://10.10.10.90:3000/api/v2/map?lat=-7&lng=112")),
+                          "http://10.10.10.90:3000/api/v2/map?lat=-7&lng=112&kategori=customer&id=${loginProvider.loginModel.data?.id}")),
                   initialOptions: InAppWebViewGroupOptions(
                     android: AndroidInAppWebViewOptions(
                       // allowFileAccessFromFileURLs: true,
