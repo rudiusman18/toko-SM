@@ -21,131 +21,223 @@
 17    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 17-->/Users/enygma/Documents/github/toko-SM/android/app/src/main/AndroidManifest.xml:4:5-81
 17-->/Users/enygma/Documents/github/toko-SM/android/app/src/main/AndroidManifest.xml:4:22-78
-18    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-18-->[com.google.android.exoplayer:exoplayer-core:2.18.7] /Users/enygma/.gradle/caches/transforms-3/e255c6ce9910a673f2619b479a7d74a8/transformed/jetified-exoplayer-core-2.18.7/AndroidManifest.xml:24:5-79
-18-->[com.google.android.exoplayer:exoplayer-core:2.18.7] /Users/enygma/.gradle/caches/transforms-3/e255c6ce9910a673f2619b479a7d74a8/transformed/jetified-exoplayer-core-2.18.7/AndroidManifest.xml:24:22-76
-19
-20    <queries>
-20-->[androidx.media2:media2-session:1.2.1] /Users/enygma/.gradle/caches/transforms-3/1c11fcd5d741b7583794ec56efdeaa69/transformed/jetified-media2-session-1.2.1/AndroidManifest.xml:24:5-34:15
-21        <intent>
-21-->[androidx.media2:media2-session:1.2.1] /Users/enygma/.gradle/caches/transforms-3/1c11fcd5d741b7583794ec56efdeaa69/transformed/jetified-media2-session-1.2.1/AndroidManifest.xml:25:9-27:18
-22            <action android:name="android.media.browse.MediaBrowserService" />
-22-->[androidx.media2:media2-session:1.2.1] /Users/enygma/.gradle/caches/transforms-3/1c11fcd5d741b7583794ec56efdeaa69/transformed/jetified-media2-session-1.2.1/AndroidManifest.xml:26:13-79
-22-->[androidx.media2:media2-session:1.2.1] /Users/enygma/.gradle/caches/transforms-3/1c11fcd5d741b7583794ec56efdeaa69/transformed/jetified-media2-session-1.2.1/AndroidManifest.xml:26:21-76
-23        </intent>
-24        <intent>
-24-->[androidx.media2:media2-session:1.2.1] /Users/enygma/.gradle/caches/transforms-3/1c11fcd5d741b7583794ec56efdeaa69/transformed/jetified-media2-session-1.2.1/AndroidManifest.xml:28:9-30:18
-25            <action android:name="androidx.media2.session.MediaSessionService" />
-25-->[androidx.media2:media2-session:1.2.1] /Users/enygma/.gradle/caches/transforms-3/1c11fcd5d741b7583794ec56efdeaa69/transformed/jetified-media2-session-1.2.1/AndroidManifest.xml:29:13-82
-25-->[androidx.media2:media2-session:1.2.1] /Users/enygma/.gradle/caches/transforms-3/1c11fcd5d741b7583794ec56efdeaa69/transformed/jetified-media2-session-1.2.1/AndroidManifest.xml:29:21-79
-26        </intent>
-27        <intent>
-27-->[androidx.media2:media2-session:1.2.1] /Users/enygma/.gradle/caches/transforms-3/1c11fcd5d741b7583794ec56efdeaa69/transformed/jetified-media2-session-1.2.1/AndroidManifest.xml:31:9-33:18
-28            <action android:name="androidx.media2.session.MediaLibraryService" />
-28-->[androidx.media2:media2-session:1.2.1] /Users/enygma/.gradle/caches/transforms-3/1c11fcd5d741b7583794ec56efdeaa69/transformed/jetified-media2-session-1.2.1/AndroidManifest.xml:32:13-82
-28-->[androidx.media2:media2-session:1.2.1] /Users/enygma/.gradle/caches/transforms-3/1c11fcd5d741b7583794ec56efdeaa69/transformed/jetified-media2-session-1.2.1/AndroidManifest.xml:32:21-79
-29        </intent>
-30    </queries>
-31
-32    <permission
-32-->[androidx.core:core:1.10.1] /Users/enygma/.gradle/caches/transforms-3/c4988ff80110f75080a936fc6f044848/transformed/core-1.10.1/AndroidManifest.xml:22:5-24:47
-33        android:name="id.project.tokoSM.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
-33-->[androidx.core:core:1.10.1] /Users/enygma/.gradle/caches/transforms-3/c4988ff80110f75080a936fc6f044848/transformed/core-1.10.1/AndroidManifest.xml:23:9-81
-34        android:protectionLevel="signature" />
-34-->[androidx.core:core:1.10.1] /Users/enygma/.gradle/caches/transforms-3/c4988ff80110f75080a936fc6f044848/transformed/core-1.10.1/AndroidManifest.xml:24:9-44
+18
+19    <queries>
+19-->[:flutter_inappwebview] /Users/enygma/Documents/github/toko-SM/build/flutter_inappwebview/intermediates/merged_manifest/debug/AndroidManifest.xml:9:5-13:15
+20        <intent>
+20-->[:flutter_inappwebview] /Users/enygma/Documents/github/toko-SM/build/flutter_inappwebview/intermediates/merged_manifest/debug/AndroidManifest.xml:10:9-12:18
+21            <action android:name="android.support.customtabs.action.CustomTabsService" />
+21-->[:flutter_inappwebview] /Users/enygma/Documents/github/toko-SM/build/flutter_inappwebview/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-90
+21-->[:flutter_inappwebview] /Users/enygma/Documents/github/toko-SM/build/flutter_inappwebview/intermediates/merged_manifest/debug/AndroidManifest.xml:11:21-87
+22        </intent>
+23        <intent>
+23-->[androidx.media2:media2-session:1.2.1] /Users/enygma/.gradle/caches/transforms-3/1c11fcd5d741b7583794ec56efdeaa69/transformed/jetified-media2-session-1.2.1/AndroidManifest.xml:25:9-27:18
+24            <action android:name="android.media.browse.MediaBrowserService" />
+24-->[androidx.media2:media2-session:1.2.1] /Users/enygma/.gradle/caches/transforms-3/1c11fcd5d741b7583794ec56efdeaa69/transformed/jetified-media2-session-1.2.1/AndroidManifest.xml:26:13-79
+24-->[androidx.media2:media2-session:1.2.1] /Users/enygma/.gradle/caches/transforms-3/1c11fcd5d741b7583794ec56efdeaa69/transformed/jetified-media2-session-1.2.1/AndroidManifest.xml:26:21-76
+25        </intent>
+26        <intent>
+26-->[androidx.media2:media2-session:1.2.1] /Users/enygma/.gradle/caches/transforms-3/1c11fcd5d741b7583794ec56efdeaa69/transformed/jetified-media2-session-1.2.1/AndroidManifest.xml:28:9-30:18
+27            <action android:name="androidx.media2.session.MediaSessionService" />
+27-->[androidx.media2:media2-session:1.2.1] /Users/enygma/.gradle/caches/transforms-3/1c11fcd5d741b7583794ec56efdeaa69/transformed/jetified-media2-session-1.2.1/AndroidManifest.xml:29:13-82
+27-->[androidx.media2:media2-session:1.2.1] /Users/enygma/.gradle/caches/transforms-3/1c11fcd5d741b7583794ec56efdeaa69/transformed/jetified-media2-session-1.2.1/AndroidManifest.xml:29:21-79
+28        </intent>
+29        <intent>
+29-->[androidx.media2:media2-session:1.2.1] /Users/enygma/.gradle/caches/transforms-3/1c11fcd5d741b7583794ec56efdeaa69/transformed/jetified-media2-session-1.2.1/AndroidManifest.xml:31:9-33:18
+30            <action android:name="androidx.media2.session.MediaLibraryService" />
+30-->[androidx.media2:media2-session:1.2.1] /Users/enygma/.gradle/caches/transforms-3/1c11fcd5d741b7583794ec56efdeaa69/transformed/jetified-media2-session-1.2.1/AndroidManifest.xml:32:13-82
+30-->[androidx.media2:media2-session:1.2.1] /Users/enygma/.gradle/caches/transforms-3/1c11fcd5d741b7583794ec56efdeaa69/transformed/jetified-media2-session-1.2.1/AndroidManifest.xml:32:21-79
+31        </intent>
+32    </queries>
+33
+34    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+34-->[com.google.android.exoplayer:exoplayer-core:2.18.7] /Users/enygma/.gradle/caches/transforms-3/e255c6ce9910a673f2619b479a7d74a8/transformed/jetified-exoplayer-core-2.18.7/AndroidManifest.xml:24:5-79
+34-->[com.google.android.exoplayer:exoplayer-core:2.18.7] /Users/enygma/.gradle/caches/transforms-3/e255c6ce9910a673f2619b479a7d74a8/transformed/jetified-exoplayer-core-2.18.7/AndroidManifest.xml:24:22-76
 35
-36    <uses-permission android:name="id.project.tokoSM.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
-36-->[androidx.core:core:1.10.1] /Users/enygma/.gradle/caches/transforms-3/c4988ff80110f75080a936fc6f044848/transformed/core-1.10.1/AndroidManifest.xml:26:5-97
-36-->[androidx.core:core:1.10.1] /Users/enygma/.gradle/caches/transforms-3/c4988ff80110f75080a936fc6f044848/transformed/core-1.10.1/AndroidManifest.xml:26:22-94
-37
-38    <application
-39        android:name="android.app.Application"
-40        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-40-->[androidx.core:core:1.10.1] /Users/enygma/.gradle/caches/transforms-3/c4988ff80110f75080a936fc6f044848/transformed/core-1.10.1/AndroidManifest.xml:28:18-86
-41        android:debuggable="true"
-42        android:icon="@mipmap/ic_launcher"
-43        android:label="tokoSM" >
-44        <activity
-45            android:name="id.project.tokoSM.MainActivity"
-46            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
-47            android:exported="true"
-48            android:hardwareAccelerated="true"
-49            android:launchMode="singleTop"
-50            android:theme="@style/LaunchTheme"
-51            android:windowSoftInputMode="adjustResize" >
-52
-53            <!--
-54                 Specifies an Android theme to apply to this Activity as soon as
-55                 the Android process has started. This theme is visible to the user
-56                 while the Flutter UI initializes. After that, this theme continues
-57                 to determine the Window background behind the Flutter UI.
-58            -->
-59            <meta-data
-60                android:name="io.flutter.embedding.android.NormalTheme"
-61                android:resource="@style/NormalTheme" />
-62
-63            <intent-filter>
-64                <action android:name="android.intent.action.MAIN" />
-65
-66                <category android:name="android.intent.category.LAUNCHER" />
-67            </intent-filter>
-68        </activity>
-69        <!--
-70             Don't delete the meta-data below.
-71             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
-72        -->
-73        <meta-data
-74            android:name="flutterEmbedding"
-75            android:value="2" />
-76
-77        <service
-77-->[:geolocator_android] /Users/enygma/Documents/github/toko-SM/build/geolocator_android/intermediates/merged_manifest/debug/AndroidManifest.xml:10:9-14:56
-78            android:name="com.baseflow.geolocator.GeolocatorLocationService"
-78-->[:geolocator_android] /Users/enygma/Documents/github/toko-SM/build/geolocator_android/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-77
-79            android:enabled="true"
-79-->[:geolocator_android] /Users/enygma/Documents/github/toko-SM/build/geolocator_android/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-35
-80            android:exported="false"
-80-->[:geolocator_android] /Users/enygma/Documents/github/toko-SM/build/geolocator_android/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-37
-81            android:foregroundServiceType="location" />
-81-->[:geolocator_android] /Users/enygma/Documents/github/toko-SM/build/geolocator_android/intermediates/merged_manifest/debug/AndroidManifest.xml:14:13-53
-82
-83        <activity
-83-->[:url_launcher_android] /Users/enygma/Documents/github/toko-SM/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:10:9-13:74
-84            android:name="io.flutter.plugins.urllauncher.WebViewActivity"
-84-->[:url_launcher_android] /Users/enygma/Documents/github/toko-SM/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-74
+36    <permission
+36-->[androidx.core:core:1.10.1] /Users/enygma/.gradle/caches/transforms-3/c4988ff80110f75080a936fc6f044848/transformed/core-1.10.1/AndroidManifest.xml:22:5-24:47
+37        android:name="id.project.tokoSM.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+37-->[androidx.core:core:1.10.1] /Users/enygma/.gradle/caches/transforms-3/c4988ff80110f75080a936fc6f044848/transformed/core-1.10.1/AndroidManifest.xml:23:9-81
+38        android:protectionLevel="signature" />
+38-->[androidx.core:core:1.10.1] /Users/enygma/.gradle/caches/transforms-3/c4988ff80110f75080a936fc6f044848/transformed/core-1.10.1/AndroidManifest.xml:24:9-44
+39
+40    <uses-permission android:name="id.project.tokoSM.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+40-->[androidx.core:core:1.10.1] /Users/enygma/.gradle/caches/transforms-3/c4988ff80110f75080a936fc6f044848/transformed/core-1.10.1/AndroidManifest.xml:26:5-97
+40-->[androidx.core:core:1.10.1] /Users/enygma/.gradle/caches/transforms-3/c4988ff80110f75080a936fc6f044848/transformed/core-1.10.1/AndroidManifest.xml:26:22-94
+41
+42    <application
+43        android:name="android.app.Application"
+44        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+44-->[androidx.core:core:1.10.1] /Users/enygma/.gradle/caches/transforms-3/c4988ff80110f75080a936fc6f044848/transformed/core-1.10.1/AndroidManifest.xml:28:18-86
+45        android:debuggable="true"
+46        android:icon="@mipmap/ic_launcher"
+47        android:label="tokoSM"
+48        android:usesCleartextTraffic="true" >
+49        <activity
+50            android:name="id.project.tokoSM.MainActivity"
+51            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+52            android:exported="true"
+53            android:hardwareAccelerated="true"
+54            android:launchMode="singleTop"
+55            android:theme="@style/LaunchTheme"
+56            android:windowSoftInputMode="adjustResize" >
+57
+58            <!--
+59                 Specifies an Android theme to apply to this Activity as soon as
+60                 the Android process has started. This theme is visible to the user
+61                 while the Flutter UI initializes. After that, this theme continues
+62                 to determine the Window background behind the Flutter UI.
+63            -->
+64            <meta-data
+65                android:name="io.flutter.embedding.android.NormalTheme"
+66                android:resource="@style/NormalTheme" />
+67
+68            <intent-filter>
+69                <action android:name="android.intent.action.MAIN" />
+70
+71                <category android:name="android.intent.category.LAUNCHER" />
+72            </intent-filter>
+73        </activity>
+74        <!--
+75             Don't delete the meta-data below.
+76             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
+77        -->
+78        <meta-data
+79            android:name="flutterEmbedding"
+80            android:value="2" />
+81
+82        <service
+82-->[:geolocator_android] /Users/enygma/Documents/github/toko-SM/build/geolocator_android/intermediates/merged_manifest/debug/AndroidManifest.xml:10:9-14:56
+83            android:name="com.baseflow.geolocator.GeolocatorLocationService"
+83-->[:geolocator_android] /Users/enygma/Documents/github/toko-SM/build/geolocator_android/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-77
+84            android:enabled="true"
+84-->[:geolocator_android] /Users/enygma/Documents/github/toko-SM/build/geolocator_android/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-35
 85            android:exported="false"
-85-->[:url_launcher_android] /Users/enygma/Documents/github/toko-SM/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-37
-86            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
-86-->[:url_launcher_android] /Users/enygma/Documents/github/toko-SM/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-71
+85-->[:geolocator_android] /Users/enygma/Documents/github/toko-SM/build/geolocator_android/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-37
+86            android:foregroundServiceType="location" />
+86-->[:geolocator_android] /Users/enygma/Documents/github/toko-SM/build/geolocator_android/intermediates/merged_manifest/debug/AndroidManifest.xml:14:13-53
 87
-88        <uses-library
-88-->[androidx.window:window:1.0.0-beta04] /Users/enygma/.gradle/caches/transforms-3/25cee5f028ac2a6b79fd6278ff5b59e2/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:25:9-27:40
-89            android:name="androidx.window.extensions"
-89-->[androidx.window:window:1.0.0-beta04] /Users/enygma/.gradle/caches/transforms-3/25cee5f028ac2a6b79fd6278ff5b59e2/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:26:13-54
-90            android:required="false" />
-90-->[androidx.window:window:1.0.0-beta04] /Users/enygma/.gradle/caches/transforms-3/25cee5f028ac2a6b79fd6278ff5b59e2/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:27:13-37
-91        <uses-library
-91-->[androidx.window:window:1.0.0-beta04] /Users/enygma/.gradle/caches/transforms-3/25cee5f028ac2a6b79fd6278ff5b59e2/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:28:9-30:40
-92            android:name="androidx.window.sidecar"
-92-->[androidx.window:window:1.0.0-beta04] /Users/enygma/.gradle/caches/transforms-3/25cee5f028ac2a6b79fd6278ff5b59e2/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:29:13-51
-93            android:required="false" />
-93-->[androidx.window:window:1.0.0-beta04] /Users/enygma/.gradle/caches/transforms-3/25cee5f028ac2a6b79fd6278ff5b59e2/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:30:13-37
-94
-95        <activity
-95-->[com.google.android.gms:play-services-base:18.1.0] /Users/enygma/.gradle/caches/transforms-3/781e5567158e59d38ee2b89930f9808b/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:20:9-22:45
-96            android:name="com.google.android.gms.common.api.GoogleApiActivity"
-96-->[com.google.android.gms:play-services-base:18.1.0] /Users/enygma/.gradle/caches/transforms-3/781e5567158e59d38ee2b89930f9808b/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:20:19-85
-97            android:exported="false"
-97-->[com.google.android.gms:play-services-base:18.1.0] /Users/enygma/.gradle/caches/transforms-3/781e5567158e59d38ee2b89930f9808b/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:22:19-43
-98            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-98-->[com.google.android.gms:play-services-base:18.1.0] /Users/enygma/.gradle/caches/transforms-3/781e5567158e59d38ee2b89930f9808b/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:21:19-78
-99
-100        <meta-data
-100-->[com.google.android.gms:play-services-basement:18.1.0] /Users/enygma/.gradle/caches/transforms-3/58aa1384bde170d075503b845cfcf44c/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:21:9-23:69
-101            android:name="com.google.android.gms.version"
-101-->[com.google.android.gms:play-services-basement:18.1.0] /Users/enygma/.gradle/caches/transforms-3/58aa1384bde170d075503b845cfcf44c/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:22:13-58
-102            android:value="@integer/google_play_services_version" />
-102-->[com.google.android.gms:play-services-basement:18.1.0] /Users/enygma/.gradle/caches/transforms-3/58aa1384bde170d075503b845cfcf44c/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:23:13-66
-103    </application>
-104
-105</manifest>
+88        <activity
+88-->[:url_launcher_android] /Users/enygma/Documents/github/toko-SM/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:10:9-13:74
+89            android:name="io.flutter.plugins.urllauncher.WebViewActivity"
+89-->[:url_launcher_android] /Users/enygma/Documents/github/toko-SM/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-74
+90            android:exported="false"
+90-->[:url_launcher_android] /Users/enygma/Documents/github/toko-SM/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-37
+91            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+91-->[:url_launcher_android] /Users/enygma/Documents/github/toko-SM/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-71
+92        <activity
+92-->[:flutter_inappwebview] /Users/enygma/Documents/github/toko-SM/build/flutter_inappwebview/intermediates/merged_manifest/debug/AndroidManifest.xml:16:9-20:47
+93            android:name="com.pichillilorenzo.flutter_inappwebview.in_app_browser.InAppBrowserActivity"
+93-->[:flutter_inappwebview] /Users/enygma/Documents/github/toko-SM/build/flutter_inappwebview/intermediates/merged_manifest/debug/AndroidManifest.xml:17:13-104
+94            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density"
+94-->[:flutter_inappwebview] /Users/enygma/Documents/github/toko-SM/build/flutter_inappwebview/intermediates/merged_manifest/debug/AndroidManifest.xml:18:13-137
+95            android:exported="false"
+95-->[:flutter_inappwebview] /Users/enygma/Documents/github/toko-SM/build/flutter_inappwebview/intermediates/merged_manifest/debug/AndroidManifest.xml:19:13-37
+96            android:theme="@style/AppTheme" />
+96-->[:flutter_inappwebview] /Users/enygma/Documents/github/toko-SM/build/flutter_inappwebview/intermediates/merged_manifest/debug/AndroidManifest.xml:20:13-44
+97        <activity
+97-->[:flutter_inappwebview] /Users/enygma/Documents/github/toko-SM/build/flutter_inappwebview/intermediates/merged_manifest/debug/AndroidManifest.xml:21:9-24:55
+98            android:name="com.pichillilorenzo.flutter_inappwebview.chrome_custom_tabs.ChromeCustomTabsActivity"
+98-->[:flutter_inappwebview] /Users/enygma/Documents/github/toko-SM/build/flutter_inappwebview/intermediates/merged_manifest/debug/AndroidManifest.xml:22:13-112
+99            android:exported="false"
+99-->[:flutter_inappwebview] /Users/enygma/Documents/github/toko-SM/build/flutter_inappwebview/intermediates/merged_manifest/debug/AndroidManifest.xml:23:13-37
+100            android:theme="@style/ThemeTransparent" />
+100-->[:flutter_inappwebview] /Users/enygma/Documents/github/toko-SM/build/flutter_inappwebview/intermediates/merged_manifest/debug/AndroidManifest.xml:24:13-52
+101        <activity
+101-->[:flutter_inappwebview] /Users/enygma/Documents/github/toko-SM/build/flutter_inappwebview/intermediates/merged_manifest/debug/AndroidManifest.xml:25:9-28:55
+102            android:name="com.pichillilorenzo.flutter_inappwebview.chrome_custom_tabs.TrustedWebActivity"
+102-->[:flutter_inappwebview] /Users/enygma/Documents/github/toko-SM/build/flutter_inappwebview/intermediates/merged_manifest/debug/AndroidManifest.xml:26:13-106
+103            android:exported="false"
+103-->[:flutter_inappwebview] /Users/enygma/Documents/github/toko-SM/build/flutter_inappwebview/intermediates/merged_manifest/debug/AndroidManifest.xml:27:13-37
+104            android:theme="@style/ThemeTransparent" />
+104-->[:flutter_inappwebview] /Users/enygma/Documents/github/toko-SM/build/flutter_inappwebview/intermediates/merged_manifest/debug/AndroidManifest.xml:28:13-52
+105        <activity
+105-->[:flutter_inappwebview] /Users/enygma/Documents/github/toko-SM/build/flutter_inappwebview/intermediates/merged_manifest/debug/AndroidManifest.xml:29:9-33:55
+106            android:name="com.pichillilorenzo.flutter_inappwebview.chrome_custom_tabs.ChromeCustomTabsActivitySingleInstance"
+106-->[:flutter_inappwebview] /Users/enygma/Documents/github/toko-SM/build/flutter_inappwebview/intermediates/merged_manifest/debug/AndroidManifest.xml:30:13-126
+107            android:exported="false"
+107-->[:flutter_inappwebview] /Users/enygma/Documents/github/toko-SM/build/flutter_inappwebview/intermediates/merged_manifest/debug/AndroidManifest.xml:31:13-37
+108            android:launchMode="singleInstance"
+108-->[:flutter_inappwebview] /Users/enygma/Documents/github/toko-SM/build/flutter_inappwebview/intermediates/merged_manifest/debug/AndroidManifest.xml:32:13-48
+109            android:theme="@style/ThemeTransparent" />
+109-->[:flutter_inappwebview] /Users/enygma/Documents/github/toko-SM/build/flutter_inappwebview/intermediates/merged_manifest/debug/AndroidManifest.xml:33:13-52
+110        <activity
+110-->[:flutter_inappwebview] /Users/enygma/Documents/github/toko-SM/build/flutter_inappwebview/intermediates/merged_manifest/debug/AndroidManifest.xml:34:9-38:55
+111            android:name="com.pichillilorenzo.flutter_inappwebview.chrome_custom_tabs.TrustedWebActivitySingleInstance"
+111-->[:flutter_inappwebview] /Users/enygma/Documents/github/toko-SM/build/flutter_inappwebview/intermediates/merged_manifest/debug/AndroidManifest.xml:35:13-120
+112            android:exported="false"
+112-->[:flutter_inappwebview] /Users/enygma/Documents/github/toko-SM/build/flutter_inappwebview/intermediates/merged_manifest/debug/AndroidManifest.xml:36:13-37
+113            android:launchMode="singleInstance"
+113-->[:flutter_inappwebview] /Users/enygma/Documents/github/toko-SM/build/flutter_inappwebview/intermediates/merged_manifest/debug/AndroidManifest.xml:37:13-48
+114            android:theme="@style/ThemeTransparent" />
+114-->[:flutter_inappwebview] /Users/enygma/Documents/github/toko-SM/build/flutter_inappwebview/intermediates/merged_manifest/debug/AndroidManifest.xml:38:13-52
+115
+116        <receiver
+116-->[:flutter_inappwebview] /Users/enygma/Documents/github/toko-SM/build/flutter_inappwebview/intermediates/merged_manifest/debug/AndroidManifest.xml:40:9-43:40
+117            android:name="com.pichillilorenzo.flutter_inappwebview.chrome_custom_tabs.ActionBroadcastReceiver"
+117-->[:flutter_inappwebview] /Users/enygma/Documents/github/toko-SM/build/flutter_inappwebview/intermediates/merged_manifest/debug/AndroidManifest.xml:41:13-111
+118            android:enabled="true"
+118-->[:flutter_inappwebview] /Users/enygma/Documents/github/toko-SM/build/flutter_inappwebview/intermediates/merged_manifest/debug/AndroidManifest.xml:42:13-35
+119            android:exported="false" />
+119-->[:flutter_inappwebview] /Users/enygma/Documents/github/toko-SM/build/flutter_inappwebview/intermediates/merged_manifest/debug/AndroidManifest.xml:43:13-37
+120
+121        <meta-data
+121-->[:flutter_inappwebview] /Users/enygma/Documents/github/toko-SM/build/flutter_inappwebview/intermediates/merged_manifest/debug/AndroidManifest.xml:45:9-47:36
+122            android:name="io.flutter.embedded_views_preview"
+122-->[:flutter_inappwebview] /Users/enygma/Documents/github/toko-SM/build/flutter_inappwebview/intermediates/merged_manifest/debug/AndroidManifest.xml:46:13-61
+123            android:value="true" />
+123-->[:flutter_inappwebview] /Users/enygma/Documents/github/toko-SM/build/flutter_inappwebview/intermediates/merged_manifest/debug/AndroidManifest.xml:47:13-33
+124
+125        <uses-library
+125-->[androidx.window:window:1.0.0-beta04] /Users/enygma/.gradle/caches/transforms-3/25cee5f028ac2a6b79fd6278ff5b59e2/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:25:9-27:40
+126            android:name="androidx.window.extensions"
+126-->[androidx.window:window:1.0.0-beta04] /Users/enygma/.gradle/caches/transforms-3/25cee5f028ac2a6b79fd6278ff5b59e2/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:26:13-54
+127            android:required="false" />
+127-->[androidx.window:window:1.0.0-beta04] /Users/enygma/.gradle/caches/transforms-3/25cee5f028ac2a6b79fd6278ff5b59e2/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:27:13-37
+128        <uses-library
+128-->[androidx.window:window:1.0.0-beta04] /Users/enygma/.gradle/caches/transforms-3/25cee5f028ac2a6b79fd6278ff5b59e2/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:28:9-30:40
+129            android:name="androidx.window.sidecar"
+129-->[androidx.window:window:1.0.0-beta04] /Users/enygma/.gradle/caches/transforms-3/25cee5f028ac2a6b79fd6278ff5b59e2/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:29:13-51
+130            android:required="false" />
+130-->[androidx.window:window:1.0.0-beta04] /Users/enygma/.gradle/caches/transforms-3/25cee5f028ac2a6b79fd6278ff5b59e2/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:30:13-37
+131
+132        <activity
+132-->[com.google.android.gms:play-services-base:18.1.0] /Users/enygma/.gradle/caches/transforms-3/781e5567158e59d38ee2b89930f9808b/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:20:9-22:45
+133            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+133-->[com.google.android.gms:play-services-base:18.1.0] /Users/enygma/.gradle/caches/transforms-3/781e5567158e59d38ee2b89930f9808b/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:20:19-85
+134            android:exported="false"
+134-->[com.google.android.gms:play-services-base:18.1.0] /Users/enygma/.gradle/caches/transforms-3/781e5567158e59d38ee2b89930f9808b/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:22:19-43
+135            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+135-->[com.google.android.gms:play-services-base:18.1.0] /Users/enygma/.gradle/caches/transforms-3/781e5567158e59d38ee2b89930f9808b/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:21:19-78
+136
+137        <meta-data
+137-->[com.google.android.gms:play-services-basement:18.1.0] /Users/enygma/.gradle/caches/transforms-3/58aa1384bde170d075503b845cfcf44c/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:21:9-23:69
+138            android:name="com.google.android.gms.version"
+138-->[com.google.android.gms:play-services-basement:18.1.0] /Users/enygma/.gradle/caches/transforms-3/58aa1384bde170d075503b845cfcf44c/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:22:13-58
+139            android:value="@integer/google_play_services_version" />
+139-->[com.google.android.gms:play-services-basement:18.1.0] /Users/enygma/.gradle/caches/transforms-3/58aa1384bde170d075503b845cfcf44c/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:23:13-66
+140
+141        <provider
+141-->[androidx.emoji2:emoji2:1.2.0] /Users/enygma/.gradle/caches/transforms-3/e04bc3769bedd8dd6f8ca688986b0355/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:24:9-32:20
+142            android:name="androidx.startup.InitializationProvider"
+142-->[androidx.emoji2:emoji2:1.2.0] /Users/enygma/.gradle/caches/transforms-3/e04bc3769bedd8dd6f8ca688986b0355/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:25:13-67
+143            android:authorities="id.project.tokoSM.androidx-startup"
+143-->[androidx.emoji2:emoji2:1.2.0] /Users/enygma/.gradle/caches/transforms-3/e04bc3769bedd8dd6f8ca688986b0355/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:26:13-68
+144            android:exported="false" >
+144-->[androidx.emoji2:emoji2:1.2.0] /Users/enygma/.gradle/caches/transforms-3/e04bc3769bedd8dd6f8ca688986b0355/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:27:13-37
+145            <meta-data
+145-->[androidx.emoji2:emoji2:1.2.0] /Users/enygma/.gradle/caches/transforms-3/e04bc3769bedd8dd6f8ca688986b0355/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:29:13-31:52
+146                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+146-->[androidx.emoji2:emoji2:1.2.0] /Users/enygma/.gradle/caches/transforms-3/e04bc3769bedd8dd6f8ca688986b0355/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:30:17-75
+147                android:value="androidx.startup" />
+147-->[androidx.emoji2:emoji2:1.2.0] /Users/enygma/.gradle/caches/transforms-3/e04bc3769bedd8dd6f8ca688986b0355/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:31:17-49
+148            <meta-data
+148-->[androidx.lifecycle:lifecycle-process:2.4.1] /Users/enygma/.gradle/caches/transforms-3/8c1e738388b632b23acecc5b0cf3e292/transformed/jetified-lifecycle-process-2.4.1/AndroidManifest.xml:31:13-33:52
+149                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+149-->[androidx.lifecycle:lifecycle-process:2.4.1] /Users/enygma/.gradle/caches/transforms-3/8c1e738388b632b23acecc5b0cf3e292/transformed/jetified-lifecycle-process-2.4.1/AndroidManifest.xml:32:17-78
+150                android:value="androidx.startup" />
+150-->[androidx.lifecycle:lifecycle-process:2.4.1] /Users/enygma/.gradle/caches/transforms-3/8c1e738388b632b23acecc5b0cf3e292/transformed/jetified-lifecycle-process-2.4.1/AndroidManifest.xml:33:17-49
+151        </provider>
+152    </application>
+153
+154</manifest>

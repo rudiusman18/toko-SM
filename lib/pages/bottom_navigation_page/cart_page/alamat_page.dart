@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:tokoSM/models/alamat_model.dart';
+import 'package:tokoSM/pages/bottom_navigation_page/cart_page/alamat_page/tambah_alamat_page.dart';
 import 'package:tokoSM/providers/alamat_provider.dart';
 import 'package:tokoSM/providers/login_provider.dart';
 import 'package:tokoSM/theme/theme.dart';
@@ -213,15 +215,25 @@ class _AlamatPageState extends State<AlamatPage> {
         ),
         backgroundColor: backgroundColor3,
         actions: [
-          Container(
-              margin: const EdgeInsets.only(
-                right: 10,
-              ),
-              child: Center(
-                  child: Text(
-                "Tambah Alamat",
-                style: poppins,
-              ))),
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  PageTransition(
+                    child: TambahAlamatPage(),
+                    type: PageTransitionType.rightToLeft,
+                  ));
+            },
+            child: Container(
+                margin: const EdgeInsets.only(
+                  right: 10,
+                ),
+                child: Center(
+                    child: Text(
+                  "Tambah Alamat",
+                  style: poppins,
+                ))),
+          ),
         ],
       ),
       body: ListView(

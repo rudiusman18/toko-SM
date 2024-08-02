@@ -1,26 +1,30 @@
 [
     {
-        "merged": "id.project.tokoSM.app-merged_res-20:/mipmap-mdpi_ic_launcher.png.flat",
-        "source": "id.project.tokoSM.app-main-14:/mipmap-mdpi/ic_launcher.png"
+        "merged": "/Users/enygma/.gradle/daemon/7.5/id.project.tokoSM.app-merged_res-34:/drawable-v21_launch_background.xml.flat",
+        "source": "/Users/enygma/.gradle/daemon/7.5/id.project.tokoSM.app-main-28:/drawable-v21/launch_background.xml"
     },
     {
-        "merged": "id.project.tokoSM.app-merged_res-20:/mipmap-hdpi_ic_launcher.png.flat",
-        "source": "id.project.tokoSM.app-main-14:/mipmap-hdpi/ic_launcher.png"
+        "merged": "/Users/enygma/.gradle/daemon/7.5/id.project.tokoSM.app-merged_res-34:/mipmap-mdpi_ic_launcher.png.flat",
+        "source": "/Users/enygma/.gradle/daemon/7.5/id.project.tokoSM.app-main-28:/mipmap-mdpi/ic_launcher.png"
     },
     {
-        "merged": "id.project.tokoSM.app-merged_res-20:/drawable-v21_launch_background.xml.flat",
-        "source": "id.project.tokoSM.app-main-14:/drawable-v21/launch_background.xml"
+        "merged": "/Users/enygma/.gradle/daemon/7.5/id.project.tokoSM.app-merged_res-34:/mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "/Users/enygma/.gradle/daemon/7.5/id.project.tokoSM.app-main-28:/mipmap-xxxhdpi/ic_launcher.png"
     },
     {
-        "merged": "id.project.tokoSM.app-merged_res-20:/mipmap-xhdpi_ic_launcher.png.flat",
-        "source": "id.project.tokoSM.app-main-14:/mipmap-xhdpi/ic_launcher.png"
+        "merged": "/Users/enygma/.gradle/daemon/7.5/id.project.tokoSM.app-merged_res-34:/mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "/Users/enygma/.gradle/daemon/7.5/id.project.tokoSM.app-main-28:/mipmap-xxhdpi/ic_launcher.png"
     },
     {
-        "merged": "id.project.tokoSM.app-merged_res-20:/mipmap-xxxhdpi_ic_launcher.png.flat",
-        "source": "id.project.tokoSM.app-main-14:/mipmap-xxxhdpi/ic_launcher.png"
+        "merged": "/Users/enygma/.gradle/daemon/7.5/id.project.tokoSM.app-merged_res-34:/mipmap-hdpi_ic_launcher.png.flat",
+        "source": "/Users/enygma/.gradle/daemon/7.5/id.project.tokoSM.app-main-28:/mipmap-hdpi/ic_launcher.png"
     },
     {
-        "merged": "id.project.tokoSM.app-merged_res-20:/mipmap-xxhdpi_ic_launcher.png.flat",
-        "source": "id.project.tokoSM.app-main-14:/mipmap-xxhdpi/ic_launcher.png"
+        "merged": "/Users/enygma/.gradle/daemon/7.5/id.project.tokoSM.app-merged_res-34:/xml_network_security_config.xml.flat",
+        "source": "/Users/enygma/.gradle/daemon/7.5/id.project.tokoSM.app-main-28:/xml/network_security_config.xml"
+    },
+    {
+        "merged": "/Users/enygma/.gradle/daemon/7.5/id.project.tokoSM.app-merged_res-34:/mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "/Users/enygma/.gradle/daemon/7.5/id.project.tokoSM.app-main-28:/mipmap-xhdpi/ic_launcher.png"
     }
 ]

@@ -1,4 +1,4 @@
-#Tue Jul 30 10:51:11 WIB 2024
+#Fri Aug 02 11:21:09 WIB 2024
 base.0=/Users/enygma/Documents/github/toko-SM/build/app/intermediates/dex/debug/mergeExtDexDebug/classes.dex
 base.1=/Users/enygma/Documents/github/toko-SM/build/app/intermediates/dex/debug/mergeLibDexDebug/0/classes.dex
 base.2=/Users/enygma/Documents/github/toko-SM/build/app/intermediates/dex/debug/mergeProjectDexDebug/0/classes.dex

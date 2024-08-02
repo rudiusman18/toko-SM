@@ -15,9 +15,11 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <queries>
+        <intent>
+            <action android:name="android.support.customtabs.action.CustomTabsService" />
+        </intent>
         <intent>
             <action android:name="android.media.browse.MediaBrowserService" />
         </intent>
@@ -28,6 +30,8 @@
             <action android:name="androidx.media2.session.MediaLibraryService" />
         </intent>
     </queries>
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <permission
         android:name="id.project.tokoSM.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
@@ -40,7 +44,8 @@
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:debuggable="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="tokoSM" >
+        android:label="tokoSM"
+        android:usesCleartextTraffic="true" >
         <activity
             android:name="id.project.tokoSM.MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
@@ -84,6 +89,38 @@
             android:name="io.flutter.plugins.urllauncher.WebViewActivity"
             android:exported="false"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+        <activity
+            android:name="com.pichillilorenzo.flutter_inappwebview.in_app_browser.InAppBrowserActivity"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density"
+            android:exported="false"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.pichillilorenzo.flutter_inappwebview.chrome_custom_tabs.ChromeCustomTabsActivity"
+            android:exported="false"
+            android:theme="@style/ThemeTransparent" />
+        <activity
+            android:name="com.pichillilorenzo.flutter_inappwebview.chrome_custom_tabs.TrustedWebActivity"
+            android:exported="false"
+            android:theme="@style/ThemeTransparent" />
+        <activity
+            android:name="com.pichillilorenzo.flutter_inappwebview.chrome_custom_tabs.ChromeCustomTabsActivitySingleInstance"
+            android:exported="false"
+            android:launchMode="singleInstance"
+            android:theme="@style/ThemeTransparent" />
+        <activity
+            android:name="com.pichillilorenzo.flutter_inappwebview.chrome_custom_tabs.TrustedWebActivitySingleInstance"
+            android:exported="false"
+            android:launchMode="singleInstance"
+            android:theme="@style/ThemeTransparent" />
+
+        <receiver
+            android:name="com.pichillilorenzo.flutter_inappwebview.chrome_custom_tabs.ActionBroadcastReceiver"
+            android:enabled="true"
+            android:exported="false" />
+
+        <meta-data
+            android:name="io.flutter.embedded_views_preview"
+            android:value="true" />
 
         <uses-library
             android:name="androidx.window.extensions"
@@ -100,6 +137,18 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="id.project.tokoSM.androidx-startup"
+            android:exported="false" >
+            <meta-data
+                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+                android:value="androidx.startup" />
+            <meta-data
+                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+                android:value="androidx.startup" />
+        </provider>
     </application>
 
 </manifest>
