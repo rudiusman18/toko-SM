@@ -1,0 +1,4 @@
+#Wed Aug 07 15:22:44 WIB 2024
+base.0=/Users/enygma/Documents/github/toko-SM/build/app/intermediates/dex/release/minifyReleaseWithR8/classes.dex
+path.0=classes.dex
+renamed.0=classes.dex

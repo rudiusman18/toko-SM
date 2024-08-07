@@ -41,6 +41,7 @@ class _AlamatPageState extends State<AlamatPage> {
             isSelected.add(true);
           } else {
             if (alamatProvider.deliveryAlamat.data?.isEmpty ?? true && i == 0) {
+              print("masuk siin");
               isSelected.add(true);
             } else {
               isSelected.add(false);
@@ -217,12 +218,20 @@ class _AlamatPageState extends State<AlamatPage> {
         actions: [
           InkWell(
             onTap: () {
+              alamatProvider.dataLatLong = "";
               Navigator.push(
                   context,
                   PageTransition(
                     child: TambahAlamatPage(),
                     type: PageTransitionType.rightToLeft,
-                  ));
+                  )).then((value) {
+                Navigator.pushReplacement(
+                    context,
+                    PageTransition(
+                      child: const AlamatPage(),
+                      type: PageTransitionType.fade,
+                    ));
+              });
             },
             child: Container(
                 margin: const EdgeInsets.only(
