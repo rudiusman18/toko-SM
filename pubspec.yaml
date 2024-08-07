@@ -60,6 +60,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_inappwebview: ^5.8.0
+  solar_icons: ^0.0.5
 
 dev_dependencies:
   flutter_test:

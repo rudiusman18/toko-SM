@@ -29,4 +29,7 @@ class AlamatService {
       throw Exception("${jsonDecode(response.body)['message']}");
     }
   }
+
+  // Fungsi untuk mengambil data latitude dan longitude pada maps webview
+  // Future<>
 }

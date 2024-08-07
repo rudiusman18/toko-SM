@@ -620,6 +620,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "solar_icons",
+      "rootUri": "file:///Users/enygma/.pub-cache/hosted/pub.dev/solar_icons-0.0.5",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "source_span",
       "rootUri": "file:///Users/enygma/.pub-cache/hosted/pub.dev/source_span-1.10.0",
       "packageUri": "lib/",
@@ -872,7 +878,7 @@
       "languageVersion": "3.1"
     }
   ],
-  "generated": "2024-08-02T04:14:21.043964Z",
+  "generated": "2024-08-07T02:42:52.124928Z",
   "generator": "pub",
   "generatorVersion": "3.1.2"
 }
