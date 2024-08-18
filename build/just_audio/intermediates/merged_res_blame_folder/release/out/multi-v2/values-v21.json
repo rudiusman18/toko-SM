@@ -4,7 +4,7 @@
             "outputFile": "com.ryanheise.just_audio-merged_res-16:/values-v21/values-v21.xml",
             "map": [
                 {
-                    "source": "/Users/enygma/.gradle/caches/transforms-3/57d13c65eae90a7945dea98c1aa2b720/transformed/core-1.7.0/res/values-v21/values-v21.xml",
+                    "source": "C:\\Users\\Rudi\\.gradle\\caches\\transforms-3\\57d13c65eae90a7945dea98c1aa2b720\\transformed\\core-1.7.0\\res\\values-v21\\values-v21.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,13",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4",
@@ -23,7 +23,7 @@
                     }
                 },
                 {
-                    "source": "/Users/enygma/.gradle/caches/transforms-3/33aeac6041f7f32f65addefb234a1ba0/transformed/media-1.4.1/res/values-v21/values-v21.xml",
+                    "source": "C:\\Users\\Rudi\\.gradle\\caches\\transforms-3\\33aeac6041f7f32f65addefb234a1ba0\\transformed\\media-1.4.1\\res\\values-v21\\values-v21.xml",
                     "from": {
                         "startLines": "2,5,8,11",
                         "startColumns": "4,4,4,4",
@@ -47,7 +47,7 @@
             "outputFile": "com.ryanheise.just_audio-mergeReleaseResources-14:/values-v21/values-v21.xml",
             "map": [
                 {
-                    "source": "/Users/enygma/.gradle/caches/transforms-3/57d13c65eae90a7945dea98c1aa2b720/transformed/core-1.7.0/res/values-v21/values-v21.xml",
+                    "source": "C:\\Users\\Rudi\\.gradle\\caches\\transforms-3\\57d13c65eae90a7945dea98c1aa2b720\\transformed\\core-1.7.0\\res\\values-v21\\values-v21.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,13",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4",
@@ -66,7 +66,7 @@
                     }
                 },
                 {
-                    "source": "/Users/enygma/.gradle/caches/transforms-3/33aeac6041f7f32f65addefb234a1ba0/transformed/media-1.4.1/res/values-v21/values-v21.xml",
+                    "source": "C:\\Users\\Rudi\\.gradle\\caches\\transforms-3\\33aeac6041f7f32f65addefb234a1ba0\\transformed\\media-1.4.1\\res\\values-v21\\values-v21.xml",
                     "from": {
                         "startLines": "2,5,8,11",
                         "startColumns": "4,4,4,4",
