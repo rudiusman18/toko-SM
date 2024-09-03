@@ -39,7 +39,7 @@
         android:name="android.app.Application"
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:icon="@mipmap/ic_launcher"
-        android:label="tokoSM"
+        android:label="Toko SM"
         android:usesCleartextTraffic="true" >
         <activity
             android:name="id.project.tokoSM.MainActivity"

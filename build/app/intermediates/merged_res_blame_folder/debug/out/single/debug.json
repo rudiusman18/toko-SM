@@ -1,15 +1,7 @@
 [
     {
-        "merged": "C:\\Users\\Rudi\\.gradle\\daemon\\7.5\\id.project.tokoSM.app-merged_res-34:\\mipmap-mdpi_ic_launcher.png.flat",
-        "source": "C:\\Users\\Rudi\\.gradle\\daemon\\7.5\\id.project.tokoSM.app-main-28:\\mipmap-mdpi\\ic_launcher.png"
-    },
-    {
         "merged": "id.project.tokoSM.app-merged_res-34:/mipmap-hdpi_ic_launcher.png.flat",
         "source": "id.project.tokoSM.app-main-28:/mipmap-hdpi/ic_launcher.png"
-    },
-    {
-        "merged": "C:\\Users\\Rudi\\.gradle\\daemon\\7.5\\id.project.tokoSM.app-merged_res-34:\\mipmap-xhdpi_ic_launcher.png.flat",
-        "source": "C:\\Users\\Rudi\\.gradle\\daemon\\7.5\\id.project.tokoSM.app-main-28:\\mipmap-xhdpi\\ic_launcher.png"
     },
     {
         "merged": "id.project.tokoSM.app-merged_res-34:/mipmap-xxxhdpi_ic_launcher.png.flat",
@@ -20,27 +12,15 @@
         "source": "id.project.tokoSM.app-main-28:/mipmap-mdpi/ic_launcher.png"
     },
     {
-        "merged": "C:\\Users\\Rudi\\.gradle\\daemon\\7.5\\id.project.tokoSM.app-merged_res-34:\\drawable-v21_launch_background.xml.flat",
-        "source": "C:\\Users\\Rudi\\.gradle\\daemon\\7.5\\id.project.tokoSM.app-main-28:\\drawable-v21\\launch_background.xml"
-    },
-    {
         "merged": "id.project.tokoSM.app-merged_res-34:/mipmap-xxhdpi_ic_launcher.png.flat",
         "source": "id.project.tokoSM.app-main-28:/mipmap-xxhdpi/ic_launcher.png"
     },
     {
-        "merged": "C:\\Users\\Rudi\\.gradle\\daemon\\7.5\\id.project.tokoSM.app-merged_res-34:\\mipmap-xxhdpi_ic_launcher.png.flat",
-        "source": "C:\\Users\\Rudi\\.gradle\\daemon\\7.5\\id.project.tokoSM.app-main-28:\\mipmap-xxhdpi\\ic_launcher.png"
+        "merged": "id.project.tokoSM.app-merged_res-34:/drawable-v21_launch_background.xml.flat",
+        "source": "id.project.tokoSM.app-main-28:/drawable-v21/launch_background.xml"
     },
     {
         "merged": "id.project.tokoSM.app-merged_res-34:/mipmap-xhdpi_ic_launcher.png.flat",
         "source": "id.project.tokoSM.app-main-28:/mipmap-xhdpi/ic_launcher.png"
-    },
-    {
-        "merged": "C:\\Users\\Rudi\\.gradle\\daemon\\7.5\\id.project.tokoSM.app-merged_res-34:\\mipmap-xxxhdpi_ic_launcher.png.flat",
-        "source": "C:\\Users\\Rudi\\.gradle\\daemon\\7.5\\id.project.tokoSM.app-main-28:\\mipmap-xxxhdpi\\ic_launcher.png"
-    },
-    {
-        "merged": "C:\\Users\\Rudi\\.gradle\\daemon\\7.5\\id.project.tokoSM.app-merged_res-34:\\mipmap-hdpi_ic_launcher.png.flat",
-        "source": "C:\\Users\\Rudi\\.gradle\\daemon\\7.5\\id.project.tokoSM.app-main-28:\\mipmap-hdpi\\ic_launcher.png"
     }
 ]

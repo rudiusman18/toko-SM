@@ -22,7 +22,7 @@ class LoginModel {
 class Data {
   int? id;
   int? cabangId;
-  String? salesId;
+  dynamic salesId;
   int? kategoriPelangganId;
   String? username;
   String? password;
